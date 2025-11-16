@@ -2,7 +2,7 @@
   "name": "react-native-nitro-gradient-monorepo",
   "packageManager": "bun@1.1.42",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.1.1",
   "repository": "https://github.com/Swami-Laxmikant/react-native-nitro-gradients.git",
   "author": "Laxmikant Swami <lxmkntgswami@gmail.com>",
   "workspaces": [

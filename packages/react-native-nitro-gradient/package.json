@@ -1,6 +1,6 @@
 {
     "name": "react-native-nitro-gradient",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "High-performance gradient components for React Native built with Nitro",
     "main": "lib/commonjs/index",
     "module": "lib/module/index",
