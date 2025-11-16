@@ -1,0 +1,13 @@
+{
+  "uiViewClassName": "RadialGradientView",
+  "supportsRawText": false,
+  "bubblingEventTypes": {},
+  "directEventTypes": {},
+  "validAttributes": {
+    "colors": true,
+    "positions": true,
+    "center": true,
+    "radius": true,
+    "hybridRef": true
+  }
+}

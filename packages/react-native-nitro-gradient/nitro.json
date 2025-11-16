@@ -1,0 +1,26 @@
+{
+    "$schema": "https://nitro.margelo.com/nitro.schema.json",
+    "cxxNamespace": ["gradient"],
+    "ios": {
+        "iosModuleName": "NitroGradient"
+    },
+    "android": {
+        "androidNamespace": ["gradient"],
+        "androidCxxLibName": "NitroGradient"
+    },
+    "autolinking": {
+        "LinearGradientView": {
+            "swift": "HybridLinearGradientView",
+            "kotlin": "HybridLinearGradientView"
+        },
+        "RadialGradientView": {
+            "swift": "HybridRadialGradientView",
+            "kotlin": "HybridRadialGradientView"
+        },
+        "SweepGradientView": {
+            "swift": "HybridSweepGradientView",
+            "kotlin": "HybridSweepGradientView"
+        }
+    },
+    "ignorePaths": ["**/node_modules"]
+}

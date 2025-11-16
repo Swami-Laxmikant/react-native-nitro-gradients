@@ -1,0 +1,14 @@
+{
+  "uiViewClassName": "SweepGradientView",
+  "supportsRawText": false,
+  "bubblingEventTypes": {},
+  "directEventTypes": {},
+  "validAttributes": {
+    "colors": true,
+    "positions": true,
+    "center": true,
+    "startAngle": true,
+    "endAngle": true,
+    "hybridRef": true
+  }
+}

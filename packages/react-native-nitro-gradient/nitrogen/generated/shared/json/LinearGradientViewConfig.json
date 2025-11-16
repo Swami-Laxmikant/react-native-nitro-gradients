@@ -1,0 +1,13 @@
+{
+  "uiViewClassName": "LinearGradientView",
+  "supportsRawText": false,
+  "bubblingEventTypes": {},
+  "directEventTypes": {},
+  "validAttributes": {
+    "colors": true,
+    "positions": true,
+    "start": true,
+    "end": true,
+    "hybridRef": true
+  }
+}
