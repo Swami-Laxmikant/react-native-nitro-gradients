@@ -15,7 +15,7 @@ High-performance gradient components for React Native, built with [Nitro Modules
 ## Installation
 
 ```bash
-npm install react-native-nitro-gradient
+npm install react-native-nitro-gradients
 npm install react-native-nitro-modules react-native-reanimated react-native-worklets
 cd ios && pod install
 ```
@@ -25,7 +25,7 @@ cd ios && pod install
 ## Quick Example
 
 ```tsx
-import { LinearGradient } from 'react-native-nitro-gradient';
+import { LinearGradient } from 'react-native-nitro-gradients';
 
 function App() {
   return (

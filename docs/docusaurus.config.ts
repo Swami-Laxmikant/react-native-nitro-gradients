@@ -98,7 +98,7 @@ const config: Config = {
             },
             {
               label: 'npm',
-              href: 'https://www.npmjs.com/package/react-native-nitro-gradient',
+              href: 'https://www.npmjs.com/package/react-native-nitro-gradients',
             },
           ],
         },

@@ -9,7 +9,7 @@ The `LinearGradient` component creates smooth color transitions between two poin
 ## Basic Usage
 
 ```tsx
-import { LinearGradient } from 'react-native-nitro-gradient';
+import { LinearGradient } from 'react-native-nitro-gradients';
 
 function MyComponent() {
   return (

@@ -10,7 +10,7 @@ We provide first class reanimated support, any gradient props can be a reanimate
 
 ```tsx
 import { useEffect } from "react";
-import { LinearGradient } from "react-native-nitro-gradient";
+import { LinearGradient } from "react-native-nitro-gradients";
 import {
   useSharedValue,
   withTiming,

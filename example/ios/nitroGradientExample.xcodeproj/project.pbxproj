@@ -274,7 +274,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.mrousavy.nitro.image;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nitrogradient.example;
 				PRODUCT_NAME = nitroGradientExample;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -302,7 +302,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.mrousavy.nitro.image;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nitrogradient.example;
 				PRODUCT_NAME = nitroGradientExample;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";

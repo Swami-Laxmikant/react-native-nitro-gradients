@@ -20,7 +20,7 @@ Setup and platform notes. Quick Start is in the Overview page.
 
 ```bash
 # Install the gradient library
-npm install react-native-nitro-gradient
+npm install react-native-nitro-gradients
 
 # Install required peer dependencies
 npm install react-native-nitro-modules react-native-reanimated react-native-worklets

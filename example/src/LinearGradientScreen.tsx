@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { StyleSheet, ScrollView, ColorValue, Button, View } from "react-native";
-import { LinearGradient, Vector } from "react-native-nitro-gradient";
+import { StyleSheet, ScrollView, ColorValue, Button, View, PixelRatio } from "react-native";
+import { LinearGradient, Vector } from "react-native-nitro-gradients";
 import {
   interpolateColor,
   useDerivedValue,
@@ -103,6 +103,16 @@ export function LinearGradientScreen() {
       style={styles.scrollView}
       contentContainerStyle={styles.content}
     >
+      <LinearGradient
+            style={{
+                width: 100,height: 100
+            }}
+            positions={[0.5, 0.5]}
+            start={{x: 0, y: 50}}
+            end={{x: 100, y: 50}}
+            colors={["#333", "#ddd"]}
+        />
+
       <LinearGradient
         colors={["#FF6B6B", "#4ECDC4", "#45B7D1"]}
         start={{ x: "0%", y: "50%" }}

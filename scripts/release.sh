@@ -5,8 +5,8 @@ set -e
 echo "Starting the release process..."
 echo "Provided options: $@"
 
-echo "Publishing 'react-native-nitro-gradient' to NPM"
-cd packages/react-native-nitro-gradient
+echo "Publishing 'react-native-nitro-gradients' to NPM"
+cd packages/react-native-nitro-gradients
 bun release $@
 
 echo "Creating a Git bump commit and GitHub release"

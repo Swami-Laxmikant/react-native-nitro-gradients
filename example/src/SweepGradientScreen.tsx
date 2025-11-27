@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, ColorValue, ScrollView, StyleSheet, View } from "react-native";
-import { SweepGradient, Vector } from "react-native-nitro-gradient";
+import { SweepGradient, Vector } from "react-native-nitro-gradients";
 import {
   interpolateColor,
   useDerivedValue,

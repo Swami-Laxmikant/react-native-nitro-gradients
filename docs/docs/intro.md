@@ -6,10 +6,12 @@ sidebar_position: 1
 
 React Native Nitro Gradient provides three gradient components for React Native, with first‑class React Native Reanimated support.
 
+> This project was bootstrapped from [react-native-nitro-image](https://github.com/mrousavy/react-native-nitro-image) by Marc Rousavy.
+
 ## Basic usage
 
 ```tsx
-import { LinearGradient } from 'react-native-nitro-gradient';
+import { LinearGradient } from 'react-native-nitro-gradients';
 
 function App() {
   return (
@@ -45,7 +47,7 @@ All components accept reanimated's shared values out of the box.
 
 ```tsx
 import { useEffect } from 'react';
-import { LinearGradient } from 'react-native-nitro-gradient';
+import { LinearGradient } from 'react-native-nitro-gradients';
 import { useSharedValue, withTiming } from 'react-native-reanimated';
 
 function AnimatedExample() {

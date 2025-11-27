@@ -9,7 +9,7 @@ The `RadialGradient` component creates circular gradients that radiate from a ce
 ## Basic Usage
 
 ```tsx
-import { RadialGradient } from 'react-native-nitro-gradient';
+import { RadialGradient } from 'react-native-nitro-gradients';
 
 function MyComponent() {
   return (

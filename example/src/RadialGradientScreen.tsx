@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View, ScrollView, ColorValue, Button } from "react-native";
-import { RadialGradient, Vector, RadiusValue } from "react-native-nitro-gradient";
+import { RadialGradient, Vector, RadiusValue } from "react-native-nitro-gradients";
 import {
   interpolateColor,
   useDerivedValue,

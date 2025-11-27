@@ -9,7 +9,7 @@ The `SweepGradient` component creates gradients that sweep around a center point
 ## Basic Usage
 
 ```tsx
-import { SweepGradient } from 'react-native-nitro-gradient';
+import { SweepGradient } from 'react-native-nitro-gradients';
 
 function MyComponent() {
   return (
