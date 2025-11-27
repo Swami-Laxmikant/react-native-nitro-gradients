@@ -1,4 +1,4 @@
-# React Native Nitro Gradient
+# React Native Nitro Gradients
 
 High-performance gradient components for React Native, built with [Nitro Modules](https://github.com/mrousavy/nitro) ⚡
 

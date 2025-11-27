@@ -5,7 +5,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: 'React Native Nitro Gradient',
+  title: 'React Native Nitro Gradients',
   tagline: 'High-performance gradient components for React Native',
   favicon: 'img/favicon.ico',
 
@@ -103,7 +103,7 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} React Native Nitro Gradient. Built with ❤️ from Bengaluru.`,
+      copyright: `Copyright © ${new Date().getFullYear()} React Native Nitro Gradients. Built with ❤️ from Bengaluru.`,
     },
     prism: {
       theme: prismThemes.github,

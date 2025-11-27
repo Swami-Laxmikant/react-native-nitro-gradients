@@ -31,7 +31,7 @@ cd ios && pod install
 
 ### 2. Enable New Architecture
 
-React Native Nitro Gradient requires the [New Architecture](https://reactnative.dev/architecture/landing-page) to be enabled.
+React Native Nitro Gradients requires the [New Architecture](https://reactnative.dev/architecture/landing-page) to be enabled.
 By default its enabled in React Native 0.78.0+
 
 
