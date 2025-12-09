@@ -12,12 +12,12 @@
 // Forward declaration of `HybridLinearGradientViewSpec_cxx` to properly resolve imports.
 namespace NitroGradient { class HybridLinearGradientViewSpec_cxx; }
 
-// Forward declaration of `VectorR` to properly resolve imports.
-namespace margelo::nitro::gradient { struct VectorR; }
+// Forward declaration of `Vector` to properly resolve imports.
+namespace margelo::nitro::gradient { struct Vector; }
 
 #include <vector>
 #include <optional>
-#include "VectorR.hpp"
+#include "Vector.hpp"
 #include <string>
 #include <variant>
 #include <NitroModules/Null.hpp>
@@ -76,25 +76,32 @@ namespace margelo::nitro::gradient {
     inline void setPositions(const std::optional<std::vector<double>>& positions) noexcept override {
       _swiftPart.setPositions(positions);
     }
-    inline std::optional<VectorR> getStart() noexcept override {
+    inline std::optional<Vector> getStart() noexcept override {
       auto __result = _swiftPart.getStart();
       return __result;
     }
-    inline void setStart(const std::optional<VectorR>& start) noexcept override {
+    inline void setStart(const std::optional<Vector>& start) noexcept override {
       _swiftPart.setStart(start);
     }
-    inline std::optional<VectorR> getEnd() noexcept override {
+    inline std::optional<Vector> getEnd() noexcept override {
       auto __result = _swiftPart.getEnd();
       return __result;
     }
-    inline void setEnd(const std::optional<VectorR>& end) noexcept override {
+    inline void setEnd(const std::optional<Vector>& end) noexcept override {
       _swiftPart.setEnd(end);
+    }
+    inline std::optional<double> getAngle() noexcept override {
+      auto __result = _swiftPart.getAngle();
+      return __result;
+    }
+    inline void setAngle(std::optional<double> angle) noexcept override {
+      _swiftPart.setAngle(angle);
     }
 
   public:
     // Methods
-    inline void update(const std::optional<std::variant<nitro::NullType, std::vector<double>>>& colors, const std::optional<std::vector<double>>& positions, const std::optional<VectorR>& start, const std::optional<VectorR>& end) override {
-      auto __result = _swiftPart.update(colors, positions, start, end);
+    inline void update(const std::optional<std::variant<nitro::NullType, std::vector<double>>>& colors, const std::optional<std::vector<double>>& positions, const std::optional<Vector>& start, const std::optional<Vector>& end, std::optional<double> angle) override {
+      auto __result = _swiftPart.update(colors, positions, start, end, angle);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

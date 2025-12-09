@@ -2,17 +2,17 @@ package com.margelo.nitro.gradient
 
 import android.graphics.PointF
 import com.margelo.nitro.gradient.Variant_String_Double
-import com.margelo.nitro.gradient.VectorR
+import com.margelo.nitro.gradient.Vector
 
 typealias Float2 = PointF
 
-fun toFloat2(value: VectorR, width: Int, height: Int, density: Float): Float2 {
+fun toFloat2(value: Vector, width: Int, height: Int, density: Float): Float2 {
     val xPx = parseCoordinate(value.x, width, height, density, width)
     val yPx = parseCoordinate(value.y, width, height, density, height)
     return PointF(xPx, yPx)
 }
 
-private fun parseCoordinate(
+fun parseCoordinate(
     variant: Variant_String_Double,
     width: Int,
     height: Int,

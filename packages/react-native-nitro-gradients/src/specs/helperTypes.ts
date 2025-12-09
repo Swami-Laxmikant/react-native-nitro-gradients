@@ -16,7 +16,7 @@
  */
 export type PercentString = string;
 
-export interface VectorR {
+export interface Vector {
     x: number | PercentString;
     y: number | PercentString;
 }

@@ -59,24 +59,12 @@ abstract class HybridSweepGradientViewSpec: HybridView() {
   @get:Keep
   @set:DoNotStrip
   @set:Keep
-  abstract var center: VectorR?
-  
-  @get:DoNotStrip
-  @get:Keep
-  @set:DoNotStrip
-  @set:Keep
-  abstract var startAngle: Double?
-  
-  @get:DoNotStrip
-  @get:Keep
-  @set:DoNotStrip
-  @set:Keep
-  abstract var endAngle: Double?
+  abstract var center: Vector?
 
   // Methods
   @DoNotStrip
   @Keep
-  abstract fun update(colors: Variant_NullType_DoubleArray?, positions: DoubleArray?, center: VectorR?, startAngle: Double?, endAngle: Double?): Unit
+  abstract fun update(colors: Variant_NullType_DoubleArray?, positions: DoubleArray?, center: Vector?): Unit
 
   private external fun initHybrid(): HybridData
 

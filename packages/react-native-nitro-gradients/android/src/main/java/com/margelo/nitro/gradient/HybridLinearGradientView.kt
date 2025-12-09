@@ -1,9 +1,12 @@
 package com.margelo.nitro.gradient
 
 import android.content.Context
+import android.util.Log
 import android.view.View
 import androidx.annotation.Keep
 import com.facebook.common.internal.DoNotStrip
+import kotlin.collections.contentEquals
+import kotlin.toString
 
 @DoNotStrip
 @Keep
@@ -24,6 +27,7 @@ class HybridLinearGradientView(context: Context): HybridLinearGradientViewSpec()
                     isLayoutValid = true
                     start?.let { gradientDrawable.setStart(it, w, h, density) }
                     end?.let { gradientDrawable.setEnd(it, w, h, density) }
+                    angle?.let { gradientDrawable.setPointsFromAngle(it, w, h) }
                     gradientDrawable.invalidate()
                 }
             }
@@ -35,6 +39,7 @@ class HybridLinearGradientView(context: Context): HybridLinearGradientViewSpec()
             if (!field.contentEquals(value)) {
                 field = value
                 gradientDrawable.setColors(value)
+                gradientDrawable.invalidate()
             }
         }
 
@@ -43,29 +48,58 @@ class HybridLinearGradientView(context: Context): HybridLinearGradientViewSpec()
             if (!field.contentEquals(value)) {
                 field = value
                 gradientDrawable.setPositions(value?.map { it.toFloat() }?.toFloatArray())
+                gradientDrawable.invalidate()
             }
         }
 
-    override var start: VectorR? = null
-        set(value) {
-            if (field != value) {
-                field = value
+    override var angle: Double? = null
+        set(value){
+            Log.d("the angle value", value.toString());
+            if(field != value){
+                field = value;
                 val w = gradientView.width
                 val h = gradientView.height
-                if (w > 0 && h > 0 && value != null) {
-                    gradientDrawable.setStart(value, w, h, density)
+                if (w > 0 && h > 0) {
+                    angle?.let { gradientDrawable.setPointsFromAngle(it, w, h) }
+                    gradientDrawable.invalidate()
                 }
             }
         }
 
-    override var end: VectorR? = null
+    override var start: Vector? = null
         set(value) {
+            Log.d("the start value", angle.toString());
+            if(this.angle != null){
+                return
+            }
+
             if (field != value) {
                 field = value
+
+                val w = gradientView.width
+                val h = gradientView.height
+                if (w > 0 && h > 0 && value != null) {
+                    gradientDrawable.setStart(value, w, h, density)
+                    gradientDrawable.invalidate()
+                }
+            }
+        }
+
+    override var end: Vector? = null
+        set(value) {
+            Log.d("the end value", angle.toString());
+            if(this.angle != null){
+                return;
+            }
+
+            if (field != value) {
+                field = value
+
                 val w = gradientView.width
                 val h = gradientView.height
                 if (w > 0 && h > 0 && value != null) {
                     gradientDrawable.setEnd(value, w, h, density)
+                    gradientDrawable.invalidate()
                 }
             }
         }
@@ -73,8 +107,9 @@ class HybridLinearGradientView(context: Context): HybridLinearGradientViewSpec()
     override fun update(
         colors: Variant_NullType_DoubleArray?,
         positions: DoubleArray?,
-        start: VectorR?,
-        end: VectorR?
+        start: Vector?,
+        end: Vector?,
+        angle: Double?
     ) {
         var changed = false
 
@@ -89,6 +124,14 @@ class HybridLinearGradientView(context: Context): HybridLinearGradientViewSpec()
             OptionalVariant.NotProvided -> Unit
         }
 
+        angle?.let {
+            Log.d("the fachi", angle.toString());
+            if(this.angle != it){
+                this.angle = angle
+                changed = true
+            }
+        }
+
         positions?.let {
             if (!this.positions.contentEquals(it)) {
                 this.positions = it
@@ -96,17 +139,20 @@ class HybridLinearGradientView(context: Context): HybridLinearGradientViewSpec()
             }
         }
 
-        start?.let {
-            if (this.start != it) {
-                this.start = it
-                changed = true
+        if(this.angle == null){
+            Log.d("the sachi", angle.toString());
+            start?.let {
+                if (this.start != it) {
+                    this.start = it
+                    changed = true
+                }
             }
-        }
 
-        end?.let {
-            if (this.end != it) {
-                this.end = it
-                changed = true
+            end?.let {
+                if (this.end != it) {
+                    this.end = it
+                    changed = true
+                }
             }
         }
 

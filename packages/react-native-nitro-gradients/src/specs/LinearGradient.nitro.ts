@@ -3,21 +3,23 @@ import type {
     HybridViewMethods,
     HybridViewProps,
 } from "react-native-nitro-modules";
-import type { VectorR } from "./helperTypes";
+import type { Vector } from "./helperTypes";
 
 export interface LinearGradientViewProps extends HybridViewProps {
     colors: number[];
     positions?: number[];
-    start?: VectorR;
-    end?: VectorR;
+    start?: Vector;
+    end?: Vector;
+    angle?: number;
 }
 
 export interface LinearGradientViewMethods extends HybridViewMethods {
     update(
         colors: number[] | null,
         positions?: number[],
-        start?: VectorR,
-        end?: VectorR,
+        start?: Vector,
+        end?: Vector,
+        angle?: number,
     ): void;
 }
 

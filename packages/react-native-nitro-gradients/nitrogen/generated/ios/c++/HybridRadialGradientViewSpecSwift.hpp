@@ -12,12 +12,12 @@
 // Forward declaration of `HybridRadialGradientViewSpec_cxx` to properly resolve imports.
 namespace NitroGradient { class HybridRadialGradientViewSpec_cxx; }
 
-// Forward declaration of `VectorR` to properly resolve imports.
-namespace margelo::nitro::gradient { struct VectorR; }
+// Forward declaration of `Vector` to properly resolve imports.
+namespace margelo::nitro::gradient { struct Vector; }
 
 #include <vector>
 #include <optional>
-#include "VectorR.hpp"
+#include "Vector.hpp"
 #include <string>
 #include <variant>
 #include <NitroModules/Null.hpp>
@@ -76,11 +76,11 @@ namespace margelo::nitro::gradient {
     inline void setPositions(const std::optional<std::vector<double>>& positions) noexcept override {
       _swiftPart.setPositions(positions);
     }
-    inline std::optional<VectorR> getCenter() noexcept override {
+    inline std::optional<Vector> getCenter() noexcept override {
       auto __result = _swiftPart.getCenter();
       return __result;
     }
-    inline void setCenter(const std::optional<VectorR>& center) noexcept override {
+    inline void setCenter(const std::optional<Vector>& center) noexcept override {
       _swiftPart.setCenter(center);
     }
     inline std::optional<std::variant<std::string, double>> getRadius() noexcept override {
@@ -93,7 +93,7 @@ namespace margelo::nitro::gradient {
 
   public:
     // Methods
-    inline void update(const std::optional<std::variant<nitro::NullType, std::vector<double>>>& colors, const std::optional<std::vector<double>>& positions, const std::optional<VectorR>& center, const std::optional<std::variant<std::string, double>>& radius) override {
+    inline void update(const std::optional<std::variant<nitro::NullType, std::vector<double>>>& colors, const std::optional<std::vector<double>>& positions, const std::optional<Vector>& center, const std::optional<std::variant<std::string, double>>& radius) override {
       auto __result = _swiftPart.update(colors, positions, center, radius);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());

@@ -45,12 +45,12 @@ namespace margelo::nitro::gradient::views {
         throw std::runtime_error(std::string("RadialGradientView.positions: ") + exc.what());
       }
     }()),
-    center([&]() -> CachedProp<std::optional<VectorR>> {
+    center([&]() -> CachedProp<std::optional<Vector>> {
       try {
         const react::RawValue* rawValue = rawProps.at("center", nullptr, nullptr);
         if (rawValue == nullptr) return sourceProps.center;
         const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
-        return CachedProp<std::optional<VectorR>>::fromRawValue(*runtime, value, sourceProps.center);
+        return CachedProp<std::optional<Vector>>::fromRawValue(*runtime, value, sourceProps.center);
       } catch (const std::exception& exc) {
         throw std::runtime_error(std::string("RadialGradientView.center: ") + exc.what());
       }

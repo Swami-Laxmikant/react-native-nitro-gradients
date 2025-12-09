@@ -60,19 +60,6 @@ export function SweepGradientScreen() {
     });
   };
 
-  const startAngle = useSharedValue(0);
-  const endAngle = useSharedValue(360);
-  const updateAngles = () => {
-    const cf = startAngle.value;
-    if (cf === 0) {
-      startAngle.value = withTiming(45, { duration: 350 });
-      endAngle.value = withTiming(315, { duration: 350 });
-    } else {
-      startAngle.value = withTiming(0, { duration: 350 });
-      endAngle.value = withTiming(360, { duration: 350 });
-    }
-  };
-
   const [colors7, setColors] = useState([
     "#FF0000",
     "#FF7F00",
@@ -88,8 +75,6 @@ export function SweepGradientScreen() {
   ]);
 
   const [center7, setCenter] = useState<Vector>({ x: "50%", y: "50%" });
-  const [startAngle7, setStartAngle] = useState(0);
-  const [endAngle7, setEndAngle] = useState(360);
 
   const updateColors7 = () => {
     setColors((pre) => [...pre].reverse());
@@ -111,45 +96,28 @@ export function SweepGradientScreen() {
     );
   };
 
-  const updateAngles7 = () => {
-    if (startAngle7 === 0) {
-      setStartAngle(90);
-      setEndAngle(450);
-    } else {
-      setStartAngle(0);
-      setEndAngle(360);
-    }
-  };
-
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <SweepGradient
         colors={["#FF0000", "#00FF00", "#0000FF", "#FF0000"]}
         style={styles.gradient1}
         center={toVec(0.5, 0.5)}
-        startAngle={0}
-        endAngle={360}
       />
       <SweepGradient
         colors={["#667EEA", "#764BA2", "#F093FB", "#667EEA"]}
         style={styles.gradient1}
         center={toVec(0.3, 0.7)}
-        startAngle={45}
-        endAngle={405}
+        key={2}
       />
       <SweepGradient
         colors={["#A8E6CF", "#DCEDC1", "#FFD3B6", "#FFAAA5", "#A8E6CF"]}
         center={toVec(0.5, 0.5)}
-        startAngle={-90}
-        endAngle={270}
         style={styles.gradient1}
       />
 
       <View style={styles.container}>
         <SweepGradient
           center={center}
-          startAngle={startAngle}
-          endAngle={endAngle}
           positions={positions}
           colors={colors}
           style={styles.gradient1}
@@ -158,7 +126,6 @@ export function SweepGradientScreen() {
           <Button title="swap colors" onPress={animateGrad} />
           <Button title="update positions" onPress={updatePositions} />
           <Button title="update center" onPress={updateCenter} />
-          <Button title="update angles" onPress={updateAngles} />
         </View>
       </View>
 
@@ -166,8 +133,6 @@ export function SweepGradientScreen() {
         <SweepGradient
           colors={colors7}
           center={center7}
-          startAngle={startAngle7}
-          endAngle={endAngle7}
           positions={positions7}
           style={styles.gradient4}
         />
@@ -175,7 +140,6 @@ export function SweepGradientScreen() {
           <Button title="reverse colors" onPress={updateColors7} />
           <Button title="change positions" onPress={updatePositions7} />
           <Button title="change center" onPress={updateCenter7} />
-          <Button title="change angles" onPress={updateAngles7} />
         </View>
       </View>
     </ScrollView>

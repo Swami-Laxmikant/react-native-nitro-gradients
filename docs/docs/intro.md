@@ -31,11 +31,11 @@ function App() {
 - Common props (each gradient prop can be a reanimated shared value):
 
 
-| Gradient Type | colors | positions | start | end | center | radius | startAngle | endAngle (ios) |
-|---------------|--------|-----------|-------|-----|--------|--------|------------|----------|
-| LinearGradient | [`ColorValue[]`](./types#colorvalue) | `number[]` | [`Vector`](./types#vector) | [`Vector`](./types#vector) | — | — | — | — |
-| RadialGradient | [`ColorValue[]`](./types#colorvalue) | `number[]` | — | — | [`Vector`](./types#vector) | [`RadiusValue`](./types#radiusvalue) | — | — |
-| SweepGradient | [`ColorValue[]`](./types#colorvalue) | `number[]` | — | — | [`Vector`](./types#vector) | — | `number` | `number` |
+| Gradient Type | colors | positions | start | end | center | radius |
+|---------------|--------|-----------|-------|-----|--------|--------|
+| LinearGradient | [`ColorValue[]`](./types#colorvalue) | `number[]` | [`Vector`](./types#vector) | [`Vector`](./types#vector) | — | — |
+| RadialGradient | [`ColorValue[]`](./types#colorvalue) | `number[]` | — | — | [`Vector`](./types#vector) | [`RadiusValue`](./types#radiusvalue) |
+| SweepGradient | [`ColorValue[]`](./types#colorvalue) | `number[]` | — | — | [`Vector`](./types#vector) | — |
 
 
 

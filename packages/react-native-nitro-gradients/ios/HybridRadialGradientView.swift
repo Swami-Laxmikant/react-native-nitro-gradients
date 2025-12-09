@@ -3,7 +3,114 @@ import UIKit
 import NitroModules
 
 class HybridRadialGradientView: HybridRadialGradientViewSpec {
-    func update(colors: Variant_NullType__Double_?, positions: [Double]?, center: VectorR?, radius: Variant_String_Double?) throws {
+    
+    // MARK: - Private Properties
+    
+    private let gradientView: UIView
+    private let gradientLayer = RadialGradientLayer()
+    let view: UIView
+    
+    private var isDirty = false
+    private var cachedColors: [CGColor] = []
+    private var cachedLocations: [CGFloat] = []
+    private var lastBounds: CGRect = .zero
+    private var isLayoutValid = false
+    private var hasCustomRadius: Bool = false
+    
+    // MARK: - Protocol Properties
+    
+    var colors: [Double] = [] {
+        didSet {
+            if !oldValue.elementsEqual(colors) {
+                isDirty = true
+                cachedColors = colors.map { parseColorInt($0).cgColor }
+            }
+        }
+    }
+    
+    var positions: [Double]? = nil {
+        didSet {
+            if !arraysEqual(oldValue, positions) {
+                isDirty = true
+                cachedLocations = computeLocations()
+            }
+        }
+    }
+    
+    var center: Vector? = Vector(x: .first("50%"), y: .first("50%")) {
+        didSet {
+            if !vectorsEqual(oldValue, center) {
+                isDirty = true
+            }
+        }
+    }
+
+    var radius: Variant_String_Double? = .first("50%") {
+        didSet {
+            hasCustomRadius = true
+            if !variantsEqual(oldValue, radius) {
+                isDirty = true
+            }
+        }
+    }
+    
+    // MARK: - Initialization
+    
+    override init() {
+        self.gradientView = UIView()
+        self.view = gradientView
+        super.init()
+        
+        setupGradient()
+        isDirty = true
+        
+        DispatchQueue.main.async { [weak self] in
+            self?.updateGradient()
+        }
+    }
+    
+    // MARK: - Setup
+    
+    private func setupGradient() {
+        let customView = CustomGradientView { [weak self] in
+            self?.handleBoundsChange()
+        }
+        
+        gradientView.layer.sublayers?.removeAll()
+        customView.layer.addSublayer(gradientLayer)
+        gradientView.addSubview(customView)
+        
+        customView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            customView.topAnchor.constraint(equalTo: gradientView.topAnchor),
+            customView.leadingAnchor.constraint(equalTo: gradientView.leadingAnchor),
+            customView.trailingAnchor.constraint(equalTo: gradientView.trailingAnchor),
+            customView.bottomAnchor.constraint(equalTo: gradientView.bottomAnchor)
+        ])
+    }
+    
+    // MARK: - Bounds Handling
+    
+    private func handleBoundsChange() {
+        let bounds = gradientView.bounds
+        if bounds != lastBounds {
+            lastBounds = bounds
+            
+            if bounds.width > 0 && bounds.height > 0 && !isLayoutValid {
+                isLayoutValid = true
+                isDirty = true
+                updateGradient()
+                updateGradientFrame()
+            } else if isLayoutValid {
+                isDirty = true
+                updateGradientFrame()
+            }
+        }
+    }
+    
+    // MARK: - Update Interface
+    
+    func update(colors: Variant_NullType__Double_?, positions: [Double]?, center: Vector?, radius: Variant_String_Double?) throws {
         var changed = false
         
         if let colorsVariant = colors, case .second(let colorsArray) = colorsVariant, !self.colors.elementsEqual(colorsArray) {
@@ -29,94 +136,7 @@ class HybridRadialGradientView: HybridRadialGradientViewSpec {
         }
     }
     
-    private let gradientView: UIView
-    private let gradientLayer = RadialGradientLayer()
-    let view: UIView
-    private var isDirty = false
-    private var cachedColors: [CGColor] = []
-    private var cachedLocations: [CGFloat] = []
-    private var lastBounds: CGRect = .zero
-    private var isLayoutValid = false
-    
-    override init() {
-        self.gradientView = UIView()
-        self.view = gradientView
-        super.init()
-        
-        setupCustomView()
-        isDirty = true
-    }
-    
-    var colors: [Double] = [] {
-        didSet {
-            if !oldValue.elementsEqual(colors) {
-                isDirty = true
-                cachedColors = colors.map { parseColorInt($0).cgColor }
-            }
-        }
-    }
-    
-    var positions: [Double]? = nil {
-        didSet {
-            if !arraysEqual(oldValue, positions) {
-                isDirty = true
-                cachedLocations = computeLocations()
-            }
-        }
-    }
-    
-    var center: VectorR? = VectorR(x: .first("50%"), y: .first("50%")) {
-        didSet {
-            if !vectorsEqual(oldValue, center) {
-                isDirty = true
-            }
-        }
-    }
-
-    var radius: Variant_String_Double? = .first("50%") {
-        didSet {
-            hasCustomRadius = true
-            if !variantsEqual(oldValue, radius) {
-                isDirty = true
-            }
-        }
-    }
-    private var hasCustomRadius: Bool = false
-    
-    private func setupCustomView() {
-        let customView = CustomGradientView { [weak self] in
-            self?.handleBoundsChange()
-        }
-        
-        gradientView.layer.sublayers?.removeAll()
-        customView.layer.addSublayer(gradientLayer)
-        gradientView.addSubview(customView)
-        
-        customView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            customView.topAnchor.constraint(equalTo: gradientView.topAnchor),
-            customView.leadingAnchor.constraint(equalTo: gradientView.leadingAnchor),
-            customView.trailingAnchor.constraint(equalTo: gradientView.trailingAnchor),
-            customView.bottomAnchor.constraint(equalTo: gradientView.bottomAnchor)
-        ])
-    }
-    
-    private func handleBoundsChange() {
-        let bounds = gradientView.bounds
-        if bounds != lastBounds {
-            lastBounds = bounds
-            
-            if bounds.width > 0 && bounds.height > 0 && !isLayoutValid {
-                isLayoutValid = true
-                isDirty = true
-                updateGradient()
-                updateGradientFrame()
-            } else if isLayoutValid {
-                isDirty = true
-                updateGradientFrame()
-            }
-        }
-    }
+    // MARK: - Gradient Updates
     
     private func computeLocations() -> [CGFloat] {
         if let positions = positions, !positions.isEmpty {
@@ -149,14 +169,14 @@ class HybridRadialGradientView: HybridRadialGradientViewSpec {
     
     private func updateGradientFrame() {
         let bounds = gradientView.bounds
-        
         guard bounds.width > 0 && bounds.height > 0 else { return }
         
         CATransaction.begin()
         CATransaction.setDisableActions(true)
+        
         gradientLayer.frame = bounds
         
-        let centerValue = center ?? VectorR(x: .first("50%"), y: .first("50%"))
+        let centerValue = center ?? Vector(x: .first("50%"), y: .first("50%"))
         gradientLayer.center = toCGPoint(value: centerValue, width: bounds.width, height: bounds.height)
         
         if hasCustomRadius, let radius = radius {
@@ -171,46 +191,12 @@ class HybridRadialGradientView: HybridRadialGradientViewSpec {
         gradientLayer.setNeedsDisplay()
     }
     
-    private func toPxRadius(value: Variant_String_Double, width: CGFloat, height: CGFloat) -> CGFloat {
-        switch value {
-        case .first(let s):
-            let trimmed = s.trimmingCharacters(in: .whitespaces)
-            if trimmed.hasSuffix("%w"), let num = Double(trimmed.dropLast(2)) {
-                return CGFloat(num / 100.0) * width
-            } else if trimmed.hasSuffix("%h"), let num = Double(trimmed.dropLast(2)) {
-                return CGFloat(num / 100.0) * height
-            } else if trimmed.hasSuffix("%"), let num = Double(trimmed.dropLast()) {
-                return CGFloat(num / 100.0) * min(width, height)
-            }
-            return 0
-        case .second(let v):
-            return CGFloat(v)
-        }
-    }
-    
-    private func arraysEqual(_ a: [Double]?, _ b: [Double]?) -> Bool {
-        guard let a = a, let b = b else { return a == nil && b == nil }
-        return a.elementsEqual(b)
-    }
-    
-    private func vectorsEqual(_ a: VectorR?, _ b: VectorR?) -> Bool {
-        guard let a = a, let b = b else { return a == nil && b == nil }
-        return variantsEqual(a.x, b.x) && variantsEqual(a.y, b.y)
-    }
-    
-    private func variantsEqual(_ a: Variant_String_Double?, _ b: Variant_String_Double?) -> Bool {
-        guard let a = a, let b = b else { return a == nil && b == nil }
-        switch (a, b) {
-        case (.first(let s1), .first(let s2)): return s1 == s2
-        case (.second(let d1), .second(let d2)): return d1 == d2
-        default: return false
-        }
-    }
-
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
 }
+
+// MARK: - Radial Gradient Layer
 
 private final class RadialGradientLayer: CALayer {
     var colors: [CGColor] = [UIColor.clear.cgColor, UIColor.clear.cgColor]

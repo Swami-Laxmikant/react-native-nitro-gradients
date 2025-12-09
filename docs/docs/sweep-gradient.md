@@ -16,8 +16,6 @@ function MyComponent() {
     <SweepGradient
       colors={[0xFFFF0000, 0xFF00FF00, 0xFF0000FF]}
       center={{ x: '50%', y: '50%' }}
-      startAngle={0}
-      endAngle={360}
       style={{ width: 200, height: 200 }}
     />
   );
@@ -30,9 +28,7 @@ function MyComponent() {
 |------|------|----------|---------|-------------|
 | `colors` | `ColorValue[]` | ✅ | - | Array of colors for the gradient |
 | `center` | `Vector` | ❌ | `{ x: '50%', y: '50%' }` | Center point of the gradient |
-| `startAngle` | `number` | ❌ | `0` | Start angle in degrees |
-| `endAngle` | `number` | ❌ | `360` | Can be changed in `ios` only |
-| `positions` | `number[]` | ❌ | _Uniformly distributed from the `startAngle` to the `endAngle`_ | Optional array of color positions (0-1) |
+| `positions` | `number[]` | ❌ | _Uniformly distributed_ | Optional array of color positions (0-1) |
 
 
 ## Color Positioning
@@ -64,8 +60,6 @@ function MyComponent() {
 <SweepGradient
   colors={['#ff0000', '#00ff00', '#0000ff']}
   center={{ x: '50%', y: '50%' }}
-  startAngle={0}
-  endAngle={360}
   style={{ width: 200, height: 200 }}
 />
 ```

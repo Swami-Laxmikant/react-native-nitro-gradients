@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import type { ColorValue } from "react-native";
 import {
     type HybridView as _HybridView,
@@ -11,9 +11,11 @@ import {
     type DerivedValue,
     processColor,
     type SharedValue,
+    startMapper,
+    stopMapper,
     useSharedValue,
 } from "react-native-reanimated";
-import { runOnUISync } from "react-native-worklets";
+import { runOnUISync, type WorkletFunction } from "react-native-worklets";
 
 type WithSharedValue<T> =
     | T
@@ -63,3 +65,18 @@ export const processColors = (colors: ColorValue[]) => {
         typeof it === "number" ? it : processColor(it) || 0,
     );
 };
+
+// @ts-expect-error This is how reanimated works.
+export function useSharedValuesEffect(
+  effect: () => void,
+)
+
+
+export function useSharedValuesEffect(
+  effect: WorkletFunction,
+) {
+  useEffect(()=>{
+    const mapperId = startMapper(effect, Object.values(effect.__closure || {}));
+    return () => stopMapper(mapperId);
+  }, [effect.__workletHash])
+}

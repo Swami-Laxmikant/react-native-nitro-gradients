@@ -54,14 +54,14 @@ namespace margelo::nitro::gradient {
     void setColors(const std::vector<double>& colors) override;
     std::optional<std::vector<double>> getPositions() override;
     void setPositions(const std::optional<std::vector<double>>& positions) override;
-    std::optional<VectorR> getCenter() override;
-    void setCenter(const std::optional<VectorR>& center) override;
+    std::optional<Vector> getCenter() override;
+    void setCenter(const std::optional<Vector>& center) override;
     std::optional<std::variant<std::string, double>> getRadius() override;
     void setRadius(const std::optional<std::variant<std::string, double>>& radius) override;
 
   public:
     // Methods
-    void update(const std::optional<std::variant<nitro::NullType, std::vector<double>>>& colors, const std::optional<std::vector<double>>& positions, const std::optional<VectorR>& center, const std::optional<std::variant<std::string, double>>& radius) override;
+    void update(const std::optional<std::variant<nitro::NullType, std::vector<double>>>& colors, const std::optional<std::vector<double>>& positions, const std::optional<Vector>& center, const std::optional<std::variant<std::string, double>>& radius) override;
 
   private:
     friend HybridBase;

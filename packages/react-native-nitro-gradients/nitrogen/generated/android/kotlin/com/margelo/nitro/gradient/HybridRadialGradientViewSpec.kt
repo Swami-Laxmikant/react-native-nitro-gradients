@@ -59,7 +59,7 @@ abstract class HybridRadialGradientViewSpec: HybridView() {
   @get:Keep
   @set:DoNotStrip
   @set:Keep
-  abstract var center: VectorR?
+  abstract var center: Vector?
   
   @get:DoNotStrip
   @get:Keep
@@ -70,7 +70,7 @@ abstract class HybridRadialGradientViewSpec: HybridView() {
   // Methods
   @DoNotStrip
   @Keep
-  abstract fun update(colors: Variant_NullType_DoubleArray?, positions: DoubleArray?, center: VectorR?, radius: Variant_String_Double?): Unit
+  abstract fun update(colors: Variant_NullType_DoubleArray?, positions: DoubleArray?, center: Vector?, radius: Variant_String_Double?): Unit
 
   private external fun initHybrid(): HybridData
 

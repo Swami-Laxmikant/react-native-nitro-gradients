@@ -59,18 +59,24 @@ abstract class HybridLinearGradientViewSpec: HybridView() {
   @get:Keep
   @set:DoNotStrip
   @set:Keep
-  abstract var start: VectorR?
+  abstract var start: Vector?
   
   @get:DoNotStrip
   @get:Keep
   @set:DoNotStrip
   @set:Keep
-  abstract var end: VectorR?
+  abstract var end: Vector?
+  
+  @get:DoNotStrip
+  @get:Keep
+  @set:DoNotStrip
+  @set:Keep
+  abstract var angle: Double?
 
   // Methods
   @DoNotStrip
   @Keep
-  abstract fun update(colors: Variant_NullType_DoubleArray?, positions: DoubleArray?, start: VectorR?, end: VectorR?): Unit
+  abstract fun update(colors: Variant_NullType_DoubleArray?, positions: DoubleArray?, start: Vector?, end: Vector?, angle: Double?): Unit
 
   private external fun initHybrid(): HybridData
 

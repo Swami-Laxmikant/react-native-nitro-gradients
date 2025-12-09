@@ -45,34 +45,14 @@ namespace margelo::nitro::gradient::views {
         throw std::runtime_error(std::string("SweepGradientView.positions: ") + exc.what());
       }
     }()),
-    center([&]() -> CachedProp<std::optional<VectorR>> {
+    center([&]() -> CachedProp<std::optional<Vector>> {
       try {
         const react::RawValue* rawValue = rawProps.at("center", nullptr, nullptr);
         if (rawValue == nullptr) return sourceProps.center;
         const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
-        return CachedProp<std::optional<VectorR>>::fromRawValue(*runtime, value, sourceProps.center);
+        return CachedProp<std::optional<Vector>>::fromRawValue(*runtime, value, sourceProps.center);
       } catch (const std::exception& exc) {
         throw std::runtime_error(std::string("SweepGradientView.center: ") + exc.what());
-      }
-    }()),
-    startAngle([&]() -> CachedProp<std::optional<double>> {
-      try {
-        const react::RawValue* rawValue = rawProps.at("startAngle", nullptr, nullptr);
-        if (rawValue == nullptr) return sourceProps.startAngle;
-        const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
-        return CachedProp<std::optional<double>>::fromRawValue(*runtime, value, sourceProps.startAngle);
-      } catch (const std::exception& exc) {
-        throw std::runtime_error(std::string("SweepGradientView.startAngle: ") + exc.what());
-      }
-    }()),
-    endAngle([&]() -> CachedProp<std::optional<double>> {
-      try {
-        const react::RawValue* rawValue = rawProps.at("endAngle", nullptr, nullptr);
-        if (rawValue == nullptr) return sourceProps.endAngle;
-        const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
-        return CachedProp<std::optional<double>>::fromRawValue(*runtime, value, sourceProps.endAngle);
-      } catch (const std::exception& exc) {
-        throw std::runtime_error(std::string("SweepGradientView.endAngle: ") + exc.what());
       }
     }()),
     hybridRef([&]() -> CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridSweepGradientViewSpec>& /* ref */)>>> {
@@ -91,8 +71,6 @@ namespace margelo::nitro::gradient::views {
     colors(other.colors),
     positions(other.positions),
     center(other.center),
-    startAngle(other.startAngle),
-    endAngle(other.endAngle),
     hybridRef(other.hybridRef) { }
 
   bool HybridSweepGradientViewProps::filterObjectKeys(const std::string& propName) {
@@ -100,8 +78,6 @@ namespace margelo::nitro::gradient::views {
       case hashString("colors"): return true;
       case hashString("positions"): return true;
       case hashString("center"): return true;
-      case hashString("startAngle"): return true;
-      case hashString("endAngle"): return true;
       case hashString("hybridRef"): return true;
       default: return false;
     }

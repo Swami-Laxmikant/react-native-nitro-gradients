@@ -161,12 +161,12 @@ open class HybridLinearGradientViewSpec_cxx {
     }
   }
   
-  public final var start: bridge.std__optional_VectorR_ {
+  public final var start: bridge.std__optional_Vector_ {
     @inline(__always)
     get {
-      return { () -> bridge.std__optional_VectorR_ in
+      return { () -> bridge.std__optional_Vector_ in
         if let __unwrappedValue = self.__implementation.start {
-          return bridge.create_std__optional_VectorR_(__unwrappedValue)
+          return bridge.create_std__optional_Vector_(__unwrappedValue)
         } else {
           return .init()
         }
@@ -178,12 +178,12 @@ open class HybridLinearGradientViewSpec_cxx {
     }
   }
   
-  public final var end: bridge.std__optional_VectorR_ {
+  public final var end: bridge.std__optional_Vector_ {
     @inline(__always)
     get {
-      return { () -> bridge.std__optional_VectorR_ in
+      return { () -> bridge.std__optional_Vector_ in
         if let __unwrappedValue = self.__implementation.end {
-          return bridge.create_std__optional_VectorR_(__unwrappedValue)
+          return bridge.create_std__optional_Vector_(__unwrappedValue)
         } else {
           return .init()
         }
@@ -194,10 +194,27 @@ open class HybridLinearGradientViewSpec_cxx {
       self.__implementation.end = newValue.value
     }
   }
+  
+  public final var angle: bridge.std__optional_double_ {
+    @inline(__always)
+    get {
+      return { () -> bridge.std__optional_double_ in
+        if let __unwrappedValue = self.__implementation.angle {
+          return bridge.create_std__optional_double_(__unwrappedValue)
+        } else {
+          return .init()
+        }
+      }()
+    }
+    @inline(__always)
+    set {
+      self.__implementation.angle = newValue.value
+    }
+  }
 
   // Methods
   @inline(__always)
-  public final func update(colors: bridge.std__optional_std__variant_nitro__NullType__std__vector_double___, positions: bridge.std__optional_std__vector_double__, start: bridge.std__optional_VectorR_, end: bridge.std__optional_VectorR_) -> bridge.Result_void_ {
+  public final func update(colors: bridge.std__optional_std__variant_nitro__NullType__std__vector_double___, positions: bridge.std__optional_std__vector_double__, start: bridge.std__optional_Vector_, end: bridge.std__optional_Vector_, angle: bridge.std__optional_double_) -> bridge.Result_void_ {
     do {
       try self.__implementation.update(colors: { () -> Variant_NullType__Double_? in
         if bridge.has_value_std__optional_std__variant_nitro__NullType__std__vector_double___(colors) {
@@ -225,7 +242,7 @@ open class HybridLinearGradientViewSpec_cxx {
         } else {
           return nil
         }
-      }(), start: start.value, end: end.value)
+      }(), start: start.value, end: end.value, angle: angle.value)
       return bridge.create_Result_void_()
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()

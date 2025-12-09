@@ -161,12 +161,12 @@ open class HybridSweepGradientViewSpec_cxx {
     }
   }
   
-  public final var center: bridge.std__optional_VectorR_ {
+  public final var center: bridge.std__optional_Vector_ {
     @inline(__always)
     get {
-      return { () -> bridge.std__optional_VectorR_ in
+      return { () -> bridge.std__optional_Vector_ in
         if let __unwrappedValue = self.__implementation.center {
-          return bridge.create_std__optional_VectorR_(__unwrappedValue)
+          return bridge.create_std__optional_Vector_(__unwrappedValue)
         } else {
           return .init()
         }
@@ -177,44 +177,10 @@ open class HybridSweepGradientViewSpec_cxx {
       self.__implementation.center = newValue.value
     }
   }
-  
-  public final var startAngle: bridge.std__optional_double_ {
-    @inline(__always)
-    get {
-      return { () -> bridge.std__optional_double_ in
-        if let __unwrappedValue = self.__implementation.startAngle {
-          return bridge.create_std__optional_double_(__unwrappedValue)
-        } else {
-          return .init()
-        }
-      }()
-    }
-    @inline(__always)
-    set {
-      self.__implementation.startAngle = newValue.value
-    }
-  }
-  
-  public final var endAngle: bridge.std__optional_double_ {
-    @inline(__always)
-    get {
-      return { () -> bridge.std__optional_double_ in
-        if let __unwrappedValue = self.__implementation.endAngle {
-          return bridge.create_std__optional_double_(__unwrappedValue)
-        } else {
-          return .init()
-        }
-      }()
-    }
-    @inline(__always)
-    set {
-      self.__implementation.endAngle = newValue.value
-    }
-  }
 
   // Methods
   @inline(__always)
-  public final func update(colors: bridge.std__optional_std__variant_nitro__NullType__std__vector_double___, positions: bridge.std__optional_std__vector_double__, center: bridge.std__optional_VectorR_, startAngle: bridge.std__optional_double_, endAngle: bridge.std__optional_double_) -> bridge.Result_void_ {
+  public final func update(colors: bridge.std__optional_std__variant_nitro__NullType__std__vector_double___, positions: bridge.std__optional_std__vector_double__, center: bridge.std__optional_Vector_) -> bridge.Result_void_ {
     do {
       try self.__implementation.update(colors: { () -> Variant_NullType__Double_? in
         if bridge.has_value_std__optional_std__variant_nitro__NullType__std__vector_double___(colors) {
@@ -242,7 +208,7 @@ open class HybridSweepGradientViewSpec_cxx {
         } else {
           return nil
         }
-      }(), center: center.value, startAngle: startAngle.value, endAngle: endAngle.value)
+      }(), center: center.value)
       return bridge.create_Result_void_()
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()

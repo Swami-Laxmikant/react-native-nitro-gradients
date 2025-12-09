@@ -20,10 +20,6 @@ namespace margelo::nitro::gradient {
       prototype.registerHybridSetter("positions", &HybridSweepGradientViewSpec::setPositions);
       prototype.registerHybridGetter("center", &HybridSweepGradientViewSpec::getCenter);
       prototype.registerHybridSetter("center", &HybridSweepGradientViewSpec::setCenter);
-      prototype.registerHybridGetter("startAngle", &HybridSweepGradientViewSpec::getStartAngle);
-      prototype.registerHybridSetter("startAngle", &HybridSweepGradientViewSpec::setStartAngle);
-      prototype.registerHybridGetter("endAngle", &HybridSweepGradientViewSpec::getEndAngle);
-      prototype.registerHybridSetter("endAngle", &HybridSweepGradientViewSpec::setEndAngle);
       prototype.registerHybridMethod("update", &HybridSweepGradientViewSpec::update);
     });
   }

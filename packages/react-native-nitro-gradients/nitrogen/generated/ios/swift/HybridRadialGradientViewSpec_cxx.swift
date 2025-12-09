@@ -161,12 +161,12 @@ open class HybridRadialGradientViewSpec_cxx {
     }
   }
   
-  public final var center: bridge.std__optional_VectorR_ {
+  public final var center: bridge.std__optional_Vector_ {
     @inline(__always)
     get {
-      return { () -> bridge.std__optional_VectorR_ in
+      return { () -> bridge.std__optional_Vector_ in
         if let __unwrappedValue = self.__implementation.center {
-          return bridge.create_std__optional_VectorR_(__unwrappedValue)
+          return bridge.create_std__optional_Vector_(__unwrappedValue)
         } else {
           return .init()
         }
@@ -223,7 +223,7 @@ open class HybridRadialGradientViewSpec_cxx {
 
   // Methods
   @inline(__always)
-  public final func update(colors: bridge.std__optional_std__variant_nitro__NullType__std__vector_double___, positions: bridge.std__optional_std__vector_double__, center: bridge.std__optional_VectorR_, radius: bridge.std__optional_std__variant_std__string__double__) -> bridge.Result_void_ {
+  public final func update(colors: bridge.std__optional_std__variant_nitro__NullType__std__vector_double___, positions: bridge.std__optional_std__vector_double__, center: bridge.std__optional_Vector_, radius: bridge.std__optional_std__variant_std__string__double__) -> bridge.Result_void_ {
     do {
       try self.__implementation.update(colors: { () -> Variant_NullType__Double_? in
         if bridge.has_value_std__optional_std__variant_nitro__NullType__std__vector_double___(colors) {

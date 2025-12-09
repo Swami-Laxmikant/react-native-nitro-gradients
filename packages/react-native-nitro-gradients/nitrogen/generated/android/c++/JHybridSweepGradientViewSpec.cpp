@@ -7,13 +7,13 @@
 
 #include "JHybridSweepGradientViewSpec.hpp"
 
-// Forward declaration of `VectorR` to properly resolve imports.
-namespace margelo::nitro::gradient { struct VectorR; }
+// Forward declaration of `Vector` to properly resolve imports.
+namespace margelo::nitro::gradient { struct Vector; }
 
 #include <vector>
 #include <optional>
-#include "VectorR.hpp"
-#include "JVectorR.hpp"
+#include "Vector.hpp"
+#include "JVector.hpp"
 #include <string>
 #include <variant>
 #include "JVariant_String_Double.hpp"
@@ -88,43 +88,25 @@ namespace margelo::nitro::gradient {
       return __array;
     }() : nullptr);
   }
-  std::optional<VectorR> JHybridSweepGradientViewSpec::getCenter() {
-    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JVectorR>()>("getCenter");
+  std::optional<Vector> JHybridSweepGradientViewSpec::getCenter() {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JVector>()>("getCenter");
     auto __result = method(_javaPart);
     return __result != nullptr ? std::make_optional(__result->toCpp()) : std::nullopt;
   }
-  void JHybridSweepGradientViewSpec::setCenter(const std::optional<VectorR>& center) {
-    static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<JVectorR> /* center */)>("setCenter");
-    method(_javaPart, center.has_value() ? JVectorR::fromCpp(center.value()) : nullptr);
-  }
-  std::optional<double> JHybridSweepGradientViewSpec::getStartAngle() {
-    static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JDouble>()>("getStartAngle");
-    auto __result = method(_javaPart);
-    return __result != nullptr ? std::make_optional(__result->value()) : std::nullopt;
-  }
-  void JHybridSweepGradientViewSpec::setStartAngle(std::optional<double> startAngle) {
-    static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<jni::JDouble> /* startAngle */)>("setStartAngle");
-    method(_javaPart, startAngle.has_value() ? jni::JDouble::valueOf(startAngle.value()) : nullptr);
-  }
-  std::optional<double> JHybridSweepGradientViewSpec::getEndAngle() {
-    static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JDouble>()>("getEndAngle");
-    auto __result = method(_javaPart);
-    return __result != nullptr ? std::make_optional(__result->value()) : std::nullopt;
-  }
-  void JHybridSweepGradientViewSpec::setEndAngle(std::optional<double> endAngle) {
-    static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<jni::JDouble> /* endAngle */)>("setEndAngle");
-    method(_javaPart, endAngle.has_value() ? jni::JDouble::valueOf(endAngle.value()) : nullptr);
+  void JHybridSweepGradientViewSpec::setCenter(const std::optional<Vector>& center) {
+    static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<JVector> /* center */)>("setCenter");
+    method(_javaPart, center.has_value() ? JVector::fromCpp(center.value()) : nullptr);
   }
 
   // Methods
-  void JHybridSweepGradientViewSpec::update(const std::optional<std::variant<nitro::NullType, std::vector<double>>>& colors, const std::optional<std::vector<double>>& positions, const std::optional<VectorR>& center, std::optional<double> startAngle, std::optional<double> endAngle) {
-    static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<JVariant_NullType_DoubleArray> /* colors */, jni::alias_ref<jni::JArrayDouble> /* positions */, jni::alias_ref<JVectorR> /* center */, jni::alias_ref<jni::JDouble> /* startAngle */, jni::alias_ref<jni::JDouble> /* endAngle */)>("update");
+  void JHybridSweepGradientViewSpec::update(const std::optional<std::variant<nitro::NullType, std::vector<double>>>& colors, const std::optional<std::vector<double>>& positions, const std::optional<Vector>& center) {
+    static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<JVariant_NullType_DoubleArray> /* colors */, jni::alias_ref<jni::JArrayDouble> /* positions */, jni::alias_ref<JVector> /* center */)>("update");
     method(_javaPart, colors.has_value() ? JVariant_NullType_DoubleArray::fromCpp(colors.value()) : nullptr, positions.has_value() ? [&]() {
       size_t __size = positions.value().size();
       jni::local_ref<jni::JArrayDouble> __array = jni::JArrayDouble::newArray(__size);
       __array->setRegion(0, __size, positions.value().data());
       return __array;
-    }() : nullptr, center.has_value() ? JVectorR::fromCpp(center.value()) : nullptr, startAngle.has_value() ? jni::JDouble::valueOf(startAngle.value()) : nullptr, endAngle.has_value() ? jni::JDouble::valueOf(endAngle.value()) : nullptr);
+    }() : nullptr, center.has_value() ? JVector::fromCpp(center.value()) : nullptr);
   }
 
 } // namespace margelo::nitro::gradient

@@ -48,14 +48,6 @@ void JHybridSweepGradientViewStateUpdater::updateViewProps(jni::alias_ref<jni::J
     view->setCenter(props.center.value);
     // TODO: Set isDirty = false
   }
-  if (props.startAngle.isDirty) {
-    view->setStartAngle(props.startAngle.value);
-    // TODO: Set isDirty = false
-  }
-  if (props.endAngle.isDirty) {
-    view->setEndAngle(props.endAngle.value);
-    // TODO: Set isDirty = false
-  }
 
   // Update hybridRef if it changed
   if (props.hybridRef.isDirty) {

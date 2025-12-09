@@ -3,23 +3,19 @@ import type {
     HybridViewMethods,
     HybridViewProps,
 } from "react-native-nitro-modules";
-import type { VectorR } from "./helperTypes";
+import type { Vector } from "./helperTypes";
 
 export interface SweepGradientViewProps extends HybridViewProps {
     colors: number[];
     positions?: number[];
-    center?: VectorR;
-    startAngle?: number;
-    endAngle?: number;
+    center?: Vector;
 }
 
 export interface SweepGradientViewMethods extends HybridViewMethods {
     update(
         colors: number[] | null,
         positions?: number[],
-        center?: VectorR,
-        startAngle?: number,
-        endAngle?: number,
+        center?: Vector,
     ): void;
 }
 

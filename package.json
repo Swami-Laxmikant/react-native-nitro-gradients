@@ -11,6 +11,7 @@
     "docs"
   ],
   "scripts": {
+    "kill": "sh -c 'kill -9 $(lsof -ti:\"$1\") 2>/dev/null && echo \"Killed process on port $1\" || echo \"No process on port $1\"' _",
     "run:android": "bun run --cwd example android",
     "build": "bun run --cwd packages/react-native-nitro-gradients build",
     "specs": "bun run --cwd packages/react-native-nitro-gradients specs",

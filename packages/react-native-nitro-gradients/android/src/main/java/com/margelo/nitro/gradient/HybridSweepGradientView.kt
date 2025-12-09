@@ -138,7 +138,7 @@ class HybridSweepGradientView(context: Context) : HybridSweepGradientViewSpec() 
         }
     }
 
-    private fun updateCenter(value: VectorR) {
+    private fun updateCenter(value: Vector) {
         val w = gradientView.width
         val h = gradientView.height
         if (w > 0 && h > 0) {
@@ -171,7 +171,7 @@ class HybridSweepGradientView(context: Context) : HybridSweepGradientViewSpec() 
             }
         }
 
-    override var center: VectorR? = VectorR(
+    override var center: Vector? = Vector(
         x = Variant_String_Double.First("50%"),
         y = Variant_String_Double.First("50%")
     )
@@ -187,24 +187,10 @@ class HybridSweepGradientView(context: Context) : HybridSweepGradientViewSpec() 
             }
         }
 
-    override var startAngle: Double? = 0.0
-        set(value) {
-            val newValue = value ?: 0.0
-            if (field != newValue) {
-                field = newValue
-                gradientDrawable.setStartAngle(newValue.toFloat())
-                gradientDrawable.invalidate()
-            }
-        }
-
-    override var endAngle: Double? = null
-
     override fun update(
         colors: Variant_NullType_DoubleArray?,
         positions: DoubleArray?,
-        center: VectorR?,
-        startAngle: Double?,
-        endAngle: Double?
+        center: Vector?
     ) {
         var changed = false
 
@@ -238,14 +224,6 @@ class HybridSweepGradientView(context: Context) : HybridSweepGradientViewSpec() 
         center?.let {
             if (this.center != it) {
                 this.center = it
-                changed = true
-            }
-        }
-
-        startAngle?.let {
-            if (this.startAngle != it) {
-                this.startAngle = it
-                gradientDrawable.setStartAngle(it.toFloat())
                 changed = true
             }
         }

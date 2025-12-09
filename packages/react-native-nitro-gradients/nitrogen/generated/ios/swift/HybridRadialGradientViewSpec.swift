@@ -13,11 +13,11 @@ public protocol HybridRadialGradientViewSpec_protocol: HybridObject, HybridView 
   // Properties
   var colors: [Double] { get set }
   var positions: [Double]? { get set }
-  var center: VectorR? { get set }
+  var center: Vector? { get set }
   var radius: Variant_String_Double? { get set }
 
   // Methods
-  func update(colors: Variant_NullType__Double_?, positions: [Double]?, center: VectorR?, radius: Variant_String_Double?) throws -> Void
+  func update(colors: Variant_NullType__Double_?, positions: [Double]?, center: Vector?, radius: Variant_String_Double?) throws -> Void
 }
 
 public extension HybridRadialGradientViewSpec_protocol {

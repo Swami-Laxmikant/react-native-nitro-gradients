@@ -13,12 +13,12 @@
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
 
-// Forward declaration of `VectorR` to properly resolve imports.
-namespace margelo::nitro::gradient { struct VectorR; }
+// Forward declaration of `Vector` to properly resolve imports.
+namespace margelo::nitro::gradient { struct Vector; }
 
 #include <vector>
 #include <optional>
-#include "VectorR.hpp"
+#include "Vector.hpp"
 #include <NitroModules/Null.hpp>
 #include <variant>
 
@@ -53,14 +53,16 @@ namespace margelo::nitro::gradient {
       virtual void setColors(const std::vector<double>& colors) = 0;
       virtual std::optional<std::vector<double>> getPositions() = 0;
       virtual void setPositions(const std::optional<std::vector<double>>& positions) = 0;
-      virtual std::optional<VectorR> getStart() = 0;
-      virtual void setStart(const std::optional<VectorR>& start) = 0;
-      virtual std::optional<VectorR> getEnd() = 0;
-      virtual void setEnd(const std::optional<VectorR>& end) = 0;
+      virtual std::optional<Vector> getStart() = 0;
+      virtual void setStart(const std::optional<Vector>& start) = 0;
+      virtual std::optional<Vector> getEnd() = 0;
+      virtual void setEnd(const std::optional<Vector>& end) = 0;
+      virtual std::optional<double> getAngle() = 0;
+      virtual void setAngle(std::optional<double> angle) = 0;
 
     public:
       // Methods
-      virtual void update(const std::optional<std::variant<nitro::NullType, std::vector<double>>>& colors, const std::optional<std::vector<double>>& positions, const std::optional<VectorR>& start, const std::optional<VectorR>& end) = 0;
+      virtual void update(const std::optional<std::variant<nitro::NullType, std::vector<double>>>& colors, const std::optional<std::vector<double>>& positions, const std::optional<Vector>& start, const std::optional<Vector>& end, std::optional<double> angle) = 0;
 
     protected:
       // Hybrid Setup

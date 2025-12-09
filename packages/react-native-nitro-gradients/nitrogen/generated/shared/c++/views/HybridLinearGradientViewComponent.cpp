@@ -45,24 +45,34 @@ namespace margelo::nitro::gradient::views {
         throw std::runtime_error(std::string("LinearGradientView.positions: ") + exc.what());
       }
     }()),
-    start([&]() -> CachedProp<std::optional<VectorR>> {
+    start([&]() -> CachedProp<std::optional<Vector>> {
       try {
         const react::RawValue* rawValue = rawProps.at("start", nullptr, nullptr);
         if (rawValue == nullptr) return sourceProps.start;
         const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
-        return CachedProp<std::optional<VectorR>>::fromRawValue(*runtime, value, sourceProps.start);
+        return CachedProp<std::optional<Vector>>::fromRawValue(*runtime, value, sourceProps.start);
       } catch (const std::exception& exc) {
         throw std::runtime_error(std::string("LinearGradientView.start: ") + exc.what());
       }
     }()),
-    end([&]() -> CachedProp<std::optional<VectorR>> {
+    end([&]() -> CachedProp<std::optional<Vector>> {
       try {
         const react::RawValue* rawValue = rawProps.at("end", nullptr, nullptr);
         if (rawValue == nullptr) return sourceProps.end;
         const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
-        return CachedProp<std::optional<VectorR>>::fromRawValue(*runtime, value, sourceProps.end);
+        return CachedProp<std::optional<Vector>>::fromRawValue(*runtime, value, sourceProps.end);
       } catch (const std::exception& exc) {
         throw std::runtime_error(std::string("LinearGradientView.end: ") + exc.what());
+      }
+    }()),
+    angle([&]() -> CachedProp<std::optional<double>> {
+      try {
+        const react::RawValue* rawValue = rawProps.at("angle", nullptr, nullptr);
+        if (rawValue == nullptr) return sourceProps.angle;
+        const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
+        return CachedProp<std::optional<double>>::fromRawValue(*runtime, value, sourceProps.angle);
+      } catch (const std::exception& exc) {
+        throw std::runtime_error(std::string("LinearGradientView.angle: ") + exc.what());
       }
     }()),
     hybridRef([&]() -> CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridLinearGradientViewSpec>& /* ref */)>>> {
@@ -82,6 +92,7 @@ namespace margelo::nitro::gradient::views {
     positions(other.positions),
     start(other.start),
     end(other.end),
+    angle(other.angle),
     hybridRef(other.hybridRef) { }
 
   bool HybridLinearGradientViewProps::filterObjectKeys(const std::string& propName) {
@@ -90,6 +101,7 @@ namespace margelo::nitro::gradient::views {
       case hashString("positions"): return true;
       case hashString("start"): return true;
       case hashString("end"): return true;
+      case hashString("angle"): return true;
       case hashString("hybridRef"): return true;
       default: return false;
     }

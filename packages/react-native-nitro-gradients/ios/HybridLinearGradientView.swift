@@ -3,51 +3,20 @@ import UIKit
 import NitroModules
 
 class HybridLinearGradientView: HybridLinearGradientViewSpec {
-    func update(colors: Variant_NullType__Double_?, positions: [Double]?, start: VectorR?, end: VectorR?) throws {
-        var changed = false
-        
-        if let colorsVariant = colors, case .second(let colorsArray) = colorsVariant, !self.colors.elementsEqual(colorsArray) {
-            self.colors = colorsArray
-            changed = true
-        }
-        if let positions = positions, !arraysEqual(self.positions, positions) {
-            self.positions = positions
-            changed = true
-        }
-        if let start = start, !vectorsEqual(self.start, start) {
-            self.start = start
-            changed = true
-        }
-        if let end = end, !vectorsEqual(self.end, end) {
-            self.end = end
-            changed = true
-        }
-        
-        if changed {
-            updateGradient()
-        }
-    }
+    
+    // MARK: - Private Properties
     
     private let gradientView: UIView
     private let gradientLayer = CAGradientLayer()
     let view: UIView
+    
     private var isDirty = false
     private var cachedColors: [CGColor] = []
     private var cachedLocations: [NSNumber] = []
     private var lastBounds: CGRect = .zero
     private var isLayoutValid = false
     
-    override init() {
-        self.gradientView = UIView()
-        self.view = gradientView
-        super.init()
-        
-        setupCustomView()
-        isDirty = true
-        DispatchQueue.main.async { [weak self] in
-            self?.updateGradient()
-        }
-    }
+    // MARK: - Protocol Properties
     
     var colors: [Double] = [] {
         didSet {
@@ -67,28 +36,67 @@ class HybridLinearGradientView: HybridLinearGradientViewSpec {
         }
     }
     
-    var start: VectorR? = VectorR(x: .second(0.0), y: .second(0.0)) {
+    var angle: Double? = nil {
         didSet {
+            if oldValue != angle {
+                let bounds = gradientView.bounds
+                if bounds.width > 0 && bounds.height > 0, let angle = angle {
+                    setPointsFromAngle(angle: angle, width: bounds.width, height: bounds.height)
+                }
+                isDirty = true
+            }
+        }
+    }
+    
+    var start: Vector? = Vector(x: .second(0.0), y: .second(0.0)) {
+        didSet {
+            if angle != nil {
+                return
+            }
             if !vectorsEqual(oldValue, start) {
                 isDirty = true
             }
         }
     }
     
-    var end: VectorR? = VectorR(x: .second(1.0), y: .second(0.0)) {
+    var end: Vector? = Vector(x: .second(1.0), y: .second(0.0)) {
         didSet {
+            if angle != nil {
+                return
+            }
             if !vectorsEqual(oldValue, end) {
                 isDirty = true
             }
         }
     }
     
-    private func setupCustomView() {
+    // MARK: - Initialization
+    
+    override init() {
+        self.gradientView = UIView()
+        self.view = gradientView
+        super.init()
+        
+        setupGradient()
+        isDirty = true
+        
+        DispatchQueue.main.async { [weak self] in
+            self?.updateGradient()
+        }
+    }
+    
+    // MARK: - Setup
+    
+    private func setupGradient() {
         let customView = CustomGradientView { [weak self] in
             self?.handleBoundsChange()
         }
         
         gradientView.layer.sublayers?.removeAll()
+        
+        gradientLayer.type = .axial
+        gradientLayer.contentsScale = UIScreen.main.scale
+        
         customView.layer.addSublayer(gradientLayer)
         gradientView.addSubview(customView)
         
@@ -99,9 +107,9 @@ class HybridLinearGradientView: HybridLinearGradientViewSpec {
             customView.trailingAnchor.constraint(equalTo: gradientView.trailingAnchor),
             customView.bottomAnchor.constraint(equalTo: gradientView.bottomAnchor)
         ])
-        
-        gradientLayer.type = .axial
     }
+    
+    // MARK: - Bounds Handling
     
     private func handleBoundsChange() {
         let bounds = gradientView.bounds
@@ -110,6 +118,9 @@ class HybridLinearGradientView: HybridLinearGradientViewSpec {
             
             if bounds.width > 0 && bounds.height > 0 && !isLayoutValid {
                 isLayoutValid = true
+                if let angle = angle {
+                    setPointsFromAngle(angle: angle, width: bounds.width, height: bounds.height)
+                }
                 isDirty = true
                 updateGradient()
                 updateGradientFrame()
@@ -119,6 +130,45 @@ class HybridLinearGradientView: HybridLinearGradientViewSpec {
             }
         }
     }
+    
+    // MARK: - Update Interface
+    
+    func update(colors: Variant_NullType__Double_?, positions: [Double]?, start: Vector?, end: Vector?, angle: Double?) throws {
+        var changed = false
+        
+        if let colorsVariant = colors, case .second(let colorsArray) = colorsVariant, !self.colors.elementsEqual(colorsArray) {
+            self.colors = colorsArray
+            changed = true
+        }
+        if let positions = positions, !arraysEqual(self.positions, positions) {
+            self.positions = positions
+            changed = true
+        }
+        
+        if let angle = angle {
+            if self.angle != angle {
+                self.angle = angle
+                changed = true
+            }
+        }
+        
+        if self.angle == nil {
+            if let start = start, !vectorsEqual(self.start, start) {
+                self.start = start
+                changed = true
+            }
+            if let end = end, !vectorsEqual(self.end, end) {
+                self.end = end
+                changed = true
+            }
+        }
+        
+        if changed {
+            updateGradient()
+        }
+    }
+    
+    // MARK: - Gradient Updates
     
     private func computeLocations() -> [NSNumber] {
         if let positions = positions, !positions.isEmpty {
@@ -151,16 +201,15 @@ class HybridLinearGradientView: HybridLinearGradientViewSpec {
     
     private func updateGradientFrame() {
         let bounds = gradientView.bounds
-        
         guard bounds.width > 0 && bounds.height > 0 else { return }
         
         CATransaction.begin()
         CATransaction.setDisableActions(true)
+        
         gradientLayer.frame = bounds
         
-        // Convert VectorR to normalized points (0-1) for CAGradientLayer
-        let startValue = start ?? VectorR(x: .second(0.0), y: .second(0.0))
-        let endValue = end ?? VectorR(x: .second(1.0), y: .second(0.0))
+        let startValue = start ?? Vector(x: .second(0.0), y: .second(0.0))
+        let endValue = end ?? Vector(x: .second(1.0), y: .second(0.0))
         
         gradientLayer.startPoint = toNormalizedPoint(value: startValue, width: bounds.width, height: bounds.height)
         gradientLayer.endPoint = toNormalizedPoint(value: endValue, width: bounds.width, height: bounds.height)
@@ -168,52 +217,30 @@ class HybridLinearGradientView: HybridLinearGradientViewSpec {
         CATransaction.commit()
     }
     
-    private func toNormalizedPoint(value: VectorR, width: CGFloat, height: CGFloat) -> CGPoint {
-        let x = toNormalizedCoordinate(value: value.x, dimension: width)
-        let y = toNormalizedCoordinate(value: value.y, dimension: height)
-        return CGPoint(x: x, y: y)
-    }
-    
-    private func toNormalizedCoordinate(value: Variant_String_Double, dimension: CGFloat) -> CGFloat {
-        switch value {
-        case .first(let s):
-            // Handle percentage strings: "50%", "50w%", "50h%"
-            if s.hasSuffix("%"), let num = Double(s.dropLast(1)) {
-                return CGFloat(num * 0.01)
-            } else if s.hasSuffix("w%"), let num = Double(s.dropLast(2)) {
-                return CGFloat(num * 0.01)
-            } else if s.hasSuffix("h%"), let num = Double(s.dropLast(2)) {
-                return CGFloat(num * 0.01)
-            }
-            return 0
-        case .second(let v):
-            // Numeric values are absolute pixels, convert to normalized (0-1)
-            guard dimension > 0 else { return 0 }
-            return CGFloat(v) / dimension
+    private func setPointsFromAngle(angle: Double, width: CGFloat, height: CGFloat) {
+        if width == 0 || height == 0 {
+            return
         }
-    }
-    
-    private func arraysEqual(_ a: [Double]?, _ b: [Double]?) -> Bool {
-        guard let a = a, let b = b else { return a == nil && b == nil }
-        return a.elementsEqual(b)
-    }
-    
-    private func vectorsEqual(_ a: VectorR?, _ b: VectorR?) -> Bool {
-        guard let a = a, let b = b else { return a == nil && b == nil }
-        return variantsEqual(a.x, b.x) && variantsEqual(a.y, b.y)
-    }
-    
-    private func variantsEqual(_ a: Variant_String_Double?, _ b: Variant_String_Double?) -> Bool {
-        guard let a = a, let b = b else { return a == nil && b == nil }
-        switch (a, b) {
-        case (.first(let s1), .first(let s2)): return s1 == s2
-        case (.second(let d1), .second(let d2)): return d1 == d2
-        default: return false
-        }
+        
+        // Negate to reverse rotation direction for iOS
+        let adjustedAngle = CGFloat(angle) - 90
+        let cx = width / 2
+        let cy = height / 2
+        let relativeStartPoint = getGradientStartPoint(angle: adjustedAngle, hWidth: cx, hHeight: cy)
+        
+        // Convert to absolute coordinates
+        // iOS coordinate system: Y increases downward, so we add instead of subtract
+        let absoluteStartX = cx + relativeStartPoint.0
+        let absoluteStartY = cy + relativeStartPoint.1  // Changed: add instead of subtract
+        let absoluteEndX = cx - relativeStartPoint.0
+        let absoluteEndY = cy - relativeStartPoint.1    // Changed: subtract instead of add
+        
+        // Store as absolute pixel values (toNormalizedCoordinate will convert them to 0-1)
+        start = Vector(x: .second(Double(absoluteStartX)), y: .second(Double(absoluteStartY)))
+        end = Vector(x: .second(Double(absoluteEndX)), y: .second(Double(absoluteEndY)))
     }
     
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
 }
-

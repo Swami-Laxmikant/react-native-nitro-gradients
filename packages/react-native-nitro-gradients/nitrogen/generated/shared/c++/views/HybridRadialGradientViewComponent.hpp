@@ -18,7 +18,7 @@
 
 #include <vector>
 #include <optional>
-#include "VectorR.hpp"
+#include "Vector.hpp"
 #include <string>
 #include <variant>
 #include <memory>
@@ -48,7 +48,7 @@ namespace margelo::nitro::gradient::views {
   public:
     CachedProp<std::vector<double>> colors;
     CachedProp<std::optional<std::vector<double>>> positions;
-    CachedProp<std::optional<VectorR>> center;
+    CachedProp<std::optional<Vector>> center;
     CachedProp<std::optional<std::variant<std::string, double>>> radius;
     CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridRadialGradientViewSpec>& /* ref */)>>> hybridRef;
 

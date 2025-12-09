@@ -14,8 +14,8 @@ namespace margelo::nitro::gradient { class HybridLinearGradientViewSpec; }
 namespace margelo::nitro::gradient { class HybridRadialGradientViewSpec; }
 // Forward declaration of `HybridSweepGradientViewSpec` to properly resolve imports.
 namespace margelo::nitro::gradient { class HybridSweepGradientViewSpec; }
-// Forward declaration of `VectorR` to properly resolve imports.
-namespace margelo::nitro::gradient { struct VectorR; }
+// Forward declaration of `Vector` to properly resolve imports.
+namespace margelo::nitro::gradient { struct Vector; }
 
 // Forward declarations of Swift defined types
 // Forward declaration of `HybridLinearGradientViewSpec_cxx` to properly resolve imports.
@@ -29,7 +29,7 @@ namespace NitroGradient { class HybridSweepGradientViewSpec_cxx; }
 #include "HybridLinearGradientViewSpec.hpp"
 #include "HybridRadialGradientViewSpec.hpp"
 #include "HybridSweepGradientViewSpec.hpp"
-#include "VectorR.hpp"
+#include "Vector.hpp"
 #include <NitroModules/Null.hpp>
 #include <NitroModules/Result.hpp>
 #include <exception>
@@ -100,18 +100,33 @@ namespace margelo::nitro::gradient::bridge::swift {
     return std__variant_std__string__double_(value);
   }
   
-  // pragma MARK: std::optional<VectorR>
+  // pragma MARK: std::optional<Vector>
   /**
-   * Specialized version of `std::optional<VectorR>`.
+   * Specialized version of `std::optional<Vector>`.
    */
-  using std__optional_VectorR_ = std::optional<VectorR>;
-  inline std::optional<VectorR> create_std__optional_VectorR_(const VectorR& value) noexcept {
-    return std::optional<VectorR>(value);
+  using std__optional_Vector_ = std::optional<Vector>;
+  inline std::optional<Vector> create_std__optional_Vector_(const Vector& value) noexcept {
+    return std::optional<Vector>(value);
   }
-  inline bool has_value_std__optional_VectorR_(const std::optional<VectorR>& optional) noexcept {
+  inline bool has_value_std__optional_Vector_(const std::optional<Vector>& optional) noexcept {
     return optional.has_value();
   }
-  inline VectorR get_std__optional_VectorR_(const std::optional<VectorR>& optional) noexcept {
+  inline Vector get_std__optional_Vector_(const std::optional<Vector>& optional) noexcept {
+    return *optional;
+  }
+  
+  // pragma MARK: std::optional<double>
+  /**
+   * Specialized version of `std::optional<double>`.
+   */
+  using std__optional_double_ = std::optional<double>;
+  inline std::optional<double> create_std__optional_double_(const double& value) noexcept {
+    return std::optional<double>(value);
+  }
+  inline bool has_value_std__optional_double_(const std::optional<double>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline double get_std__optional_double_(const std::optional<double>& optional) noexcept {
     return *optional;
   }
   
@@ -206,21 +221,6 @@ namespace margelo::nitro::gradient::bridge::swift {
   // pragma MARK: std::weak_ptr<HybridRadialGradientViewSpec>
   using std__weak_ptr_HybridRadialGradientViewSpec_ = std::weak_ptr<HybridRadialGradientViewSpec>;
   inline std__weak_ptr_HybridRadialGradientViewSpec_ weakify_std__shared_ptr_HybridRadialGradientViewSpec_(const std::shared_ptr<HybridRadialGradientViewSpec>& strong) noexcept { return strong; }
-  
-  // pragma MARK: std::optional<double>
-  /**
-   * Specialized version of `std::optional<double>`.
-   */
-  using std__optional_double_ = std::optional<double>;
-  inline std::optional<double> create_std__optional_double_(const double& value) noexcept {
-    return std::optional<double>(value);
-  }
-  inline bool has_value_std__optional_double_(const std::optional<double>& optional) noexcept {
-    return optional.has_value();
-  }
-  inline double get_std__optional_double_(const std::optional<double>& optional) noexcept {
-    return *optional;
-  }
   
   // pragma MARK: std::shared_ptr<HybridSweepGradientViewSpec>
   /**

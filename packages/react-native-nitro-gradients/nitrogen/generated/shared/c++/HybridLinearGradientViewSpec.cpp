@@ -22,6 +22,8 @@ namespace margelo::nitro::gradient {
       prototype.registerHybridSetter("start", &HybridLinearGradientViewSpec::setStart);
       prototype.registerHybridGetter("end", &HybridLinearGradientViewSpec::getEnd);
       prototype.registerHybridSetter("end", &HybridLinearGradientViewSpec::setEnd);
+      prototype.registerHybridGetter("angle", &HybridLinearGradientViewSpec::getAngle);
+      prototype.registerHybridSetter("angle", &HybridLinearGradientViewSpec::setAngle);
       prototype.registerHybridMethod("update", &HybridLinearGradientViewSpec::update);
     });
   }

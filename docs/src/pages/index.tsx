@@ -12,7 +12,9 @@ function HomepageHeader() {
   return (
     <header className={clsx("hero hero--primary", styles.heroBanner)}>
       <div className="container">
-        <Logo style={{ aspectRatio: 1, height: "20vh" }} />
+        <div className={styles.logoContainer}>
+          <Logo style={{ aspectRatio: 1, height: "20vh" }} />
+        </div>
         <Heading as="h1" className="hero__title">
           {siteConfig.title}
         </Heading>

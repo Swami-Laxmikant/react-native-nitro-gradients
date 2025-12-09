@@ -8,7 +8,7 @@ PODS:
   - hermes-engine (0.81.0):
     - hermes-engine/Pre-built (= 0.81.0)
   - hermes-engine/Pre-built (0.81.0)
-  - NitroGradient (0.1.4):
+  - NitroGradient (0.1.0):
     - boost
     - DoubleConversion
     - fast_float
@@ -2623,7 +2623,7 @@ DEPENDENCIES:
   - fmt (from `../../node_modules/react-native/third-party-podspecs/fmt.podspec`)
   - glog (from `../../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - hermes-engine (from `../../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`)
-  - NitroGradient (from `../../node_modules/react-native-nitro-gradient`)
+  - NitroGradient (from `../../node_modules/react-native-nitro-gradients`)
   - NitroModules (from `../../node_modules/react-native-nitro-modules`)
   - RCT-Folly (from `../../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTDeprecation (from `../../node_modules/react-native/ReactApple/Libraries/RCTFoundation/RCTDeprecation`)
@@ -2719,7 +2719,7 @@ EXTERNAL SOURCES:
     :podspec: "../../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec"
     :tag: hermes-2025-07-07-RNv0.81.0-e0fc67142ec0763c6b6153ca2bf96df815539782
   NitroGradient:
-    :path: "../../node_modules/react-native-nitro-gradient"
+    :path: "../../node_modules/react-native-nitro-gradients"
   NitroModules:
     :path: "../../node_modules/react-native-nitro-modules"
   RCT-Folly:
@@ -2867,7 +2867,7 @@ SPEC CHECKSUMS:
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
   glog: 5683914934d5b6e4240e497e0f4a3b42d1854183
   hermes-engine: e7491a2038f2618c8cd444ed411a6deb350a3742
-  NitroGradient: e15e96a73f2cd934a483b95929c1fad00515dd9e
+  NitroGradient: cbe75b8950f52f09c3292d7ac0fde38547bdc454
   NitroModules: 224bf833d249b0c7ce32831368f2887008579b13
   RCT-Folly: 846fda9475e61ec7bcbf8a3fe81edfcaeb090669
   RCTDeprecation: 0735ab4f6b3ec93a7f98187b5da74d7916e2cf4c

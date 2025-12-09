@@ -54,14 +54,16 @@ namespace margelo::nitro::gradient {
     void setColors(const std::vector<double>& colors) override;
     std::optional<std::vector<double>> getPositions() override;
     void setPositions(const std::optional<std::vector<double>>& positions) override;
-    std::optional<VectorR> getStart() override;
-    void setStart(const std::optional<VectorR>& start) override;
-    std::optional<VectorR> getEnd() override;
-    void setEnd(const std::optional<VectorR>& end) override;
+    std::optional<Vector> getStart() override;
+    void setStart(const std::optional<Vector>& start) override;
+    std::optional<Vector> getEnd() override;
+    void setEnd(const std::optional<Vector>& end) override;
+    std::optional<double> getAngle() override;
+    void setAngle(std::optional<double> angle) override;
 
   public:
     // Methods
-    void update(const std::optional<std::variant<nitro::NullType, std::vector<double>>>& colors, const std::optional<std::vector<double>>& positions, const std::optional<VectorR>& start, const std::optional<VectorR>& end) override;
+    void update(const std::optional<std::variant<nitro::NullType, std::vector<double>>>& colors, const std::optional<std::vector<double>>& positions, const std::optional<Vector>& start, const std::optional<Vector>& end, std::optional<double> angle) override;
 
   private:
     friend HybridBase;

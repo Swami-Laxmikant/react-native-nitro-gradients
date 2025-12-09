@@ -162,7 +162,7 @@ class HybridRadialGradientView(context: Context): HybridRadialGradientViewSpec()
             }
         }
 
-    override var center: VectorR? = null
+    override var center: Vector? = null
         set(value) {
             if (field != value) {
                 field = value
@@ -192,7 +192,7 @@ class HybridRadialGradientView(context: Context): HybridRadialGradientViewSpec()
             }
         }
 
-    override fun update(colors: Variant_NullType_DoubleArray?, positions: DoubleArray?, center: VectorR?, radius: Variant_String_Double?) {
+    override fun update(colors: Variant_NullType_DoubleArray?, positions: DoubleArray?, center: Vector?, radius: Variant_String_Double?) {
         var changed = false
 
         when (val colorsArg = colors.asOptionalDoubleArray()) {

@@ -14,14 +14,14 @@ namespace margelo::nitro::gradient { class HybridLinearGradientViewSpec; }
 namespace margelo::nitro::gradient { class HybridRadialGradientViewSpec; }
 // Forward declaration of `HybridSweepGradientViewSpec` to properly resolve imports.
 namespace margelo::nitro::gradient { class HybridSweepGradientViewSpec; }
-// Forward declaration of `VectorR` to properly resolve imports.
-namespace margelo::nitro::gradient { struct VectorR; }
+// Forward declaration of `Vector` to properly resolve imports.
+namespace margelo::nitro::gradient { struct Vector; }
 
 // Include C++ defined types
 #include "HybridLinearGradientViewSpec.hpp"
 #include "HybridRadialGradientViewSpec.hpp"
 #include "HybridSweepGradientViewSpec.hpp"
-#include "VectorR.hpp"
+#include "Vector.hpp"
 #include <NitroModules/Null.hpp>
 #include <NitroModules/Result.hpp>
 #include <exception>

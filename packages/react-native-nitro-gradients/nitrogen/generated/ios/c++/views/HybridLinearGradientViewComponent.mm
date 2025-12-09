@@ -91,6 +91,11 @@ using namespace margelo::nitro::gradient::views;
     swiftPart.setEnd(newViewProps.end.value);
     newViewProps.end.isDirty = false;
   }
+  // angle: optional
+  if (newViewProps.angle.isDirty) {
+    swiftPart.setAngle(newViewProps.angle.value);
+    newViewProps.angle.isDirty = false;
+  }
 
   swiftPart.afterUpdate();
 

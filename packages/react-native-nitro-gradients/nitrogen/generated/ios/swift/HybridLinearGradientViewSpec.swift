@@ -13,11 +13,12 @@ public protocol HybridLinearGradientViewSpec_protocol: HybridObject, HybridView 
   // Properties
   var colors: [Double] { get set }
   var positions: [Double]? { get set }
-  var start: VectorR? { get set }
-  var end: VectorR? { get set }
+  var start: Vector? { get set }
+  var end: Vector? { get set }
+  var angle: Double? { get set }
 
   // Methods
-  func update(colors: Variant_NullType__Double_?, positions: [Double]?, start: VectorR?, end: VectorR?) throws -> Void
+  func update(colors: Variant_NullType__Double_?, positions: [Double]?, start: Vector?, end: Vector?, angle: Double?) throws -> Void
 }
 
 public extension HybridLinearGradientViewSpec_protocol {

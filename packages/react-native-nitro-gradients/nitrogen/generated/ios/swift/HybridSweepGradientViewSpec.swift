@@ -13,12 +13,10 @@ public protocol HybridSweepGradientViewSpec_protocol: HybridObject, HybridView {
   // Properties
   var colors: [Double] { get set }
   var positions: [Double]? { get set }
-  var center: VectorR? { get set }
-  var startAngle: Double? { get set }
-  var endAngle: Double? { get set }
+  var center: Vector? { get set }
 
   // Methods
-  func update(colors: Variant_NullType__Double_?, positions: [Double]?, center: VectorR?, startAngle: Double?, endAngle: Double?) throws -> Void
+  func update(colors: Variant_NullType__Double_?, positions: [Double]?, center: Vector?) throws -> Void
 }
 
 public extension HybridSweepGradientViewSpec_protocol {

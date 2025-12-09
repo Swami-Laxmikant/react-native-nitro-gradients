@@ -1,10 +1,19 @@
 import React, { useState } from "react";
-import { StyleSheet, ScrollView, ColorValue, Button, View, PixelRatio } from "react-native";
+import {
+  StyleSheet,
+  ScrollView,
+  ColorValue,
+  Button,
+  View,
+  PixelRatio,
+} from "react-native";
 import { LinearGradient, Vector } from "react-native-nitro-gradients";
 import {
+  Easing,
   interpolateColor,
   useDerivedValue,
   useSharedValue,
+  withRepeat,
   withTiming,
 } from "react-native-reanimated";
 
@@ -12,7 +21,6 @@ const startColors = ["#000", "#fff"];
 const endColors = ["#fff", "#000"];
 
 export function LinearGradientScreen() {
-
   const interpolationRange = [0, 1];
 
   const colorProgress = useSharedValue(0);
@@ -27,9 +35,7 @@ export function LinearGradientScreen() {
   );
 
   const animateGrad = () => {
-    colorProgress.value = withTiming(colorProgress.value === 0 ? 1 : 0, {
-      duration: 5000,
-    });
+    colorProgress.value = withTiming(colorProgress.value === 0 ? 1 : 0);
   };
 
   const positions = useSharedValue<number[]>([0.5, 0.5]);
@@ -42,19 +48,27 @@ export function LinearGradientScreen() {
   };
 
   const start = useSharedValue<Vector>({ x: "0%", y: "0%" });
+  const start2 = useSharedValue<Vector>({ x: "0%", y: "0%" });
   const end = useSharedValue<Vector>({ x: "100%", y: "0%" });
 
   const updateStart = () => {
     const cf = start.value.x;
-    const finalValue = cf === "0%" ? { x: "50%", y: "0%" } : { x: "0%", y: "0%" };
+    const finalValue =
+      cf !== "0%" ? { x: "0%", y: "0%" } : { x: "50%", y: "0%" };
+    console.log("the final value", cf, finalValue);
     start.value = withTiming(finalValue, {
       duration: 350,
     });
   };
 
+  // useDerivedValue(()=>{
+  //   console.log("start is changing", start.value)
+  // })
+
   const updateEnd = () => {
     const cf = end.value!.y;
-    const finalValue = cf === "0%" ? { x: "0%", y: "100%" } : { x: "100%", y: "0%" };
+    const finalValue =
+      cf === "0%" ? { x: "0%", y: "100%" } : { x: "100%", y: "0%" };
     end.value = withTiming(finalValue, {
       duration: 350,
     });
@@ -98,26 +112,35 @@ export function LinearGradientScreen() {
     setEnd((pre) => ({ ...pre, y: pre.y === "0%" ? "100%" : "0%" }));
   };
 
+  const angle = useSharedValue(0);
+  const rotate = () => {
+    angle.value = 0;
+    const f = 10;
+    angle.value = withTiming(360 * f, {easing: Easing.linear, duration: 1000 * f})
+  };
+
   return (
     <ScrollView
       style={styles.scrollView}
       contentContainerStyle={styles.content}
     >
-      <LinearGradient
-            style={{
-                width: 100,height: 100
-            }}
-            positions={[0.5, 0.5]}
-            start={{x: 0, y: 50}}
-            end={{x: 100, y: 50}}
-            colors={["#333", "#ddd"]}
+      <View style={styles.container}>
+        <LinearGradient
+          style={styles.gradient1}
+          positions={[0.5, 0.5]}
+          angle={angle}
+          colors={["black", "white"]}
         />
-
+        <View style={styles.row}>
+          <Button title="Rotate" onPress={rotate} />
+        </View>
+      </View>
       <LinearGradient
         colors={["#FF6B6B", "#4ECDC4", "#45B7D1"]}
         start={{ x: "0%", y: "50%" }}
         end={{ x: "100%", y: "50%" }}
         style={styles.gradient1}
+        key={2}
       />
 
       <LinearGradient
@@ -186,12 +209,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "black",
     borderRadius: 10,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   graident4: {
     width: "100%",
     aspectRatio: 2,
-    overflow: 'hidden',
+    overflow: "hidden",
     borderColor: "black",
     borderRadius: 10,
   },

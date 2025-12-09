@@ -52,6 +52,10 @@ void JHybridLinearGradientViewStateUpdater::updateViewProps(jni::alias_ref<jni::
     view->setEnd(props.end.value);
     // TODO: Set isDirty = false
   }
+  if (props.angle.isDirty) {
+    view->setAngle(props.angle.value);
+    // TODO: Set isDirty = false
+  }
 
   // Update hybridRef if it changed
   if (props.hybridRef.isDirty) {

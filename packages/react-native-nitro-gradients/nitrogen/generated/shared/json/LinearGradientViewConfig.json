@@ -8,6 +8,7 @@
     "positions": true,
     "start": true,
     "end": true,
+    "angle": true,
     "hybridRef": true
   }
 }
