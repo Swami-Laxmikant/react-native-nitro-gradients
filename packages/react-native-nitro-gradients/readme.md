@@ -12,7 +12,7 @@ High-performance gradient components for React Native, built with [Nitro Modules
 ## Features
 
 - 🎨 **Three gradient types** - Linear, Radial, and Sweep gradients
-- 🎭 **First-class Reanimated support** - Smooth 60fps animations with shared values
+- 🎭 **First-class Reanimated support** - Use shared values as gradient props
 
 ## Installation
 
