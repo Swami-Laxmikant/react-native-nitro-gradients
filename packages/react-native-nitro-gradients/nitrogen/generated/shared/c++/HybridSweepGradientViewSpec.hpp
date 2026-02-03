@@ -6,6 +6,8 @@
 ///
 
 #pragma once
+#ifndef NITRO_GRADIENT_HYBRID_SWEEP_GRADIENT_VIEW_SPEC_HPP
+#define NITRO_GRADIENT_HYBRID_SWEEP_GRADIENT_VIEW_SPEC_HPP
 
 #if __has_include(<NitroModules/HybridObject.hpp>)
 #include <NitroModules/HybridObject.hpp>
@@ -70,3 +72,5 @@ namespace margelo::nitro::gradient {
   };
 
 } // namespace margelo::nitro::gradient
+
+#endif // NITRO_GRADIENT_HYBRID_SWEEP_GRADIENT_VIEW_SPEC_HPP

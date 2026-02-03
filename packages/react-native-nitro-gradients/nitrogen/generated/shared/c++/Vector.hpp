@@ -6,6 +6,8 @@
 ///
 
 #pragma once
+#ifndef NITRO_GRADIENT_VECTOR_HPP
+#define NITRO_GRADIENT_VECTOR_HPP
 
 #if __has_include(<NitroModules/JSIConverter.hpp>)
 #include <NitroModules/JSIConverter.hpp>
@@ -86,3 +88,5 @@ namespace margelo::nitro {
   };
 
 } // namespace margelo::nitro
+
+#endif // NITRO_GRADIENT_VECTOR_HPP
