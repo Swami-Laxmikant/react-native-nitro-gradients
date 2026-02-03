@@ -8,6 +8,7 @@
   "workspaces": [
     "packages/react-native-nitro-gradients",
     "example",
+    "apps/example_89",
     "docs"
   ],
   "scripts": {

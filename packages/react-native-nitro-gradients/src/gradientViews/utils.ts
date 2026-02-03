@@ -59,24 +59,23 @@ export const useAnimatedNitroViewRef = <
     return [svRef, setRef] as const;
 };
 
-export const processColors = (colors: ColorValue[]) => {
+export const processColors = (colors: ColorValue[]): number[] => {
     "worklet";
     return colors.map((it) =>
-        typeof it === "number" ? it : processColor(it) || 0,
-    );
+        typeof it === "number" ? it : processColor(it),
+    ) as number[];
 };
 
 // @ts-expect-error This is how reanimated works.
-export function useSharedValuesEffect(
-  effect: () => void,
-)
+export function useSharedValuesEffect(effect: () => void);
 
-
-export function useSharedValuesEffect(
-  effect: WorkletFunction,
-) {
-  useEffect(()=>{
-    const mapperId = startMapper(effect, Object.values(effect.__closure || {}));
-    return () => stopMapper(mapperId);
-  }, [effect.__workletHash])
+export function useSharedValuesEffect(effect: WorkletFunction) {
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <this is how it works>
+    useEffect(() => {
+        const mapperId = startMapper(
+            effect,
+            Object.values(effect.__closure || {}),
+        );
+        return () => stopMapper(mapperId);
+    }, [effect.__workletHash]);
 }
