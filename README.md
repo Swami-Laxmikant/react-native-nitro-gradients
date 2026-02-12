@@ -2,11 +2,6 @@
 
 High-performance gradient components for React Native, built with [Nitro Modules](https://github.com/mrousavy/nitro) ⚡
 
-> [!WARNING]
-> **🚧 Under Active Development**
-> 
-> This library is currently in early development and **not recommended for production use**
-
 ## Features
 
 - 🎨 **Three gradient types** - Linear, Radial, and Sweep gradients
