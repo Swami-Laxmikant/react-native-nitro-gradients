@@ -32,7 +32,7 @@ function App() {
     <LinearGradient
       colors={['#667eea', '#764ba2']}
       start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
+      end={{ x: '100%', y: '100%' }}
       style={{ width: 200, height: 200 }}
     />
   );
