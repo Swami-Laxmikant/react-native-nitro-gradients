@@ -151,7 +151,7 @@ When `angle` is provided, it automatically calculates the `start` and `end` poin
 
 ### Animated Angle
 
-The `angle` prop supports Reanimated shared values, making it easy to create rotating gradient animations:
+Passed `angle` prop as Reanimated shared values, making it easy to create rotating gradient animations:
 
 ```tsx
 import { LinearGradient } from 'react-native-nitro-gradients';

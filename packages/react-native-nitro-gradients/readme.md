@@ -2,8 +2,6 @@
 
 High-performance gradient components for React Native, built with [Nitro Modules](https://github.com/mrousavy/nitro) ⚡
 
-> This project was bootstrapped from [react-native-nitro-image](https://github.com/mrousavy/react-native-nitro-image) by Marc Rousavy.
-
 > [!WARNING]
 > **🚧 Under Active Development**
 > 
@@ -50,6 +48,10 @@ function App() {
 - [Radial Gradient](https://Swami-Laxmikant.github.io/react-native-nitro-gradients/docs/radial-gradient)
 - [Sweep Gradient](https://Swami-Laxmikant.github.io/react-native-nitro-gradients/docs/sweep-gradient)
 - [Animations with Reanimated](https://Swami-Laxmikant.github.io/react-native-nitro-gradients/docs/animations)
+
+## Special Thanks
+
+> This project was bootstrapped from [react-native-nitro-image](https://github.com/mrousavy/react-native-nitro-image) by Marc Rousavy.
 
 ## License
 
