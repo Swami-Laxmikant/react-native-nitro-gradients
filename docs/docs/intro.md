@@ -6,8 +6,6 @@ sidebar_position: 1
 
 React Native Nitro Gradients provides three gradient components for React Native, with first‑class React Native Reanimated support.
 
-> This project was bootstrapped from [react-native-nitro-image](https://github.com/mrousavy/react-native-nitro-image) by Marc Rousavy.
-
 ## Basic usage
 
 ```tsx

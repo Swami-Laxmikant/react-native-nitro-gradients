@@ -22,12 +22,21 @@ Pod::Spec.new do |s|
     "cpp/**/*.{hpp,cpp}",
   ]
 
-  # Map generated shared C++ headers to the root of the public headers include path
-  # so includes like "VectorR.hpp" resolve correctly when consumed as a module.
-  s.header_mappings_dir = "nitrogen/generated/shared/c++"
-
   load 'nitrogen/generated/ios/NitroGradient+autolinking.rb'
   add_nitrogen_files(s)
+
+  # Fix archive builds: without header_mappings_dir, CocoaPods uses the pod root
+  # to map public headers, so the umbrella header gets stable paths instead of
+  # broken relative paths like "../../ios/NitroGradient-Swift-Cxx-Bridge.hpp".
+  # HEADER_SEARCH_PATHS ensures bare includes (e.g. #include "Vector.hpp") still resolve.
+  s.pod_target_xcconfig = (s.attributes_hash['pod_target_xcconfig'] || {}).merge({
+    "HEADER_SEARCH_PATHS" => [
+      "\"$(PODS_TARGET_SRCROOT)/nitrogen/generated/shared/c++\"",
+      "\"$(PODS_TARGET_SRCROOT)/nitrogen/generated/shared/c++/views\"",
+      "\"$(PODS_TARGET_SRCROOT)/nitrogen/generated/ios\"",
+      "\"$(PODS_TARGET_SRCROOT)/nitrogen/generated/ios/c++\"",
+    ].join(" "),
+  })
 
   s.dependency 'React-jsi'
   s.dependency 'React-callinvoker'
