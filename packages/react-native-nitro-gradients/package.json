@@ -1,6 +1,6 @@
 {
     "name": "react-native-nitro-gradients",
-    "version": "0.3.2",
+    "version": "0.4.0",
     "description": "High-performance Linear, Radial & Sweep gradient components for React Native with first-class Reanimated support, built on Nitro Modules",
     "main": "lib/commonjs/index",
     "module": "lib/module/index",
