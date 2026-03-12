@@ -5,13 +5,14 @@ High-performance gradient components for React Native, built with [Nitro Modules
 ## Features
 
 - 🎨 **Three gradient types** - Linear, Radial, and Sweep gradients
+- 🔮 **Built-in blur** - Gaussian blur on any gradient via the `blur` prop
 - 🎭 **First-class Reanimated support** - Use shared values as gradient props
 
 ## Installation
 
 ```bash
 npm install react-native-nitro-gradients
-npm install react-native-nitro-modules react-native-reanimated react-native-worklets
+npm install react-native-nitro-modules react-native-reanimated
 cd ios && pod install
 ```
 
