@@ -22,6 +22,15 @@ export interface Vector {
 }
 
 /**
+ * Controls how sampling behaves beyond the view bounds.
+ *
+ * Supported values:
+ * - `"decal"` - samples outside bounds as transparent
+ * - `"clamp"` - extends edge pixels beyond the bounds
+ */
+export type TileModeValue = string;
+
+/**
  * Radius value for radial gradients.
  *
  * Supported formats:

@@ -103,11 +103,25 @@ namespace margelo::nitro::gradient {
     inline void setAngle(std::optional<double> angle) noexcept override {
       _swiftPart.setAngle(angle);
     }
+    inline std::optional<double> getBlur() noexcept override {
+      auto __result = _swiftPart.getBlur();
+      return __result;
+    }
+    inline void setBlur(std::optional<double> blur) noexcept override {
+      _swiftPart.setBlur(blur);
+    }
+    inline std::optional<std::string> getTileMode() noexcept override {
+      auto __result = _swiftPart.getTileMode();
+      return __result;
+    }
+    inline void setTileMode(const std::optional<std::string>& tileMode) noexcept override {
+      _swiftPart.setTileMode(tileMode);
+    }
 
   public:
     // Methods
-    inline void update(const std::optional<std::variant<nitro::NullType, std::vector<double>>>& colors, const std::optional<std::vector<double>>& positions, const std::optional<Vector>& start, const std::optional<Vector>& end, std::optional<double> angle) override {
-      auto __result = _swiftPart.update(colors, positions, start, end, angle);
+    inline void update(const std::optional<std::variant<nitro::NullType, std::vector<double>>>& colors, const std::optional<std::vector<double>>& positions, const std::optional<Vector>& start, const std::optional<Vector>& end, std::optional<double> angle, std::optional<double> blur, const std::optional<std::string>& tileMode) override {
+      auto __result = _swiftPart.update(colors, positions, start, end, angle, blur, tileMode);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

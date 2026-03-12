@@ -1,6 +1,7 @@
 package com.margelo.nitro.gradient
 
 import android.content.Context
+import android.graphics.BlurMaskFilter
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.ColorFilter
@@ -45,6 +46,11 @@ class SweepGradientDrawable: Drawable() {
             centre = newCentre
             isDirty = true
         }
+    }
+
+    fun setBlur(radius: Float) {
+        paint.maskFilter = if (radius > 0f) BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL) else null
+        isDirty = true
     }
 
     fun setStartAngle(angle: Float) {
@@ -120,8 +126,38 @@ class HybridSweepGradientView(context: Context) : HybridSweepGradientViewSpec() 
     private val density = context.resources.displayMetrics.density
     private val gradientView = View(context)
     override val view: View = gradientView
+    private val defaultCenter = Vector(
+        x = Variant_String_Double.First("50%"),
+        y = Variant_String_Double.First("50%")
+    )
     private var cachedColors: IntArray? = null
     private var isLayoutValid = false
+    private var updateDepth = 0
+    private var hasPendingInvalidate = false
+
+    private fun invalidateGradient() {
+        if (updateDepth > 0) {
+            hasPendingInvalidate = true
+        } else {
+            gradientDrawable.invalidate()
+        }
+    }
+
+    override fun beforeUpdate() {
+        updateDepth += 1
+    }
+
+    override fun afterUpdate() {
+        if (updateDepth == 0) {
+            return
+        }
+
+        updateDepth -= 1
+        if (updateDepth == 0 && hasPendingInvalidate) {
+            hasPendingInvalidate = false
+            gradientDrawable.invalidate()
+        }
+    }
 
     init {
         gradientView.background = gradientDrawable
@@ -130,21 +166,47 @@ class HybridSweepGradientView(context: Context) : HybridSweepGradientViewSpec() 
             val h = gradientView.height
             if (w > 0 && h > 0 && !isLayoutValid) {
                 isLayoutValid = true
-                center?.let {
-                    gradientDrawable.setCentre(toFloat2(it, w, h, density))
-                }
-                gradientDrawable.invalidate()
+                updateCenter(center)
+                invalidateGradient()
             }
         }
     }
 
-    private fun updateCenter(value: Vector) {
+    private fun updateCenter(value: Vector?) {
         val w = gradientView.width
         val h = gradientView.height
         if (w > 0 && h > 0) {
-            gradientDrawable.setCentre(toFloat2(value, w, h, density))
+            gradientDrawable.setCentre(toFloat2(value ?: defaultCenter, w, h, density))
         }
     }
+
+    override var blur: Double? = null
+        set(value) {
+            if (field != value) {
+                field = value
+                applyBlurToView(
+                    gradientView,
+                    value,
+                    tileMode,
+                    gradientDrawable::setBlur,
+                    ::invalidateGradient
+                )
+            }
+        }
+
+    override var tileMode: String? = null
+        set(value) {
+            if (field != value) {
+                field = value
+                applyBlurToView(
+                    gradientView,
+                    blur,
+                    value,
+                    gradientDrawable::setBlur,
+                    ::invalidateGradient
+                )
+            }
+        }
 
     override var colors: DoubleArray = DoubleArray(0)
         set(value) {
@@ -156,7 +218,7 @@ class HybridSweepGradientView(context: Context) : HybridSweepGradientViewSpec() 
                 if (!cachedColors.contentEquals(newColors)) {
                     cachedColors = newColors
                     gradientDrawable.setColors(newColors)
-                    gradientDrawable.invalidate()
+                    invalidateGradient()
                 }
             }
         }
@@ -167,7 +229,7 @@ class HybridSweepGradientView(context: Context) : HybridSweepGradientViewSpec() 
                 field = value
                 val newPositions = value?.let { FloatArray(it.size) { i -> it[i].toFloat() } }
                 gradientDrawable.setPositions(newPositions)
-                gradientDrawable.invalidate()
+                invalidateGradient()
             }
         }
 
@@ -178,58 +240,56 @@ class HybridSweepGradientView(context: Context) : HybridSweepGradientViewSpec() 
         set(value) {
             if (field != value) {
                 field = value
-                if (value != null) {
-                    updateCenter(value)
-                } else {
-                    gradientDrawable.setCentre(Float2(0f, 0f))
-                }
-                gradientDrawable.invalidate()
+                updateCenter(value)
+                invalidateGradient()
             }
         }
 
     override fun update(
         colors: Variant_NullType_DoubleArray?,
         positions: DoubleArray?,
-        center: Vector?
+        center: Vector?,
+        blur: Double?,
+        tileMode: String?
     ) {
-        var changed = false
+        beforeUpdate()
+        try {
+            var changed = false
 
-        when (val colorsArg = colors.asOptionalDoubleArray()) {
-            is OptionalVariant.Provided -> {
-                val nextColors = colorsArg.value ?: doubleArrayOf()
-                if (!this.colors.contentEquals(nextColors)) {
-                    this.colors = nextColors
-                    val newColors = if (nextColors.isEmpty()) intArrayOf(Color.BLACK, Color.WHITE)
-                    else IntArray(nextColors.size) { i -> nextColors[i].toInt() }
-
-                    if (!cachedColors.contentEquals(newColors)) {
-                        cachedColors = newColors
-                        gradientDrawable.setColors(newColors)
+            when (val colorsArg = colors.asOptionalDoubleArray()) {
+                is OptionalVariant.Provided -> {
+                    val nextColors = colorsArg.value ?: doubleArrayOf()
+                    if (!this.colors.contentEquals(nextColors)) {
+                        this.colors = nextColors
+                        changed = true
                     }
-                    changed = true
                 }
+                OptionalVariant.NotProvided -> Unit
             }
-            OptionalVariant.NotProvided -> Unit
-        }
 
-        positions?.let {
-            if (!this.positions.contentEquals(it)) {
-                this.positions = it
-                val newPositions = FloatArray(it.size) { i -> it[i].toFloat() }
-                gradientDrawable.setPositions(newPositions)
+            if (!this.positions.contentEquals(positions)) {
+                this.positions = positions
                 changed = true
             }
-        }
 
-        center?.let {
-            if (this.center != it) {
-                this.center = it
+            if (this.center != center) {
+                this.center = center
                 changed = true
             }
-        }
 
-        if (changed) {
-            gradientDrawable.invalidate()
+            if (this.blur != blur) {
+                this.blur = blur
+            }
+
+            if (this.tileMode != tileMode) {
+                this.tileMode = tileMode
+            }
+
+            if (changed) {
+                invalidateGradient()
+            }
+        } finally {
+            afterUpdate()
         }
     }
 }

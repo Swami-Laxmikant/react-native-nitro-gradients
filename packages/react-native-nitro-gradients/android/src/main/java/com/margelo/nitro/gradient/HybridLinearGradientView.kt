@@ -1,12 +1,10 @@
 package com.margelo.nitro.gradient
 
 import android.content.Context
-import android.util.Log
 import android.view.View
 import androidx.annotation.Keep
 import com.facebook.common.internal.DoNotStrip
 import kotlin.collections.contentEquals
-import kotlin.toString
 
 @DoNotStrip
 @Keep
@@ -15,7 +13,58 @@ class HybridLinearGradientView(context: Context): HybridLinearGradientViewSpec()
     private val gradientView = View(context)
     override val view: View = gradientView
     private val density = context.resources.displayMetrics.density
+    private val defaultStart = Vector(
+        x = Variant_String_Double.First("50%"),
+        y = Variant_String_Double.First("0%")
+    )
+    private val defaultEnd = Vector(
+        x = Variant_String_Double.First("50%"),
+        y = Variant_String_Double.First("100%")
+    )
     private var isLayoutValid = false
+    private var updateDepth = 0
+    private var hasPendingInvalidate = false
+
+    private fun invalidateGradient() {
+        if (updateDepth > 0) {
+            hasPendingInvalidate = true
+        } else {
+            gradientDrawable.invalidate()
+        }
+    }
+
+    override fun beforeUpdate() {
+        updateDepth += 1
+    }
+
+    override fun afterUpdate() {
+        if (updateDepth == 0) {
+            return
+        }
+
+        updateDepth -= 1
+        if (updateDepth == 0 && hasPendingInvalidate) {
+            hasPendingInvalidate = false
+            gradientDrawable.invalidate()
+        }
+    }
+
+    private fun updateLinePoints() {
+        val w = gradientView.width
+        val h = gradientView.height
+        if (w <= 0 || h <= 0) {
+            return
+        }
+
+        val currentAngle = angle
+        if (currentAngle != null) {
+            gradientDrawable.setPointsFromAngle(currentAngle, w, h)
+            return
+        }
+
+        gradientDrawable.setStart(start ?: defaultStart, w, h, density)
+        gradientDrawable.setEnd(end ?: defaultEnd, w, h, density)
+    }
 
     init {
         gradientView.background = gradientDrawable
@@ -25,21 +74,48 @@ class HybridLinearGradientView(context: Context): HybridLinearGradientViewSpec()
             if (w > 0 && h > 0) {
                 if (!isLayoutValid) {
                     isLayoutValid = true
-                    start?.let { gradientDrawable.setStart(it, w, h, density) }
-                    end?.let { gradientDrawable.setEnd(it, w, h, density) }
-                    angle?.let { gradientDrawable.setPointsFromAngle(it, w, h) }
-                    gradientDrawable.invalidate()
+                    updateLinePoints()
+                    invalidateGradient()
                 }
             }
         }
     }
+
+    override var blur: Double? = null
+        set(value) {
+            if (field != value) {
+                field = value
+                applyBlurToView(
+                    gradientView,
+                    value,
+                    tileMode,
+                    gradientDrawable::setBlur,
+                    ::invalidateGradient
+                )
+            }
+        }
+
+    override var tileMode: String? = null
+        set(value) {
+            if (field != value) {
+                field = value
+                gradientDrawable.setTileMode(value.toTileMode())
+                applyBlurToView(
+                    gradientView,
+                    blur,
+                    value,
+                    gradientDrawable::setBlur,
+                    ::invalidateGradient
+                )
+            }
+        }
 
     override var colors: DoubleArray = doubleArrayOf()
         set(value) {
             if (!field.contentEquals(value)) {
                 field = value
                 gradientDrawable.setColors(value)
-                gradientDrawable.invalidate()
+                invalidateGradient()
             }
         }
 
@@ -48,58 +124,39 @@ class HybridLinearGradientView(context: Context): HybridLinearGradientViewSpec()
             if (!field.contentEquals(value)) {
                 field = value
                 gradientDrawable.setPositions(value?.map { it.toFloat() }?.toFloatArray())
-                gradientDrawable.invalidate()
+                invalidateGradient()
             }
         }
 
     override var angle: Double? = null
         set(value){
-            Log.d("the angle value", value.toString());
-            if(field != value){
-                field = value;
-                val w = gradientView.width
-                val h = gradientView.height
-                if (w > 0 && h > 0) {
-                    angle?.let { gradientDrawable.setPointsFromAngle(it, w, h) }
-                    gradientDrawable.invalidate()
+            if (field != value) {
+                field = value
+                if (gradientView.width > 0 && gradientView.height > 0) {
+                    updateLinePoints()
+                    invalidateGradient()
                 }
             }
         }
 
     override var start: Vector? = null
         set(value) {
-            Log.d("the start value", angle.toString());
-            if(this.angle != null){
-                return
-            }
-
             if (field != value) {
                 field = value
-
-                val w = gradientView.width
-                val h = gradientView.height
-                if (w > 0 && h > 0 && value != null) {
-                    gradientDrawable.setStart(value, w, h, density)
-                    gradientDrawable.invalidate()
+                if (angle == null && gradientView.width > 0 && gradientView.height > 0) {
+                    updateLinePoints()
+                    invalidateGradient()
                 }
             }
         }
 
     override var end: Vector? = null
         set(value) {
-            Log.d("the end value", angle.toString());
-            if(this.angle != null){
-                return;
-            }
-
             if (field != value) {
                 field = value
-
-                val w = gradientView.width
-                val h = gradientView.height
-                if (w > 0 && h > 0 && value != null) {
-                    gradientDrawable.setEnd(value, w, h, density)
-                    gradientDrawable.invalidate()
+                if (angle == null && gradientView.width > 0 && gradientView.height > 0) {
+                    updateLinePoints()
+                    invalidateGradient()
                 }
             }
         }
@@ -109,55 +166,62 @@ class HybridLinearGradientView(context: Context): HybridLinearGradientViewSpec()
         positions: DoubleArray?,
         start: Vector?,
         end: Vector?,
-        angle: Double?
+        angle: Double?,
+        blur: Double?,
+        tileMode: String?
     ) {
-        var changed = false
+        beforeUpdate()
+        try {
+            var changed = false
 
-        when (val colorsArg = colors.asOptionalDoubleArray()) {
-            is OptionalVariant.Provided -> {
-                val nextColors = colorsArg.value ?: doubleArrayOf()
-                if (!this.colors.contentEquals(nextColors)) {
-                    this.colors = nextColors
-                    changed = true
+            when (val colorsArg = colors.asOptionalDoubleArray()) {
+                is OptionalVariant.Provided -> {
+                    val nextColors = colorsArg.value ?: doubleArrayOf()
+                    if (!this.colors.contentEquals(nextColors)) {
+                        this.colors = nextColors
+                        changed = true
+                    }
                 }
+                OptionalVariant.NotProvided -> Unit
             }
-            OptionalVariant.NotProvided -> Unit
-        }
 
-        angle?.let {
-            Log.d("the fachi", angle.toString());
-            if(this.angle != it){
+            if (!this.positions.contentEquals(positions)) {
+                this.positions = positions
+                changed = true
+            }
+
+            if (this.angle != angle) {
                 this.angle = angle
                 changed = true
             }
-        }
 
-        positions?.let {
-            if (!this.positions.contentEquals(it)) {
-                this.positions = it
-                changed = true
-            }
-        }
-
-        if(this.angle == null){
-            Log.d("the sachi", angle.toString());
-            start?.let {
-                if (this.start != it) {
-                    this.start = it
+            if (this.start != start) {
+                this.start = start
+                if (this.angle == null) {
                     changed = true
                 }
             }
 
-            end?.let {
-                if (this.end != it) {
-                    this.end = it
+            if (this.end != end) {
+                this.end = end
+                if (this.angle == null) {
                     changed = true
                 }
             }
-        }
 
-        if (changed) {
-            gradientDrawable.invalidate()
+            if (this.blur != blur) {
+                this.blur = blur
+            }
+
+            if (this.tileMode != tileMode) {
+                this.tileMode = tileMode
+            }
+
+            if (changed) {
+                invalidateGradient()
+            }
+        } finally {
+            afterUpdate()
         }
     }
 }

@@ -8,6 +8,7 @@
 #include "JHybridRadialGradientViewStateUpdater.hpp"
 #include "views/HybridRadialGradientViewComponent.hpp"
 #include <NitroModules/NitroDefines.hpp>
+#include <react/fabric/StateWrapperImpl.h>
 
 namespace margelo::nitro::gradient::views {
 
@@ -15,53 +16,60 @@ using namespace facebook;
 using ConcreteStateData = react::ConcreteState<HybridRadialGradientViewState>;
 
 void JHybridRadialGradientViewStateUpdater::updateViewProps(jni::alias_ref<jni::JClass> /* class */,
-                                           jni::alias_ref<JHybridRadialGradientViewSpec::javaobject> javaView,
+                                           jni::alias_ref<JHybridRadialGradientViewSpec::JavaPart> javaView,
                                            jni::alias_ref<JStateWrapper::javaobject> stateWrapperInterface) {
-  JHybridRadialGradientViewSpec* view = javaView->cthis();
+  std::shared_ptr<JHybridRadialGradientViewSpec> hybridView = javaView->getJHybridRadialGradientViewSpec();
 
   // Get concrete StateWrapperImpl from passed StateWrapper interface object
   jobject rawStateWrapper = stateWrapperInterface.get();
-  if (!stateWrapperInterface->isInstanceOf(react::StateWrapperImpl::javaClassStatic())) {
+  if (!stateWrapperInterface->isInstanceOf(react::StateWrapperImpl::javaClassStatic())) [[unlikely]] {
       throw std::runtime_error("StateWrapper is not a StateWrapperImpl");
   }
   auto stateWrapper = jni::alias_ref<react::StateWrapperImpl::javaobject>{
             static_cast<react::StateWrapperImpl::javaobject>(rawStateWrapper)};
-
   std::shared_ptr<const react::State> state = stateWrapper->cthis()->getState();
-  auto concreteState = std::dynamic_pointer_cast<const ConcreteStateData>(state);
+  auto concreteState = std::static_pointer_cast<const ConcreteStateData>(state);
   const HybridRadialGradientViewState& data = concreteState->getData();
-  const std::optional<HybridRadialGradientViewProps>& maybeProps = data.getProps();
-  if (!maybeProps.has_value()) {
+  const std::shared_ptr<HybridRadialGradientViewProps>& props = data.getProps();
+  if (props == nullptr) [[unlikely]] {
     // Props aren't set yet!
     throw std::runtime_error("HybridRadialGradientViewState's data doesn't contain any props!");
   }
-  const HybridRadialGradientViewProps& props = maybeProps.value();
-  if (props.colors.isDirty) {
-    view->setColors(props.colors.value);
-    // TODO: Set isDirty = false
+
+  // Update all props if they are dirty
+  if (props->colors.isDirty) {
+    hybridView->setColors(props->colors.value);
+    props->colors.isDirty = false;
   }
-  if (props.positions.isDirty) {
-    view->setPositions(props.positions.value);
-    // TODO: Set isDirty = false
+  if (props->positions.isDirty) {
+    hybridView->setPositions(props->positions.value);
+    props->positions.isDirty = false;
   }
-  if (props.center.isDirty) {
-    view->setCenter(props.center.value);
-    // TODO: Set isDirty = false
+  if (props->center.isDirty) {
+    hybridView->setCenter(props->center.value);
+    props->center.isDirty = false;
   }
-  if (props.radius.isDirty) {
-    view->setRadius(props.radius.value);
-    // TODO: Set isDirty = false
+  if (props->radius.isDirty) {
+    hybridView->setRadius(props->radius.value);
+    props->radius.isDirty = false;
+  }
+  if (props->blur.isDirty) {
+    hybridView->setBlur(props->blur.value);
+    props->blur.isDirty = false;
+  }
+  if (props->tileMode.isDirty) {
+    hybridView->setTileMode(props->tileMode.value);
+    props->tileMode.isDirty = false;
   }
 
   // Update hybridRef if it changed
-  if (props.hybridRef.isDirty) {
+  if (props->hybridRef.isDirty) {
     // hybridRef changed - call it with new this
-    const auto& maybeFunc = props.hybridRef.value;
+    const auto& maybeFunc = props->hybridRef.value;
     if (maybeFunc.has_value()) {
-      std::shared_ptr<JHybridRadialGradientViewSpec> shared = javaView->cthis()->shared_cast<JHybridRadialGradientViewSpec>();
-      maybeFunc.value()(shared);
+      maybeFunc.value()(hybridView);
     }
-    // TODO: Set isDirty = false
+    props->hybridRef.isDirty = false;
   }
 }
 

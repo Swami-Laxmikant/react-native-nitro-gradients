@@ -17,6 +17,10 @@ import {
 } from "react-native-reanimated";
 import { runOnUISync, type WorkletFunction } from "react-native-worklets";
 
+export type Pretify<T> = {
+    [k in keyof T]: T[k];
+};
+
 type WithSharedValue<T> =
     | T
     | SharedValue<T>

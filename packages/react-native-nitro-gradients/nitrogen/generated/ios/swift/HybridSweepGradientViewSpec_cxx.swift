@@ -5,7 +5,6 @@
 /// Copyright © Marc Rousavy @ Margelo
 ///
 
-import Foundation
 import NitroModules
 
 /**
@@ -185,10 +184,58 @@ open class HybridSweepGradientViewSpec_cxx {
       self.__implementation.center = newValue.value
     }
   }
+  
+  public final var blur: bridge.std__optional_double_ {
+    @inline(__always)
+    get {
+      return { () -> bridge.std__optional_double_ in
+        if let __unwrappedValue = self.__implementation.blur {
+          return bridge.create_std__optional_double_(__unwrappedValue)
+        } else {
+          return .init()
+        }
+      }()
+    }
+    @inline(__always)
+    set {
+      self.__implementation.blur = { () -> Double? in
+        if bridge.has_value_std__optional_double_(newValue) {
+          let __unwrapped = bridge.get_std__optional_double_(newValue)
+          return __unwrapped
+        } else {
+          return nil
+        }
+      }()
+    }
+  }
+  
+  public final var tileMode: bridge.std__optional_std__string_ {
+    @inline(__always)
+    get {
+      return { () -> bridge.std__optional_std__string_ in
+        if let __unwrappedValue = self.__implementation.tileMode {
+          return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
+        } else {
+          return .init()
+        }
+      }()
+    }
+    @inline(__always)
+    set {
+      self.__implementation.tileMode = { () -> String? in
+        if bridge.has_value_std__optional_std__string_(newValue) {
+          let __unwrapped = bridge.get_std__optional_std__string_(newValue)
+          return String(__unwrapped)
+        } else {
+          return nil
+        }
+      }()
+    }
+  }
 
   // Methods
   @inline(__always)
-  public final func update(colors: bridge.std__optional_std__variant_nitro__NullType__std__vector_double___, positions: bridge.std__optional_std__vector_double__, center: bridge.std__optional_Vector_) -> bridge.Result_void_ {
+  public final func update(colors: bridge.std__optional_std__variant_nitro__NullType__std__vector_double___, positions: bridge.std__optional_std__vector_double__, center: bridge.std__optional_Vector_, blur: bridge.std__optional_double_, tileMode: bridge.std__optional_std__string_) -> bridge.Result_void_ {
     do {
       try self.__implementation.update(colors: { () -> Variant_NullType__Double_? in
         if bridge.has_value_std__optional_std__variant_nitro__NullType__std__vector_double___(colors) {
@@ -216,7 +263,21 @@ open class HybridSweepGradientViewSpec_cxx {
         } else {
           return nil
         }
-      }(), center: center.value)
+      }(), center: center.value, blur: { () -> Double? in
+        if bridge.has_value_std__optional_double_(blur) {
+          let __unwrapped = bridge.get_std__optional_double_(blur)
+          return __unwrapped
+        } else {
+          return nil
+        }
+      }(), tileMode: { () -> String? in
+        if bridge.has_value_std__optional_std__string_(tileMode) {
+          let __unwrapped = bridge.get_std__optional_std__string_(tileMode)
+          return String(__unwrapped)
+        } else {
+          return nil
+        }
+      }())
       return bridge.create_Result_void_()
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
@@ -237,7 +298,7 @@ open class HybridSweepGradientViewSpec_cxx {
   }
   
   public final func maybePrepareForRecycle() {
-    guard let recyclable = __implementation as? RecyclableView else { return }
+    guard let recyclable = __implementation as? any RecyclableView else { return }
     recyclable.prepareForRecycle()
   }
 }

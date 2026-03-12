@@ -30,6 +30,7 @@ using namespace margelo::nitro::gradient::views;
 
 @implementation HybridRadialGradientViewComponent {
   std::shared_ptr<HybridRadialGradientViewSpecSwift> _hybridView;
+  BOOL _needsInitialProps;
 }
 
 + (void) load {
@@ -43,6 +44,7 @@ using namespace margelo::nitro::gradient::views;
 
 - (instancetype) init {
   if (self = [super init]) {
+    _needsInitialProps = YES;
     std::shared_ptr<HybridRadialGradientViewSpec> hybridView = NitroGradient::NitroGradientAutolinking::createRadialGradientView();
     _hybridView = std::dynamic_pointer_cast<HybridRadialGradientViewSpecSwift>(hybridView);
     [self updateView];
@@ -72,31 +74,44 @@ using namespace margelo::nitro::gradient::views;
   // 2. Update each prop individually
   swiftPart.beforeUpdate();
 
+  BOOL forceAll = _needsInitialProps;
+  _needsInitialProps = NO;
+
   // colors: array
-  if (newViewProps.colors.isDirty) {
+  if (newViewProps.colors.isDirty || forceAll) {
     swiftPart.setColors(newViewProps.colors.value);
     newViewProps.colors.isDirty = false;
   }
   // positions: optional
-  if (newViewProps.positions.isDirty) {
+  if (newViewProps.positions.isDirty || forceAll) {
     swiftPart.setPositions(newViewProps.positions.value);
     newViewProps.positions.isDirty = false;
   }
   // center: optional
-  if (newViewProps.center.isDirty) {
+  if (newViewProps.center.isDirty || forceAll) {
     swiftPart.setCenter(newViewProps.center.value);
     newViewProps.center.isDirty = false;
   }
   // radius: optional
-  if (newViewProps.radius.isDirty) {
+  if (newViewProps.radius.isDirty || forceAll) {
     swiftPart.setRadius(newViewProps.radius.value);
     newViewProps.radius.isDirty = false;
+  }
+  // blur: optional
+  if (newViewProps.blur.isDirty || forceAll) {
+    swiftPart.setBlur(newViewProps.blur.value);
+    newViewProps.blur.isDirty = false;
+  }
+  // tileMode: optional
+  if (newViewProps.tileMode.isDirty || forceAll) {
+    swiftPart.setTileMode(newViewProps.tileMode.value);
+    newViewProps.tileMode.isDirty = false;
   }
 
   swiftPart.afterUpdate();
 
   // 3. Update hybridRef if it changed
-  if (newViewProps.hybridRef.isDirty) {
+  if (newViewProps.hybridRef.isDirty || forceAll) {
     // hybridRef changed - call it with new this
     const auto& maybeFunc = newViewProps.hybridRef.value;
     if (maybeFunc.has_value()) {

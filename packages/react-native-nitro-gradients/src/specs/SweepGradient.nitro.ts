@@ -3,12 +3,14 @@ import type {
     HybridViewMethods,
     HybridViewProps,
 } from "react-native-nitro-modules";
-import type { Vector } from "./helperTypes";
+import type { TileModeValue, Vector } from "./helperTypes";
 
 export interface SweepGradientViewProps extends HybridViewProps {
     colors: number[];
     positions?: number[];
     center?: Vector;
+    blur?: number;
+    tileMode?: TileModeValue;
 }
 
 export interface SweepGradientViewMethods extends HybridViewMethods {
@@ -16,6 +18,8 @@ export interface SweepGradientViewMethods extends HybridViewMethods {
         colors: number[] | null,
         positions?: number[],
         center?: Vector,
+        blur?: number,
+        tileMode?: TileModeValue,
     ): void;
 }
 

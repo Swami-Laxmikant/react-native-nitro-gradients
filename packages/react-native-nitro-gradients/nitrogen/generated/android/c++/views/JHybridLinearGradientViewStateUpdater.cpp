@@ -8,6 +8,7 @@
 #include "JHybridLinearGradientViewStateUpdater.hpp"
 #include "views/HybridLinearGradientViewComponent.hpp"
 #include <NitroModules/NitroDefines.hpp>
+#include <react/fabric/StateWrapperImpl.h>
 
 namespace margelo::nitro::gradient::views {
 
@@ -15,57 +16,64 @@ using namespace facebook;
 using ConcreteStateData = react::ConcreteState<HybridLinearGradientViewState>;
 
 void JHybridLinearGradientViewStateUpdater::updateViewProps(jni::alias_ref<jni::JClass> /* class */,
-                                           jni::alias_ref<JHybridLinearGradientViewSpec::javaobject> javaView,
+                                           jni::alias_ref<JHybridLinearGradientViewSpec::JavaPart> javaView,
                                            jni::alias_ref<JStateWrapper::javaobject> stateWrapperInterface) {
-  JHybridLinearGradientViewSpec* view = javaView->cthis();
+  std::shared_ptr<JHybridLinearGradientViewSpec> hybridView = javaView->getJHybridLinearGradientViewSpec();
 
   // Get concrete StateWrapperImpl from passed StateWrapper interface object
   jobject rawStateWrapper = stateWrapperInterface.get();
-  if (!stateWrapperInterface->isInstanceOf(react::StateWrapperImpl::javaClassStatic())) {
+  if (!stateWrapperInterface->isInstanceOf(react::StateWrapperImpl::javaClassStatic())) [[unlikely]] {
       throw std::runtime_error("StateWrapper is not a StateWrapperImpl");
   }
   auto stateWrapper = jni::alias_ref<react::StateWrapperImpl::javaobject>{
             static_cast<react::StateWrapperImpl::javaobject>(rawStateWrapper)};
-
   std::shared_ptr<const react::State> state = stateWrapper->cthis()->getState();
-  auto concreteState = std::dynamic_pointer_cast<const ConcreteStateData>(state);
+  auto concreteState = std::static_pointer_cast<const ConcreteStateData>(state);
   const HybridLinearGradientViewState& data = concreteState->getData();
-  const std::optional<HybridLinearGradientViewProps>& maybeProps = data.getProps();
-  if (!maybeProps.has_value()) {
+  const std::shared_ptr<HybridLinearGradientViewProps>& props = data.getProps();
+  if (props == nullptr) [[unlikely]] {
     // Props aren't set yet!
     throw std::runtime_error("HybridLinearGradientViewState's data doesn't contain any props!");
   }
-  const HybridLinearGradientViewProps& props = maybeProps.value();
-  if (props.colors.isDirty) {
-    view->setColors(props.colors.value);
-    // TODO: Set isDirty = false
+
+  // Update all props if they are dirty
+  if (props->colors.isDirty) {
+    hybridView->setColors(props->colors.value);
+    props->colors.isDirty = false;
   }
-  if (props.positions.isDirty) {
-    view->setPositions(props.positions.value);
-    // TODO: Set isDirty = false
+  if (props->positions.isDirty) {
+    hybridView->setPositions(props->positions.value);
+    props->positions.isDirty = false;
   }
-  if (props.start.isDirty) {
-    view->setStart(props.start.value);
-    // TODO: Set isDirty = false
+  if (props->start.isDirty) {
+    hybridView->setStart(props->start.value);
+    props->start.isDirty = false;
   }
-  if (props.end.isDirty) {
-    view->setEnd(props.end.value);
-    // TODO: Set isDirty = false
+  if (props->end.isDirty) {
+    hybridView->setEnd(props->end.value);
+    props->end.isDirty = false;
   }
-  if (props.angle.isDirty) {
-    view->setAngle(props.angle.value);
-    // TODO: Set isDirty = false
+  if (props->angle.isDirty) {
+    hybridView->setAngle(props->angle.value);
+    props->angle.isDirty = false;
+  }
+  if (props->blur.isDirty) {
+    hybridView->setBlur(props->blur.value);
+    props->blur.isDirty = false;
+  }
+  if (props->tileMode.isDirty) {
+    hybridView->setTileMode(props->tileMode.value);
+    props->tileMode.isDirty = false;
   }
 
   // Update hybridRef if it changed
-  if (props.hybridRef.isDirty) {
+  if (props->hybridRef.isDirty) {
     // hybridRef changed - call it with new this
-    const auto& maybeFunc = props.hybridRef.value;
+    const auto& maybeFunc = props->hybridRef.value;
     if (maybeFunc.has_value()) {
-      std::shared_ptr<JHybridLinearGradientViewSpec> shared = javaView->cthis()->shared_cast<JHybridLinearGradientViewSpec>();
-      maybeFunc.value()(shared);
+      maybeFunc.value()(hybridView);
     }
-    // TODO: Set isDirty = false
+    props->hybridRef.isDirty = false;
   }
 }
 

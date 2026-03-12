@@ -26,45 +26,67 @@
 namespace margelo::nitro::gradient {
 
 int initialize(JavaVM* vm) {
+  return facebook::jni::initialize(vm, []() {
+    ::margelo::nitro::gradient::registerAllNatives();
+  });
+}
+
+struct JHybridLinearGradientViewSpecImpl: public jni::JavaClass<JHybridLinearGradientViewSpecImpl, JHybridLinearGradientViewSpec::JavaPart> {
+  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/gradient/HybridLinearGradientView;";
+  static std::shared_ptr<JHybridLinearGradientViewSpec> create() {
+    static auto constructorFn = javaClassStatic()->getConstructor<JHybridLinearGradientViewSpecImpl::javaobject()>();
+    jni::local_ref<JHybridLinearGradientViewSpec::JavaPart> javaPart = javaClassStatic()->newObject(constructorFn);
+    return javaPart->getJHybridLinearGradientViewSpec();
+  }
+};
+struct JHybridRadialGradientViewSpecImpl: public jni::JavaClass<JHybridRadialGradientViewSpecImpl, JHybridRadialGradientViewSpec::JavaPart> {
+  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/gradient/HybridRadialGradientView;";
+  static std::shared_ptr<JHybridRadialGradientViewSpec> create() {
+    static auto constructorFn = javaClassStatic()->getConstructor<JHybridRadialGradientViewSpecImpl::javaobject()>();
+    jni::local_ref<JHybridRadialGradientViewSpec::JavaPart> javaPart = javaClassStatic()->newObject(constructorFn);
+    return javaPart->getJHybridRadialGradientViewSpec();
+  }
+};
+struct JHybridSweepGradientViewSpecImpl: public jni::JavaClass<JHybridSweepGradientViewSpecImpl, JHybridSweepGradientViewSpec::JavaPart> {
+  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/gradient/HybridSweepGradientView;";
+  static std::shared_ptr<JHybridSweepGradientViewSpec> create() {
+    static auto constructorFn = javaClassStatic()->getConstructor<JHybridSweepGradientViewSpecImpl::javaobject()>();
+    jni::local_ref<JHybridSweepGradientViewSpec::JavaPart> javaPart = javaClassStatic()->newObject(constructorFn);
+    return javaPart->getJHybridSweepGradientViewSpec();
+  }
+};
+
+void registerAllNatives() {
   using namespace margelo::nitro;
   using namespace margelo::nitro::gradient;
-  using namespace facebook;
 
-  return facebook::jni::initialize(vm, [] {
-    // Register native JNI methods
-    margelo::nitro::gradient::JHybridLinearGradientViewSpec::registerNatives();
-    margelo::nitro::gradient::views::JHybridLinearGradientViewStateUpdater::registerNatives();
-    margelo::nitro::gradient::JHybridRadialGradientViewSpec::registerNatives();
-    margelo::nitro::gradient::views::JHybridRadialGradientViewStateUpdater::registerNatives();
-    margelo::nitro::gradient::JHybridSweepGradientViewSpec::registerNatives();
-    margelo::nitro::gradient::views::JHybridSweepGradientViewStateUpdater::registerNatives();
+  // Register native JNI methods
+  margelo::nitro::gradient::JHybridLinearGradientViewSpec::CxxPart::registerNatives();
+  margelo::nitro::gradient::views::JHybridLinearGradientViewStateUpdater::registerNatives();
+  margelo::nitro::gradient::JHybridRadialGradientViewSpec::CxxPart::registerNatives();
+  margelo::nitro::gradient::views::JHybridRadialGradientViewStateUpdater::registerNatives();
+  margelo::nitro::gradient::JHybridSweepGradientViewSpec::CxxPart::registerNatives();
+  margelo::nitro::gradient::views::JHybridSweepGradientViewStateUpdater::registerNatives();
 
-    // Register Nitro Hybrid Objects
-    HybridObjectRegistry::registerHybridObjectConstructor(
-      "LinearGradientView",
-      []() -> std::shared_ptr<HybridObject> {
-        static DefaultConstructableObject<JHybridLinearGradientViewSpec::javaobject> object("com/margelo/nitro/gradient/HybridLinearGradientView");
-        auto instance = object.create();
-        return instance->cthis()->shared();
-      }
-    );
-    HybridObjectRegistry::registerHybridObjectConstructor(
-      "RadialGradientView",
-      []() -> std::shared_ptr<HybridObject> {
-        static DefaultConstructableObject<JHybridRadialGradientViewSpec::javaobject> object("com/margelo/nitro/gradient/HybridRadialGradientView");
-        auto instance = object.create();
-        return instance->cthis()->shared();
-      }
-    );
-    HybridObjectRegistry::registerHybridObjectConstructor(
-      "SweepGradientView",
-      []() -> std::shared_ptr<HybridObject> {
-        static DefaultConstructableObject<JHybridSweepGradientViewSpec::javaobject> object("com/margelo/nitro/gradient/HybridSweepGradientView");
-        auto instance = object.create();
-        return instance->cthis()->shared();
-      }
-    );
-  });
+  // Register Nitro Hybrid Objects
+  HybridObjectRegistry::registerHybridObjectConstructor(
+    "LinearGradientView",
+    []() -> std::shared_ptr<HybridObject> {
+      return JHybridLinearGradientViewSpecImpl::create();
+    }
+  );
+  HybridObjectRegistry::registerHybridObjectConstructor(
+    "RadialGradientView",
+    []() -> std::shared_ptr<HybridObject> {
+      return JHybridRadialGradientViewSpecImpl::create();
+    }
+  );
+  HybridObjectRegistry::registerHybridObjectConstructor(
+    "SweepGradientView",
+    []() -> std::shared_ptr<HybridObject> {
+      return JHybridSweepGradientViewSpecImpl::create();
+    }
+  );
 }
 
 } // namespace margelo::nitro::gradient

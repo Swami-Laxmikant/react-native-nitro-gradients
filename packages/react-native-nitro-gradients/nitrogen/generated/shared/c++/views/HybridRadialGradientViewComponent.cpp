@@ -66,6 +66,26 @@ namespace margelo::nitro::gradient::views {
         throw std::runtime_error(std::string("RadialGradientView.radius: ") + exc.what());
       }
     }()),
+    blur([&]() -> CachedProp<std::optional<double>> {
+      try {
+        const react::RawValue* rawValue = rawProps.at("blur", nullptr, nullptr);
+        if (rawValue == nullptr) return sourceProps.blur;
+        const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
+        return CachedProp<std::optional<double>>::fromRawValue(*runtime, value, sourceProps.blur);
+      } catch (const std::exception& exc) {
+        throw std::runtime_error(std::string("RadialGradientView.blur: ") + exc.what());
+      }
+    }()),
+    tileMode([&]() -> CachedProp<std::optional<std::string>> {
+      try {
+        const react::RawValue* rawValue = rawProps.at("tileMode", nullptr, nullptr);
+        if (rawValue == nullptr) return sourceProps.tileMode;
+        const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
+        return CachedProp<std::optional<std::string>>::fromRawValue(*runtime, value, sourceProps.tileMode);
+      } catch (const std::exception& exc) {
+        throw std::runtime_error(std::string("RadialGradientView.tileMode: ") + exc.what());
+      }
+    }()),
     hybridRef([&]() -> CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridRadialGradientViewSpec>& /* ref */)>>> {
       try {
         const react::RawValue* rawValue = rawProps.at("hybridRef", nullptr, nullptr);
@@ -77,20 +97,14 @@ namespace margelo::nitro::gradient::views {
       }
     }()) { }
 
-  HybridRadialGradientViewProps::HybridRadialGradientViewProps(const HybridRadialGradientViewProps& other):
-    react::ViewProps(),
-    colors(other.colors),
-    positions(other.positions),
-    center(other.center),
-    radius(other.radius),
-    hybridRef(other.hybridRef) { }
-
   bool HybridRadialGradientViewProps::filterObjectKeys(const std::string& propName) {
     switch (hashString(propName)) {
       case hashString("colors"): return true;
       case hashString("positions"): return true;
       case hashString("center"): return true;
       case hashString("radius"): return true;
+      case hashString("blur"): return true;
+      case hashString("tileMode"): return true;
       case hashString("hybridRef"): return true;
       default: return false;
     }
@@ -113,10 +127,10 @@ namespace margelo::nitro::gradient::views {
   void HybridRadialGradientViewComponentDescriptor::adopt(react::ShadowNode& shadowNode) const {
     // This is called immediately after `ShadowNode` is created, cloned or in progress.
     // On Android, we need to wrap props in our state, which gets routed through Java and later unwrapped in JNI/C++.
-    auto& concreteShadowNode = dynamic_cast<HybridRadialGradientViewShadowNode&>(shadowNode);
-    const HybridRadialGradientViewProps& props = concreteShadowNode.getConcreteProps();
-    HybridRadialGradientViewState state;
-    state.setProps(props);
+    auto& concreteShadowNode = static_cast<HybridRadialGradientViewShadowNode&>(shadowNode);
+    const std::shared_ptr<const HybridRadialGradientViewProps>& constProps = concreteShadowNode.getConcreteSharedProps();
+    const std::shared_ptr<HybridRadialGradientViewProps>& props = std::const_pointer_cast<HybridRadialGradientViewProps>(constProps);
+    HybridRadialGradientViewState state{props};
     concreteShadowNode.setStateData(std::move(state));
   }
 #endif

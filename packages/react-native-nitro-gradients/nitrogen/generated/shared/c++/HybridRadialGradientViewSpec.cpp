@@ -22,6 +22,10 @@ namespace margelo::nitro::gradient {
       prototype.registerHybridSetter("center", &HybridRadialGradientViewSpec::setCenter);
       prototype.registerHybridGetter("radius", &HybridRadialGradientViewSpec::getRadius);
       prototype.registerHybridSetter("radius", &HybridRadialGradientViewSpec::setRadius);
+      prototype.registerHybridGetter("blur", &HybridRadialGradientViewSpec::getBlur);
+      prototype.registerHybridSetter("blur", &HybridRadialGradientViewSpec::setBlur);
+      prototype.registerHybridGetter("tileMode", &HybridRadialGradientViewSpec::getTileMode);
+      prototype.registerHybridSetter("tileMode", &HybridRadialGradientViewSpec::setTileMode);
       prototype.registerHybridMethod("update", &HybridRadialGradientViewSpec::update);
     });
   }

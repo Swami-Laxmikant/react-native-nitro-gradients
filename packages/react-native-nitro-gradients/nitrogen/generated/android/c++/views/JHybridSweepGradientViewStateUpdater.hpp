@@ -12,8 +12,8 @@
 #endif
 
 #include <fbjni/fbjni.h>
-#include <react/fabric/StateWrapperImpl.h>
 #include <react/fabric/CoreComponentsRegistry.h>
+#include <react/fabric/StateWrapperImpl.h>
 #include <react/renderer/core/ConcreteComponentDescriptor.h>
 #include <NitroModules/NitroDefines.hpp>
 #include <NitroModules/JStateWrapper.hpp>
@@ -24,13 +24,13 @@ namespace margelo::nitro::gradient::views {
 
 using namespace facebook;
 
-class JHybridSweepGradientViewStateUpdater: public jni::JavaClass<JHybridSweepGradientViewStateUpdater> {
+class JHybridSweepGradientViewStateUpdater final: public jni::JavaClass<JHybridSweepGradientViewStateUpdater> {
 public:
   static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/gradient/views/HybridSweepGradientViewStateUpdater;";
 
 public:
   static void updateViewProps(jni::alias_ref<jni::JClass> /* class */,
-                              jni::alias_ref<JHybridSweepGradientViewSpec::javaobject> view,
+                              jni::alias_ref<JHybridSweepGradientViewSpec::JavaPart> view,
                               jni::alias_ref<JStateWrapper::javaobject> stateWrapperInterface);
 
 public:

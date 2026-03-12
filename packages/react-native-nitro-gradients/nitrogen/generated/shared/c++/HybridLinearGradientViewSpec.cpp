@@ -24,6 +24,10 @@ namespace margelo::nitro::gradient {
       prototype.registerHybridSetter("end", &HybridLinearGradientViewSpec::setEnd);
       prototype.registerHybridGetter("angle", &HybridLinearGradientViewSpec::getAngle);
       prototype.registerHybridSetter("angle", &HybridLinearGradientViewSpec::setAngle);
+      prototype.registerHybridGetter("blur", &HybridLinearGradientViewSpec::getBlur);
+      prototype.registerHybridSetter("blur", &HybridLinearGradientViewSpec::setBlur);
+      prototype.registerHybridGetter("tileMode", &HybridLinearGradientViewSpec::getTileMode);
+      prototype.registerHybridSetter("tileMode", &HybridLinearGradientViewSpec::setTileMode);
       prototype.registerHybridMethod("update", &HybridLinearGradientViewSpec::update);
     });
   }

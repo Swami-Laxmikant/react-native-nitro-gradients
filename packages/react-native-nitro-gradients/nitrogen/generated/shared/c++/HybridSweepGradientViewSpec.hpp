@@ -6,8 +6,6 @@
 ///
 
 #pragma once
-#ifndef NITRO_GRADIENT_HYBRID_SWEEP_GRADIENT_VIEW_SPEC_HPP
-#define NITRO_GRADIENT_HYBRID_SWEEP_GRADIENT_VIEW_SPEC_HPP
 
 #if __has_include(<NitroModules/HybridObject.hpp>)
 #include <NitroModules/HybridObject.hpp>
@@ -21,6 +19,7 @@ namespace margelo::nitro::gradient { struct Vector; }
 #include <vector>
 #include <optional>
 #include "Vector.hpp"
+#include <string>
 #include <NitroModules/Null.hpp>
 #include <variant>
 
@@ -57,10 +56,14 @@ namespace margelo::nitro::gradient {
       virtual void setPositions(const std::optional<std::vector<double>>& positions) = 0;
       virtual std::optional<Vector> getCenter() = 0;
       virtual void setCenter(const std::optional<Vector>& center) = 0;
+      virtual std::optional<double> getBlur() = 0;
+      virtual void setBlur(std::optional<double> blur) = 0;
+      virtual std::optional<std::string> getTileMode() = 0;
+      virtual void setTileMode(const std::optional<std::string>& tileMode) = 0;
 
     public:
       // Methods
-      virtual void update(const std::optional<std::variant<nitro::NullType, std::vector<double>>>& colors, const std::optional<std::vector<double>>& positions, const std::optional<Vector>& center) = 0;
+      virtual void update(const std::optional<std::variant<nitro::NullType, std::vector<double>>>& colors, const std::optional<std::vector<double>>& positions, const std::optional<Vector>& center, std::optional<double> blur, const std::optional<std::string>& tileMode) = 0;
 
     protected:
       // Hybrid Setup
@@ -72,5 +75,3 @@ namespace margelo::nitro::gradient {
   };
 
 } // namespace margelo::nitro::gradient
-
-#endif // NITRO_GRADIENT_HYBRID_SWEEP_GRADIENT_VIEW_SPEC_HPP

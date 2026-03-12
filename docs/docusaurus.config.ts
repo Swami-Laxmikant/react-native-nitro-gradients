@@ -6,8 +6,8 @@ import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
   title: 'React Native Nitro Gradients',
-  tagline: 'High-performance gradient components for React Native',
-  favicon: 'img/favicon.ico',
+  tagline: 'Native linear, radial, and sweep gradients for React Native',
+  favicon: 'img/logo.svg',
 
   // Set the production url of your site here
   url: 'https://Swami-Laxmikant.github.io',
@@ -51,10 +51,12 @@ const config: Config = {
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
     colorMode: {
+      defaultMode: 'light',
+      disableSwitch: false,
       respectPrefersColorScheme: true,
     },
     navbar: {
-      title: 'Nitro Gradient',
+      title: 'Nitro Gradients',
       logo: {
         alt: 'Nitro Gradient Logo',
         src: 'img/logo.svg',
@@ -66,6 +68,16 @@ const config: Config = {
           position: 'left',
           label: 'Docs',
         },
+{
+          to: '/docs/api',
+          label: 'API',
+          position: 'left',
+        },
+        {
+          href: 'https://www.npmjs.com/package/react-native-nitro-gradients',
+          label: 'npm',
+          position: 'right',
+        },
         {
           href: 'https://github.com/Swami-Laxmikant/react-native-nitro-gradients',
           label: 'GitHub',
@@ -74,7 +86,7 @@ const config: Config = {
       ],
     },
     footer: {
-      style: 'dark',
+      style: 'light',
       links: [
         {
           title: 'Docs',
@@ -82,10 +94,6 @@ const config: Config = {
             {
               label: 'Getting Started',
               to: '/docs/intro',
-            },
-            {
-              label: 'API Reference',
-              to: '/docs/api',
             },
           ],
         },
@@ -103,7 +111,7 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} React Native Nitro Gradients. Built with ❤️ from Bengaluru.`,
+      copyright: `Copyright © ${new Date().getFullYear()} React Native Nitro Gradients. Built with ❤️ in <a href="https://www.google.com/search?q=Bengaluru" target="_blank" rel="noopener noreferrer">Bengaluru</a>.<br/>Special thanks to <a href="https://github.com/mrousavy" target="_blank" rel="noopener noreferrer">Marc Rousavy</a> and <a href="https://github.com/mrousavy/nitro" target="_blank" rel="noopener noreferrer">Nitro Modules</a>.`,
     },
     prism: {
       theme: prismThemes.github,

@@ -9,11 +9,13 @@ import type {
     SweepGradientViewProps,
 } from "../specs/SweepGradient.nitro";
 import { commonStyles } from "./styles";
+import type { TileMode } from "./types";
 import {
     getValue,
     processColors,
     useAnimatedNitroViewRef,
     useSharedValuesEffect,
+    type Pretify,
     type WithSharedValueObj,
 } from "./utils";
 
@@ -23,8 +25,9 @@ const SweepGradientView = getHostComponent<
 >("SweepGradientView", () => SweepGradientViewConfig);
 
 type GradientViewProps = WithSharedValueObj<
-    Omit<SweepGradientViewProps, "colors"> & {
+    Omit<SweepGradientViewProps, "colors" | "tileMode"> & {
         colors: ColorValue[];
+        tileMode?: TileMode;
     }
 >;
 
@@ -36,14 +39,18 @@ const useSweepGradient = (
     colors: Props["colors"],
     center: Props["center"],
     positions: Props["positions"],
+    blur: Props["blur"],
+    tileMode: Props["tileMode"],
 ) => {
     const gradProps = useMemo(
         () => ({
             positions: getValue(positions),
             colors: processColors(getValue(colors)),
             center: getValue(center),
+            blur: getValue(blur),
+            tileMode: getValue(tileMode),
         }),
-        [colors, center, positions],
+        [colors, center, positions, blur, tileMode],
     );
 
     const [gradRef, setGradRef] = useAnimatedNitroViewRef<
@@ -60,6 +67,8 @@ const useSweepGradient = (
             processColors(getValue(colors)),
             getValue(positions),
             getValue(center),
+            getValue(blur),
+            getValue(tileMode),
         );
     });
 
@@ -69,14 +78,12 @@ const useSweepGradient = (
     };
 };
 
-type Pretify<T> = {
-    [k in keyof T]: T[k];
-};
-
 export const SweepGradient = ({
     colors,
     center,
     positions,
+    blur,
+    tileMode,
     children,
     ...viewProps
 }: Props) => {
@@ -84,6 +91,8 @@ export const SweepGradient = ({
         colors,
         center,
         positions,
+        blur,
+        tileMode,
     );
 
     return (
