@@ -9,11 +9,13 @@ import type {
     LinearGradientViewProps,
 } from "../specs/LinearGradient.nitro";
 import { commonStyles } from "./styles";
+import type { TileMode } from "./types";
 import {
     getValue,
     processColors,
     useAnimatedNitroViewRef,
     useSharedValuesEffect,
+    type Pretify,
     type WithSharedValueObj,
 } from "./utils";
 
@@ -23,8 +25,9 @@ const LinearGradientView = getHostComponent<
 >("LinearGradientView", () => LinearGradientViewConfig);
 
 type GradientViewProps = WithSharedValueObj<
-    Omit<LinearGradientViewProps, "colors"> & {
+    Omit<LinearGradientViewProps, "colors" | "tileMode"> & {
         colors: ColorValue[];
+        tileMode?: TileMode;
     }
 >;
 
@@ -38,6 +41,8 @@ const useLinearGradient = (
     end: Props["end"],
     positions: Props["positions"],
     angle: Props["angle"],
+    blur: Props["blur"],
+    tileMode: Props["tileMode"],
 ) => {
     const gradProps = useMemo(
         () => ({
@@ -46,8 +51,10 @@ const useLinearGradient = (
             start: getValue(start),
             end: getValue(end),
             angle: getValue(angle),
+            blur: getValue(blur),
+            tileMode: getValue(tileMode),
         }),
-        [colors, start, end, positions, angle],
+        [colors, start, end, positions, angle, blur, tileMode],
     );
 
     const [gradRef, setGradRef] = useAnimatedNitroViewRef<
@@ -66,6 +73,8 @@ const useLinearGradient = (
             getValue(start),
             getValue(end),
             getValue(angle),
+            getValue(blur),
+            getValue(tileMode),
         );
     });
 
@@ -75,16 +84,14 @@ const useLinearGradient = (
     };
 };
 
-type Pretify<T> = {
-    [k in keyof T]: T[k];
-};
-
 export const LinearGradient = ({
     colors,
     start,
     end,
     positions,
     angle,
+    blur,
+    tileMode,
     children,
     ...viewProps
 }: Props) => {
@@ -94,6 +101,8 @@ export const LinearGradient = ({
         end,
         positions,
         angle,
+        blur,
+        tileMode,
     );
 
     return (

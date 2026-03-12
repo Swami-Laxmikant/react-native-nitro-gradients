@@ -1,6 +1,7 @@
 package com.margelo.nitro.gradient
 
 import android.content.Context
+import android.graphics.BlurMaskFilter
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.ColorFilter
@@ -15,9 +16,11 @@ import com.facebook.common.internal.DoNotStrip
 import com.margelo.nitro.gradient.Float2
 import com.margelo.nitro.gradient.toFloat2
 import com.margelo.nitro.gradient.toFloat1
+import kotlin.math.min
 
 class RadialGradientDrawable(): Drawable() {
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private var tileMode = Shader.TileMode.CLAMP
 
     private var colors: IntArray = intArrayOf(Color.TRANSPARENT, Color.TRANSPARENT)
     private var positions: FloatArray? = null
@@ -52,6 +55,18 @@ class RadialGradientDrawable(): Drawable() {
         }
     }
 
+    fun setBlur(radius: Float) {
+        paint.maskFilter = if (radius > 0f) BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL) else null
+        isDirty = true
+    }
+
+    fun setTileMode(value: Shader.TileMode) {
+        if (tileMode != value) {
+            tileMode = value
+            isDirty = true
+        }
+    }
+
     fun setRadius(value: Float) {
         if (radius != value) {
             radius = value
@@ -74,7 +89,7 @@ class RadialGradientDrawable(): Drawable() {
         val cy = b.top + center.y
         val r = if (radius <= 0f) 0.0001f else radius
 
-        paint.shader = RadialGradient(cx, cy, r, colors, positions, Shader.TileMode.CLAMP)
+        paint.shader = RadialGradient(cx, cy, r, colors, positions, tileMode)
         isDirty = false
         lastBoundsWidth = b.width()
         lastBoundsHeight = b.height()
@@ -118,6 +133,32 @@ class HybridRadialGradientView(context: Context): HybridRadialGradientViewSpec()
     override val view: View = gradientView
     private val density = context.resources.displayMetrics.density
     private var isLayoutValid = false
+    private var updateDepth = 0
+    private var hasPendingInvalidate = false
+
+    private fun invalidateGradient() {
+        if (updateDepth > 0) {
+            hasPendingInvalidate = true
+        } else {
+            gradientDrawable.invalidate()
+        }
+    }
+
+    override fun beforeUpdate() {
+        updateDepth += 1
+    }
+
+    override fun afterUpdate() {
+        if (updateDepth == 0) {
+            return
+        }
+
+        updateDepth -= 1
+        if (updateDepth == 0 && hasPendingInvalidate) {
+            hasPendingInvalidate = false
+            gradientDrawable.invalidate()
+        }
+    }
 
     init {
         gradientView.background = gradientDrawable
@@ -127,7 +168,7 @@ class HybridRadialGradientView(context: Context): HybridRadialGradientViewSpec()
             if (w > 0 && h > 0 && !isLayoutValid) {
                 isLayoutValid = true
                 updateGradientProperties(w, h)
-                gradientDrawable.invalidate()
+                invalidateGradient()
             }
         }
     }
@@ -140,16 +181,45 @@ class HybridRadialGradientView(context: Context): HybridRadialGradientViewSpec()
         )
 
         gradientDrawable.setRadius(
-            radius?.let { toFloat1(it, w, h, density) } ?: (w / 2f)
+            radius?.let { toFloat1(it, w, h, density) } ?: (min(w, h) / 2f)
         )
     }
+
+    override var blur: Double? = null
+        set(value) {
+            if (field != value) {
+                field = value
+                applyBlurToView(
+                    gradientView,
+                    value,
+                    tileMode,
+                    gradientDrawable::setBlur,
+                    ::invalidateGradient
+                )
+            }
+        }
+
+    override var tileMode: String? = null
+        set(value) {
+            if (field != value) {
+                field = value
+                gradientDrawable.setTileMode(value.toTileMode())
+                applyBlurToView(
+                    gradientView,
+                    blur,
+                    value,
+                    gradientDrawable::setBlur,
+                    ::invalidateGradient
+                )
+            }
+        }
 
     override var colors: DoubleArray = doubleArrayOf()
         set(value) {
             if (!field.contentEquals(value)) {
                 field = value
                 gradientDrawable.setColors(value)
-                gradientDrawable.invalidate()
+                invalidateGradient()
             }
         }
 
@@ -158,7 +228,7 @@ class HybridRadialGradientView(context: Context): HybridRadialGradientViewSpec()
             if (!field.contentEquals(value)) {
                 field = value
                 gradientDrawable.setPositions(value ?: doubleArrayOf())
-                gradientDrawable.invalidate()
+                invalidateGradient()
             }
         }
 
@@ -172,7 +242,7 @@ class HybridRadialGradientView(context: Context): HybridRadialGradientViewSpec()
                     gradientDrawable.setCenter(
                         value?.let { toFloat2(it, w, h, density) } ?: Float2(w / 2f, h / 2f)
                     )
-                    gradientDrawable.invalidate()
+                    invalidateGradient()
                 }
             }
         }
@@ -185,48 +255,64 @@ class HybridRadialGradientView(context: Context): HybridRadialGradientViewSpec()
                 val h = gradientView.height
                 if (w > 0 && h > 0) {
                     gradientDrawable.setRadius(
-                        value?.let { toFloat1(it, w, h, density) } ?: (w / 2f)
+                        value?.let { toFloat1(it, w, h, density) } ?: (min(w, h) / 2f)
                     )
-                    gradientDrawable.invalidate()
+                    invalidateGradient()
                 }
             }
         }
 
-    override fun update(colors: Variant_NullType_DoubleArray?, positions: DoubleArray?, center: Vector?, radius: Variant_String_Double?) {
-        var changed = false
+    override fun update(
+        colors: Variant_NullType_DoubleArray?,
+        positions: DoubleArray?,
+        center: Vector?,
+        radius: Variant_String_Double?,
+        blur: Double?,
+        tileMode: String?
+    ) {
+        beforeUpdate()
+        try {
+            var changed = false
 
-        when (val colorsArg = colors.asOptionalDoubleArray()) {
-            is OptionalVariant.Provided -> {
-                val nextColors = colorsArg.value ?: doubleArrayOf()
-                if (!this.colors.contentEquals(nextColors)) {
-                    this.colors = nextColors
-                    changed = true
+            when (val colorsArg = colors.asOptionalDoubleArray()) {
+                is OptionalVariant.Provided -> {
+                    val nextColors = colorsArg.value ?: doubleArrayOf()
+                    if (!this.colors.contentEquals(nextColors)) {
+                        this.colors = nextColors
+                        changed = true
+                    }
                 }
+                OptionalVariant.NotProvided -> Unit
             }
-            OptionalVariant.NotProvided -> Unit
-        }
-        positions?.let {
-            if (!this.positions.contentEquals(it)) {
-                this.positions = it
-                gradientDrawable.setPositions(it)
-                changed = true
-            }
-        }
-        center?.let {
-            if (this.center != it) {
-                this.center = it
-                changed = true
-            }
-        }
-        radius?.let {
-            if (this.radius != it) {
-                this.radius = it
-                changed = true
-            }
-        }
 
-        if (changed) {
-            gradientDrawable.invalidate()
+            if (!this.positions.contentEquals(positions)) {
+                this.positions = positions
+                changed = true
+            }
+
+            if (this.center != center) {
+                this.center = center
+                changed = true
+            }
+
+            if (this.radius != radius) {
+                this.radius = radius
+                changed = true
+            }
+
+            if (this.blur != blur) {
+                this.blur = blur
+            }
+
+            if (this.tileMode != tileMode) {
+                this.tileMode = tileMode
+            }
+
+            if (changed) {
+                invalidateGradient()
+            }
+        } finally {
+            afterUpdate()
         }
     }
 }

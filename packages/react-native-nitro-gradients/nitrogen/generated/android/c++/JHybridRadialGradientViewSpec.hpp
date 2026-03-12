@@ -18,34 +18,33 @@ namespace margelo::nitro::gradient {
 
   using namespace facebook;
 
-  class JHybridRadialGradientViewSpec: public jni::HybridClass<JHybridRadialGradientViewSpec, JHybridObject>,
-                                       public virtual HybridRadialGradientViewSpec {
+  class JHybridRadialGradientViewSpec: public virtual HybridRadialGradientViewSpec, public virtual JHybridObject {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/gradient/HybridRadialGradientViewSpec;";
-    static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
-    static void registerNatives();
+    struct JavaPart: public jni::JavaClass<JavaPart, JHybridObject::JavaPart> {
+      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/gradient/HybridRadialGradientViewSpec;";
+      std::shared_ptr<JHybridRadialGradientViewSpec> getJHybridRadialGradientViewSpec();
+    };
+    struct CxxPart: public jni::HybridClass<CxxPart, JHybridObject::CxxPart> {
+      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/gradient/HybridRadialGradientViewSpec$CxxPart;";
+      static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
+      static void registerNatives();
+      using HybridBase::HybridBase;
+    protected:
+      std::shared_ptr<JHybridObject> createHybridObject(const jni::local_ref<JHybridObject::JavaPart>& javaPart) override;
+    };
 
-  protected:
-    // C++ constructor (called from Java via `initHybrid()`)
-    explicit JHybridRadialGradientViewSpec(jni::alias_ref<jhybridobject> jThis) :
+  public:
+    explicit JHybridRadialGradientViewSpec(const jni::local_ref<JHybridRadialGradientViewSpec::JavaPart>& javaPart):
       HybridObject(HybridRadialGradientViewSpec::TAG),
-      HybridBase(jThis),
-      _javaPart(jni::make_global(jThis)) {}
-
-  public:
+      JHybridObject(javaPart),
+      _javaPart(jni::make_global(javaPart)) {}
     ~JHybridRadialGradientViewSpec() override {
       // Hermes GC can destroy JS objects on a non-JNI Thread.
       jni::ThreadScope::WithClassLoader([&] { _javaPart.reset(); });
     }
 
   public:
-    size_t getExternalMemorySize() noexcept override;
-    bool equals(const std::shared_ptr<HybridObject>& other) override;
-    void dispose() noexcept override;
-    std::string toString() override;
-
-  public:
-    inline const jni::global_ref<JHybridRadialGradientViewSpec::javaobject>& getJavaPart() const noexcept {
+    inline const jni::global_ref<JHybridRadialGradientViewSpec::JavaPart>& getJavaPart() const noexcept {
       return _javaPart;
     }
 
@@ -59,15 +58,17 @@ namespace margelo::nitro::gradient {
     void setCenter(const std::optional<Vector>& center) override;
     std::optional<std::variant<std::string, double>> getRadius() override;
     void setRadius(const std::optional<std::variant<std::string, double>>& radius) override;
+    std::optional<double> getBlur() override;
+    void setBlur(std::optional<double> blur) override;
+    std::optional<std::string> getTileMode() override;
+    void setTileMode(const std::optional<std::string>& tileMode) override;
 
   public:
     // Methods
-    void update(const std::optional<std::variant<nitro::NullType, std::vector<double>>>& colors, const std::optional<std::vector<double>>& positions, const std::optional<Vector>& center, const std::optional<std::variant<std::string, double>>& radius) override;
+    void update(const std::optional<std::variant<nitro::NullType, std::vector<double>>>& colors, const std::optional<std::vector<double>>& positions, const std::optional<Vector>& center, const std::optional<std::variant<std::string, double>>& radius, std::optional<double> blur, const std::optional<std::string>& tileMode) override;
 
   private:
-    friend HybridBase;
-    using HybridBase::HybridBase;
-    jni::global_ref<JHybridRadialGradientViewSpec::javaobject> _javaPart;
+    jni::global_ref<JHybridRadialGradientViewSpec::JavaPart> _javaPart;
   };
 
 } // namespace margelo::nitro::gradient

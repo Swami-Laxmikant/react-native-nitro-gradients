@@ -8,6 +8,8 @@
     "positions": true,
     "center": true,
     "radius": true,
+    "blur": true,
+    "tileMode": true,
     "hybridRef": true
   }
 }

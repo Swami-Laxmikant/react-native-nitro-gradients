@@ -1,6 +1,10 @@
 package com.margelo.nitro.gradient
 
 import android.graphics.PointF
+import android.graphics.RenderEffect
+import android.graphics.Shader
+import android.os.Build
+import android.view.View
 import com.margelo.nitro.gradient.Variant_String_Double
 import com.margelo.nitro.gradient.Vector
 
@@ -46,3 +50,42 @@ fun parseCoordinate(
 fun toFloat1(value: Variant_String_Double, width: Int, height: Int, density: Float): Float {
     return parseCoordinate(value, width, height, density, width)
 }
+
+fun applyBlurToView(
+    view: View,
+    blurRadius: Double?,
+    tileMode: String?,
+    setDrawableBlur: (Float) -> Unit,
+    invalidateDrawable: () -> Unit
+) {
+    val r = blurRadius?.toFloat() ?: 0f
+    if (r > 0f) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            view.setRenderEffect(
+                RenderEffect.createBlurEffect(
+                    r,
+                    r,
+                    tileMode.toTileMode()
+                )
+            )
+        } else {
+            setDrawableBlur(r)
+            view.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+            invalidateDrawable()
+        }
+    } else {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            view.setRenderEffect(null)
+        } else {
+            setDrawableBlur(0f)
+            view.setLayerType(View.LAYER_TYPE_NONE, null)
+            invalidateDrawable()
+        }
+    }
+}
+
+fun String?.toTileMode(): Shader.TileMode =
+    when (this?.lowercase()) {
+        "clamp" -> Shader.TileMode.CLAMP
+        else -> Shader.TileMode.DECAL
+    }

@@ -3,13 +3,15 @@ import type {
     HybridViewMethods,
     HybridViewProps,
 } from "react-native-nitro-modules";
-import type { RadiusValue, Vector } from "./helperTypes";
+import type { RadiusValue, TileModeValue, Vector } from "./helperTypes";
 
 export interface RadialGradientViewProps extends HybridViewProps {
     colors: number[];
     positions?: number[];
     center?: Vector;
     radius?: RadiusValue;
+    blur?: number;
+    tileMode?: TileModeValue;
 }
 
 export interface RadialGradientViewMethods extends HybridViewMethods {
@@ -18,6 +20,8 @@ export interface RadialGradientViewMethods extends HybridViewMethods {
         positions?: number[],
         center?: Vector,
         radius?: RadiusValue,
+        blur?: number,
+        tileMode?: TileModeValue,
     ): void;
 }
 

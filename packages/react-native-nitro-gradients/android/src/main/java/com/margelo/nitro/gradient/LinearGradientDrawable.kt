@@ -1,12 +1,12 @@
 package com.margelo.nitro.gradient
 
+import android.graphics.BlurMaskFilter
 import android.graphics.Canvas
 import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.Shader
 import android.graphics.drawable.Drawable
-import android.util.Log
 import kotlin.math.tan
 
 private fun getHorizontalOrVerticalStartPoint(angle: Float, halfWidth: Float, halfHeight: Float): Pair<Float, Float> {
@@ -76,6 +76,7 @@ private fun getGradientStartPoint(angle: Float, hWidth: Float, hHeight: Float): 
 class LinearGradientDrawable : Drawable() {
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var shader: Shader? = null
+    private var tileMode = Shader.TileMode.CLAMP
     private var isDirty = true
     private var lastBoundsWidth = 0
     private var lastBoundsHeight = 0
@@ -90,6 +91,18 @@ class LinearGradientDrawable : Drawable() {
     fun setColors(colors: DoubleArray) {
         if (!colorInts.contentEquals(colors.map { it.toInt() }.toIntArray())) {
             colorInts = colors.map { it.toInt() }.toIntArray()
+            isDirty = true
+        }
+    }
+
+    fun setBlur(radius: Float) {
+        paint.maskFilter = if (radius > 0f) BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL) else null
+        isDirty = true
+    }
+
+    fun setTileMode(value: Shader.TileMode) {
+        if (tileMode != value) {
+            tileMode = value
             isDirty = true
         }
     }
@@ -189,7 +202,7 @@ class LinearGradientDrawable : Drawable() {
             x0, y0, x1, y1,
             colorInts,
             colorPositions,
-            Shader.TileMode.CLAMP
+            tileMode
         )
         paint.shader = shader
         isDirty = false
@@ -215,5 +228,3 @@ class LinearGradientDrawable : Drawable() {
         invalidateSelf()
     }
 }
-
-

@@ -40,7 +40,6 @@ namespace margelo::nitro::gradient::views {
   class HybridRadialGradientViewProps final: public react::ViewProps {
   public:
     HybridRadialGradientViewProps() = default;
-    HybridRadialGradientViewProps(const HybridRadialGradientViewProps&);
     HybridRadialGradientViewProps(const react::PropsParserContext& context,
                                   const HybridRadialGradientViewProps& sourceProps,
                                   const react::RawProps& rawProps);
@@ -50,6 +49,8 @@ namespace margelo::nitro::gradient::views {
     CachedProp<std::optional<std::vector<double>>> positions;
     CachedProp<std::optional<Vector>> center;
     CachedProp<std::optional<std::variant<std::string, double>>> radius;
+    CachedProp<std::optional<double>> blur;
+    CachedProp<std::optional<std::string>> tileMode;
     CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridRadialGradientViewSpec>& /* ref */)>>> hybridRef;
 
   private:
@@ -62,10 +63,14 @@ namespace margelo::nitro::gradient::views {
   class HybridRadialGradientViewState final {
   public:
     HybridRadialGradientViewState() = default;
+    explicit HybridRadialGradientViewState(const std::shared_ptr<HybridRadialGradientViewProps>& props):
+      _props(props) {}
 
   public:
-    void setProps(const HybridRadialGradientViewProps& props) { _props.emplace(props); }
-    const std::optional<HybridRadialGradientViewProps>& getProps() const { return _props; }
+    [[nodiscard]]
+    const std::shared_ptr<HybridRadialGradientViewProps>& getProps() const {
+      return _props;
+    }
 
   public:
 #ifdef ANDROID
@@ -79,7 +84,7 @@ namespace margelo::nitro::gradient::views {
 #endif
 
   private:
-    std::optional<HybridRadialGradientViewProps> _props;
+    std::shared_ptr<HybridRadialGradientViewProps> _props;
   };
 
   /**
@@ -95,7 +100,7 @@ namespace margelo::nitro::gradient::views {
    */
   class HybridRadialGradientViewComponentDescriptor final: public react::ConcreteComponentDescriptor<HybridRadialGradientViewShadowNode> {
   public:
-    HybridRadialGradientViewComponentDescriptor(const react::ComponentDescriptorParameters& parameters);
+    explicit HybridRadialGradientViewComponentDescriptor(const react::ComponentDescriptorParameters& parameters);
 
   public:
     /**

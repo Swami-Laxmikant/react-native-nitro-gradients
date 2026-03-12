@@ -79,3 +79,9 @@ tsconfig.tsbuildinfo
 AwesomeProject/
 ExpoProject/
 apps/example_89/
+
+# Findings & notes
+FINDINGS.md
+TOFIX.md
+docs/ios-tab-switch-bug.md
+docs/TODO-easter-eggs.md

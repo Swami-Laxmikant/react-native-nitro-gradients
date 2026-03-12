@@ -9,11 +9,13 @@ import type {
     RadialGradientViewProps,
 } from "../specs/RadialGradient.nitro";
 import { commonStyles } from "./styles";
+import type { TileMode } from "./types";
 import {
     getValue,
     processColors,
     useAnimatedNitroViewRef,
     useSharedValuesEffect,
+    type Pretify,
     type WithSharedValueObj,
 } from "./utils";
 
@@ -23,8 +25,9 @@ const RadialGradientView = getHostComponent<
 >("RadialGradientView", () => RadialGradientViewConfig);
 
 type GradientViewProps = WithSharedValueObj<
-    Omit<RadialGradientViewProps, "colors"> & {
+    Omit<RadialGradientViewProps, "colors" | "tileMode"> & {
         colors: ColorValue[];
+        tileMode?: TileMode;
     }
 >;
 
@@ -37,6 +40,8 @@ const useRadialGradient = (
     center: Props["center"],
     radius: Props["radius"],
     positions: Props["positions"],
+    blur: Props["blur"],
+    tileMode: Props["tileMode"],
 ) => {
     const gradProps = useMemo(
         () => ({
@@ -44,8 +49,10 @@ const useRadialGradient = (
             colors: processColors(getValue(colors)),
             center: getValue(center),
             radius: getValue(radius),
+            blur: getValue(blur),
+            tileMode: getValue(tileMode),
         }),
-        [colors, center, radius, positions],
+        [colors, center, radius, positions, blur, tileMode],
     );
 
     const [gradRef, setGradRef] = useAnimatedNitroViewRef<
@@ -63,6 +70,8 @@ const useRadialGradient = (
             getValue(positions),
             getValue(center),
             getValue(radius),
+            getValue(blur),
+            getValue(tileMode),
         );
     });
 
@@ -72,15 +81,13 @@ const useRadialGradient = (
     };
 };
 
-type Pretify<T> = {
-    [k in keyof T]: T[k];
-};
-
 export const RadialGradient = ({
     colors,
     center,
     radius,
     positions,
+    blur,
+    tileMode,
     children,
     ...viewProps
 }: Props) => {
@@ -89,6 +96,8 @@ export const RadialGradient = ({
         center,
         radius,
         positions,
+        blur,
+        tileMode,
     );
 
     return (

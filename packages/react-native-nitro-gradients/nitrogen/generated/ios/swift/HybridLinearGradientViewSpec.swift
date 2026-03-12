@@ -5,7 +5,6 @@
 /// Copyright © Marc Rousavy @ Margelo
 ///
 
-import Foundation
 import NitroModules
 
 /// See ``HybridLinearGradientViewSpec``
@@ -16,9 +15,11 @@ public protocol HybridLinearGradientViewSpec_protocol: HybridObject, HybridView 
   var start: Vector? { get set }
   var end: Vector? { get set }
   var angle: Double? { get set }
+  var blur: Double? { get set }
+  var tileMode: String? { get set }
 
   // Methods
-  func update(colors: Variant_NullType__Double_?, positions: [Double]?, start: Vector?, end: Vector?, angle: Double?) throws -> Void
+  func update(colors: Variant_NullType__Double_?, positions: [Double]?, start: Vector?, end: Vector?, angle: Double?, blur: Double?, tileMode: String?) throws -> Void
 }
 
 public extension HybridLinearGradientViewSpec_protocol {

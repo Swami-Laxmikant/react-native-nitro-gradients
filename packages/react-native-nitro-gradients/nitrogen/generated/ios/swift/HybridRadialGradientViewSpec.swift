@@ -5,7 +5,6 @@
 /// Copyright © Marc Rousavy @ Margelo
 ///
 
-import Foundation
 import NitroModules
 
 /// See ``HybridRadialGradientViewSpec``
@@ -15,9 +14,11 @@ public protocol HybridRadialGradientViewSpec_protocol: HybridObject, HybridView 
   var positions: [Double]? { get set }
   var center: Vector? { get set }
   var radius: Variant_String_Double? { get set }
+  var blur: Double? { get set }
+  var tileMode: String? { get set }
 
   // Methods
-  func update(colors: Variant_NullType__Double_?, positions: [Double]?, center: Vector?, radius: Variant_String_Double?) throws -> Void
+  func update(colors: Variant_NullType__Double_?, positions: [Double]?, center: Vector?, radius: Variant_String_Double?, blur: Double?, tileMode: String?) throws -> Void
 }
 
 public extension HybridRadialGradientViewSpec_protocol {

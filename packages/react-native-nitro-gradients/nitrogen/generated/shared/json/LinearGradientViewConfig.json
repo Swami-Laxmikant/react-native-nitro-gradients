@@ -9,6 +9,8 @@
     "start": true,
     "end": true,
     "angle": true,
+    "blur": true,
+    "tileMode": true,
     "hybridRef": true
   }
 }

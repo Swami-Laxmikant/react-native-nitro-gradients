@@ -19,6 +19,7 @@
 #include <vector>
 #include <optional>
 #include "Vector.hpp"
+#include <string>
 #include <memory>
 #include "HybridSweepGradientViewSpec.hpp"
 #include <functional>
@@ -38,7 +39,6 @@ namespace margelo::nitro::gradient::views {
   class HybridSweepGradientViewProps final: public react::ViewProps {
   public:
     HybridSweepGradientViewProps() = default;
-    HybridSweepGradientViewProps(const HybridSweepGradientViewProps&);
     HybridSweepGradientViewProps(const react::PropsParserContext& context,
                                  const HybridSweepGradientViewProps& sourceProps,
                                  const react::RawProps& rawProps);
@@ -47,6 +47,8 @@ namespace margelo::nitro::gradient::views {
     CachedProp<std::vector<double>> colors;
     CachedProp<std::optional<std::vector<double>>> positions;
     CachedProp<std::optional<Vector>> center;
+    CachedProp<std::optional<double>> blur;
+    CachedProp<std::optional<std::string>> tileMode;
     CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridSweepGradientViewSpec>& /* ref */)>>> hybridRef;
 
   private:
@@ -59,10 +61,14 @@ namespace margelo::nitro::gradient::views {
   class HybridSweepGradientViewState final {
   public:
     HybridSweepGradientViewState() = default;
+    explicit HybridSweepGradientViewState(const std::shared_ptr<HybridSweepGradientViewProps>& props):
+      _props(props) {}
 
   public:
-    void setProps(const HybridSweepGradientViewProps& props) { _props.emplace(props); }
-    const std::optional<HybridSweepGradientViewProps>& getProps() const { return _props; }
+    [[nodiscard]]
+    const std::shared_ptr<HybridSweepGradientViewProps>& getProps() const {
+      return _props;
+    }
 
   public:
 #ifdef ANDROID
@@ -76,7 +82,7 @@ namespace margelo::nitro::gradient::views {
 #endif
 
   private:
-    std::optional<HybridSweepGradientViewProps> _props;
+    std::shared_ptr<HybridSweepGradientViewProps> _props;
   };
 
   /**
@@ -92,7 +98,7 @@ namespace margelo::nitro::gradient::views {
    */
   class HybridSweepGradientViewComponentDescriptor final: public react::ConcreteComponentDescriptor<HybridSweepGradientViewShadowNode> {
   public:
-    HybridSweepGradientViewComponentDescriptor(const react::ComponentDescriptorParameters& parameters);
+    explicit HybridSweepGradientViewComponentDescriptor(const react::ComponentDescriptorParameters& parameters);
 
   public:
     /**

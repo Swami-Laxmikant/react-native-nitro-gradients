@@ -68,7 +68,7 @@ namespace margelo::nitro::gradient::bridge::swift {
     return optional.has_value();
   }
   inline std::vector<double> get_std__optional_std__vector_double__(const std::optional<std::vector<double>>& optional) noexcept {
-    return *optional;
+    return optional.value();
   }
   
   // pragma MARK: std::variant<std::string, double>
@@ -112,7 +112,7 @@ namespace margelo::nitro::gradient::bridge::swift {
     return optional.has_value();
   }
   inline Vector get_std__optional_Vector_(const std::optional<Vector>& optional) noexcept {
-    return *optional;
+    return optional.value();
   }
   
   // pragma MARK: std::optional<double>
@@ -127,7 +127,22 @@ namespace margelo::nitro::gradient::bridge::swift {
     return optional.has_value();
   }
   inline double get_std__optional_double_(const std::optional<double>& optional) noexcept {
-    return *optional;
+    return optional.value();
+  }
+  
+  // pragma MARK: std::optional<std::string>
+  /**
+   * Specialized version of `std::optional<std::string>`.
+   */
+  using std__optional_std__string_ = std::optional<std::string>;
+  inline std::optional<std::string> create_std__optional_std__string_(const std::string& value) noexcept {
+    return std::optional<std::string>(value);
+  }
+  inline bool has_value_std__optional_std__string_(const std::optional<std::string>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline std::string get_std__optional_std__string_(const std::optional<std::string>& optional) noexcept {
+    return optional.value();
   }
   
   // pragma MARK: std::variant<nitro::NullType, std::vector<double>>
@@ -171,7 +186,7 @@ namespace margelo::nitro::gradient::bridge::swift {
     return optional.has_value();
   }
   inline std::variant<nitro::NullType, std::vector<double>> get_std__optional_std__variant_nitro__NullType__std__vector_double___(const std::optional<std::variant<nitro::NullType, std::vector<double>>>& optional) noexcept {
-    return *optional;
+    return optional.value();
   }
   
   // pragma MARK: std::shared_ptr<HybridLinearGradientViewSpec>
@@ -207,7 +222,7 @@ namespace margelo::nitro::gradient::bridge::swift {
     return optional.has_value();
   }
   inline std::variant<std::string, double> get_std__optional_std__variant_std__string__double__(const std::optional<std::variant<std::string, double>>& optional) noexcept {
-    return *optional;
+    return optional.value();
   }
   
   // pragma MARK: std::shared_ptr<HybridRadialGradientViewSpec>

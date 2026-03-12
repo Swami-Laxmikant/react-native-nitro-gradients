@@ -10,7 +10,7 @@ Setup and platform notes. Quick Start is in the Overview page.
 
 - React Native 0.78.0+ (New Architecture enabled)
 - React Native Reanimated 4.0+
-- React Native Worklets 0.6+
+- React Native Nitro Modules 0.22+
 
 ## Installation
 

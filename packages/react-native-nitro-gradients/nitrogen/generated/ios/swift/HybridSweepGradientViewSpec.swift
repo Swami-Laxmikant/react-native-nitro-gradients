@@ -5,7 +5,6 @@
 /// Copyright © Marc Rousavy @ Margelo
 ///
 
-import Foundation
 import NitroModules
 
 /// See ``HybridSweepGradientViewSpec``
@@ -14,9 +13,11 @@ public protocol HybridSweepGradientViewSpec_protocol: HybridObject, HybridView {
   var colors: [Double] { get set }
   var positions: [Double]? { get set }
   var center: Vector? { get set }
+  var blur: Double? { get set }
+  var tileMode: String? { get set }
 
   // Methods
-  func update(colors: Variant_NullType__Double_?, positions: [Double]?, center: Vector?) throws -> Void
+  func update(colors: Variant_NullType__Double_?, positions: [Double]?, center: Vector?, blur: Double?, tileMode: String?) throws -> Void
 }
 
 public extension HybridSweepGradientViewSpec_protocol {

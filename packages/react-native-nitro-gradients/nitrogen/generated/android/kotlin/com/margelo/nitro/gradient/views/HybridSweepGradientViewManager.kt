@@ -19,7 +19,7 @@ import com.margelo.nitro.gradient.*
 /**
  * Represents the React Native `ViewManager` for the "SweepGradientView" Nitro HybridView.
  */
-open class HybridSweepGradientViewManager: SimpleViewManager<View>() {
+public class HybridSweepGradientViewManager: SimpleViewManager<View>() {
   init {
     if (RecyclableView::class.java.isAssignableFrom(HybridSweepGradientView::class.java)) {
       // Enable view recycling

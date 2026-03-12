@@ -11,6 +11,7 @@ import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
 import com.margelo.nitro.core.NullType
+import com.margelo.nitro.core.HybridObject
 import com.margelo.nitro.views.HybridView
 
 /**
@@ -25,23 +26,6 @@ import com.margelo.nitro.views.HybridView
   "LocalVariableName", "PropertyName", "PrivatePropertyName", "FunctionName"
 )
 abstract class HybridLinearGradientViewSpec: HybridView() {
-  @DoNotStrip
-  private var mHybridData: HybridData = initHybrid()
-
-  init {
-    super.updateNative(mHybridData)
-  }
-
-  override fun updateNative(hybridData: HybridData) {
-    mHybridData = hybridData
-    super.updateNative(hybridData)
-  }
-
-  // Default implementation of `HybridObject.toString()`
-  override fun toString(): String {
-    return "[HybridObject LinearGradientView]"
-  }
-
   // Properties
   @get:DoNotStrip
   @get:Keep
@@ -72,13 +56,39 @@ abstract class HybridLinearGradientViewSpec: HybridView() {
   @set:DoNotStrip
   @set:Keep
   abstract var angle: Double?
+  
+  @get:DoNotStrip
+  @get:Keep
+  @set:DoNotStrip
+  @set:Keep
+  abstract var blur: Double?
+  
+  @get:DoNotStrip
+  @get:Keep
+  @set:DoNotStrip
+  @set:Keep
+  abstract var tileMode: String?
 
   // Methods
   @DoNotStrip
   @Keep
-  abstract fun update(colors: Variant_NullType_DoubleArray?, positions: DoubleArray?, start: Vector?, end: Vector?, angle: Double?): Unit
+  abstract fun update(colors: Variant_NullType_DoubleArray?, positions: DoubleArray?, start: Vector?, end: Vector?, angle: Double?, blur: Double?, tileMode: String?): Unit
 
-  private external fun initHybrid(): HybridData
+  // Default implementation of `HybridObject.toString()`
+  override fun toString(): String {
+    return "[HybridObject LinearGradientView]"
+  }
+
+  // C++ backing class
+  @DoNotStrip
+  @Keep
+  protected open class CxxPart(javaPart: HybridLinearGradientViewSpec): HybridObject.CxxPart(javaPart) {
+    // C++ JHybridLinearGradientViewSpec::CxxPart::initHybrid(...)
+    external override fun initHybrid(): HybridData
+  }
+  override fun createCxxPart(): CxxPart {
+    return CxxPart(this)
+  }
 
   companion object {
     protected const val TAG = "HybridLinearGradientViewSpec"

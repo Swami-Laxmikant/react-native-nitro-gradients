@@ -23,42 +23,36 @@ namespace margelo::nitro::gradient { struct Vector; }
 
 namespace margelo::nitro::gradient {
 
-  jni::local_ref<JHybridRadialGradientViewSpec::jhybriddata> JHybridRadialGradientViewSpec::initHybrid(jni::alias_ref<jhybridobject> jThis) {
+  std::shared_ptr<JHybridRadialGradientViewSpec> JHybridRadialGradientViewSpec::JavaPart::getJHybridRadialGradientViewSpec() {
+    auto hybridObject = JHybridObject::JavaPart::getJHybridObject();
+    auto castHybridObject = std::dynamic_pointer_cast<JHybridRadialGradientViewSpec>(hybridObject);
+    if (castHybridObject == nullptr) [[unlikely]] {
+      throw std::runtime_error("Failed to downcast JHybridObject to JHybridRadialGradientViewSpec!");
+    }
+    return castHybridObject;
+  }
+
+  jni::local_ref<JHybridRadialGradientViewSpec::CxxPart::jhybriddata> JHybridRadialGradientViewSpec::CxxPart::initHybrid(jni::alias_ref<jhybridobject> jThis) {
     return makeCxxInstance(jThis);
   }
 
-  void JHybridRadialGradientViewSpec::registerNatives() {
-    registerHybrid({
-      makeNativeMethod("initHybrid", JHybridRadialGradientViewSpec::initHybrid),
-    });
-  }
-
-  size_t JHybridRadialGradientViewSpec::getExternalMemorySize() noexcept {
-    static const auto method = javaClassStatic()->getMethod<jlong()>("getMemorySize");
-    return method(_javaPart);
-  }
-
-  bool JHybridRadialGradientViewSpec::equals(const std::shared_ptr<HybridObject>& other) {
-    if (auto otherCast = std::dynamic_pointer_cast<JHybridRadialGradientViewSpec>(other)) {
-      return _javaPart == otherCast->_javaPart;
+  std::shared_ptr<JHybridObject> JHybridRadialGradientViewSpec::CxxPart::createHybridObject(const jni::local_ref<JHybridObject::JavaPart>& javaPart) {
+    auto castJavaPart = jni::dynamic_ref_cast<JHybridRadialGradientViewSpec::JavaPart>(javaPart);
+    if (castJavaPart == nullptr) [[unlikely]] {
+      throw std::runtime_error("Failed to cast JHybridObject::JavaPart to JHybridRadialGradientViewSpec::JavaPart!");
     }
-    return false;
+    return std::make_shared<JHybridRadialGradientViewSpec>(castJavaPart);
   }
 
-  void JHybridRadialGradientViewSpec::dispose() noexcept {
-    static const auto method = javaClassStatic()->getMethod<void()>("dispose");
-    method(_javaPart);
-  }
-
-  std::string JHybridRadialGradientViewSpec::toString() {
-    static const auto method = javaClassStatic()->getMethod<jni::JString()>("toString");
-    auto javaString = method(_javaPart);
-    return javaString->toStdString();
+  void JHybridRadialGradientViewSpec::CxxPart::registerNatives() {
+    registerHybrid({
+      makeNativeMethod("initHybrid", JHybridRadialGradientViewSpec::CxxPart::initHybrid),
+    });
   }
 
   // Properties
   std::vector<double> JHybridRadialGradientViewSpec::getColors() {
-    static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JArrayDouble>()>("getColors");
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<jni::JArrayDouble>()>("getColors");
     auto __result = method(_javaPart);
     return [&]() {
       size_t __size = __result->size();
@@ -68,7 +62,7 @@ namespace margelo::nitro::gradient {
     }();
   }
   void JHybridRadialGradientViewSpec::setColors(const std::vector<double>& colors) {
-    static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<jni::JArrayDouble> /* colors */)>("setColors");
+    static const auto method = _javaPart->javaClassStatic()->getMethod<void(jni::alias_ref<jni::JArrayDouble> /* colors */)>("setColors");
     method(_javaPart, [&]() {
       size_t __size = colors.size();
       jni::local_ref<jni::JArrayDouble> __array = jni::JArrayDouble::newArray(__size);
@@ -77,7 +71,7 @@ namespace margelo::nitro::gradient {
     }());
   }
   std::optional<std::vector<double>> JHybridRadialGradientViewSpec::getPositions() {
-    static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JArrayDouble>()>("getPositions");
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<jni::JArrayDouble>()>("getPositions");
     auto __result = method(_javaPart);
     return __result != nullptr ? std::make_optional([&]() {
       size_t __size = __result->size();
@@ -87,7 +81,7 @@ namespace margelo::nitro::gradient {
     }()) : std::nullopt;
   }
   void JHybridRadialGradientViewSpec::setPositions(const std::optional<std::vector<double>>& positions) {
-    static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<jni::JArrayDouble> /* positions */)>("setPositions");
+    static const auto method = _javaPart->javaClassStatic()->getMethod<void(jni::alias_ref<jni::JArrayDouble> /* positions */)>("setPositions");
     method(_javaPart, positions.has_value() ? [&]() {
       size_t __size = positions.value().size();
       jni::local_ref<jni::JArrayDouble> __array = jni::JArrayDouble::newArray(__size);
@@ -96,33 +90,51 @@ namespace margelo::nitro::gradient {
     }() : nullptr);
   }
   std::optional<Vector> JHybridRadialGradientViewSpec::getCenter() {
-    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JVector>()>("getCenter");
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JVector>()>("getCenter");
     auto __result = method(_javaPart);
     return __result != nullptr ? std::make_optional(__result->toCpp()) : std::nullopt;
   }
   void JHybridRadialGradientViewSpec::setCenter(const std::optional<Vector>& center) {
-    static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<JVector> /* center */)>("setCenter");
+    static const auto method = _javaPart->javaClassStatic()->getMethod<void(jni::alias_ref<JVector> /* center */)>("setCenter");
     method(_javaPart, center.has_value() ? JVector::fromCpp(center.value()) : nullptr);
   }
   std::optional<std::variant<std::string, double>> JHybridRadialGradientViewSpec::getRadius() {
-    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JVariant_String_Double>()>("getRadius");
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JVariant_String_Double>()>("getRadius");
     auto __result = method(_javaPart);
     return __result != nullptr ? std::make_optional(__result->toCpp()) : std::nullopt;
   }
   void JHybridRadialGradientViewSpec::setRadius(const std::optional<std::variant<std::string, double>>& radius) {
-    static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<JVariant_String_Double> /* radius */)>("setRadius");
+    static const auto method = _javaPart->javaClassStatic()->getMethod<void(jni::alias_ref<JVariant_String_Double> /* radius */)>("setRadius");
     method(_javaPart, radius.has_value() ? JVariant_String_Double::fromCpp(radius.value()) : nullptr);
+  }
+  std::optional<double> JHybridRadialGradientViewSpec::getBlur() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<jni::JDouble>()>("getBlur");
+    auto __result = method(_javaPart);
+    return __result != nullptr ? std::make_optional(__result->value()) : std::nullopt;
+  }
+  void JHybridRadialGradientViewSpec::setBlur(std::optional<double> blur) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<void(jni::alias_ref<jni::JDouble> /* blur */)>("setBlur");
+    method(_javaPart, blur.has_value() ? jni::JDouble::valueOf(blur.value()) : nullptr);
+  }
+  std::optional<std::string> JHybridRadialGradientViewSpec::getTileMode() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<jni::JString>()>("getTileMode");
+    auto __result = method(_javaPart);
+    return __result != nullptr ? std::make_optional(__result->toStdString()) : std::nullopt;
+  }
+  void JHybridRadialGradientViewSpec::setTileMode(const std::optional<std::string>& tileMode) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<void(jni::alias_ref<jni::JString> /* tileMode */)>("setTileMode");
+    method(_javaPart, tileMode.has_value() ? jni::make_jstring(tileMode.value()) : nullptr);
   }
 
   // Methods
-  void JHybridRadialGradientViewSpec::update(const std::optional<std::variant<nitro::NullType, std::vector<double>>>& colors, const std::optional<std::vector<double>>& positions, const std::optional<Vector>& center, const std::optional<std::variant<std::string, double>>& radius) {
-    static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<JVariant_NullType_DoubleArray> /* colors */, jni::alias_ref<jni::JArrayDouble> /* positions */, jni::alias_ref<JVector> /* center */, jni::alias_ref<JVariant_String_Double> /* radius */)>("update");
+  void JHybridRadialGradientViewSpec::update(const std::optional<std::variant<nitro::NullType, std::vector<double>>>& colors, const std::optional<std::vector<double>>& positions, const std::optional<Vector>& center, const std::optional<std::variant<std::string, double>>& radius, std::optional<double> blur, const std::optional<std::string>& tileMode) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<void(jni::alias_ref<JVariant_NullType_DoubleArray> /* colors */, jni::alias_ref<jni::JArrayDouble> /* positions */, jni::alias_ref<JVector> /* center */, jni::alias_ref<JVariant_String_Double> /* radius */, jni::alias_ref<jni::JDouble> /* blur */, jni::alias_ref<jni::JString> /* tileMode */)>("update");
     method(_javaPart, colors.has_value() ? JVariant_NullType_DoubleArray::fromCpp(colors.value()) : nullptr, positions.has_value() ? [&]() {
       size_t __size = positions.value().size();
       jni::local_ref<jni::JArrayDouble> __array = jni::JArrayDouble::newArray(__size);
       __array->setRegion(0, __size, positions.value().data());
       return __array;
-    }() : nullptr, center.has_value() ? JVector::fromCpp(center.value()) : nullptr, radius.has_value() ? JVariant_String_Double::fromCpp(radius.value()) : nullptr);
+    }() : nullptr, center.has_value() ? JVector::fromCpp(center.value()) : nullptr, radius.has_value() ? JVariant_String_Double::fromCpp(radius.value()) : nullptr, blur.has_value() ? jni::JDouble::valueOf(blur.value()) : nullptr, tileMode.has_value() ? jni::make_jstring(tileMode.value()) : nullptr);
   }
 
 } // namespace margelo::nitro::gradient

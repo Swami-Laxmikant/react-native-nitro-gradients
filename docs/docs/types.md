@@ -68,6 +68,34 @@ const example3: Vector = {
 ```
 Both absolute pixel values and percentage-based values can be mixed within the same Vector, allowing flexible positioning across different screen sizes.
 
+## RadiusValue
+
+The radial gradient radius accepts either an absolute pixel value or a percentage string.
+
+```typescript
+type RadiusValue = number | PercentString;
+```
+
+### Examples
+
+```typescript
+const radiusInPixels: RadiusValue = 120;
+const radiusRelativeToShortestSide: RadiusValue = '50%';
+const radiusRelativeToWidth: RadiusValue = '70w%';
+const radiusRelativeToHeight: RadiusValue = '45h%';
+```
+
+## TileMode
+
+Controls how the gradient handles areas beyond its defined bounds.
+
+```typescript
+type TileMode = "clamp" | "decal";
+```
+
+- **`"clamp"`** - extends the edge colors beyond the gradient bounds
+- **`"decal"`** - areas outside the gradient bounds are transparent
+
 ## ColorValue
 
 Similar to [React Native's standard color format](https://reactnative.dev/docs/colors).

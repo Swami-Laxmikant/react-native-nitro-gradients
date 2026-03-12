@@ -16,13 +16,12 @@ const sidebars: SidebarsConfig = {
   tutorialSidebar: [
     'installation',
     'intro',
-    // 'api',
     {
       type: 'category',
-      label: 'Core Concepts',
+      label: 'Reference',
       items: [
         'types',
-        // 'under-the-hood',
+        'api',
       ],
     },
     {
@@ -34,8 +33,11 @@ const sidebars: SidebarsConfig = {
         'sweep-gradient',
       ],
     },
-    'animations',
-    'without-reanimated',
+    {
+      type: 'category',
+      label: 'Guides',
+      items: ['animations', 'without-reanimated'],
+    },
   ],
 };
 

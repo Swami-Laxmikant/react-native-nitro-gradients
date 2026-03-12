@@ -19,6 +19,7 @@
 #include <vector>
 #include <optional>
 #include "Vector.hpp"
+#include <string>
 #include <memory>
 #include "HybridLinearGradientViewSpec.hpp"
 #include <functional>
@@ -38,7 +39,6 @@ namespace margelo::nitro::gradient::views {
   class HybridLinearGradientViewProps final: public react::ViewProps {
   public:
     HybridLinearGradientViewProps() = default;
-    HybridLinearGradientViewProps(const HybridLinearGradientViewProps&);
     HybridLinearGradientViewProps(const react::PropsParserContext& context,
                                   const HybridLinearGradientViewProps& sourceProps,
                                   const react::RawProps& rawProps);
@@ -49,6 +49,8 @@ namespace margelo::nitro::gradient::views {
     CachedProp<std::optional<Vector>> start;
     CachedProp<std::optional<Vector>> end;
     CachedProp<std::optional<double>> angle;
+    CachedProp<std::optional<double>> blur;
+    CachedProp<std::optional<std::string>> tileMode;
     CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridLinearGradientViewSpec>& /* ref */)>>> hybridRef;
 
   private:
@@ -61,10 +63,14 @@ namespace margelo::nitro::gradient::views {
   class HybridLinearGradientViewState final {
   public:
     HybridLinearGradientViewState() = default;
+    explicit HybridLinearGradientViewState(const std::shared_ptr<HybridLinearGradientViewProps>& props):
+      _props(props) {}
 
   public:
-    void setProps(const HybridLinearGradientViewProps& props) { _props.emplace(props); }
-    const std::optional<HybridLinearGradientViewProps>& getProps() const { return _props; }
+    [[nodiscard]]
+    const std::shared_ptr<HybridLinearGradientViewProps>& getProps() const {
+      return _props;
+    }
 
   public:
 #ifdef ANDROID
@@ -78,7 +84,7 @@ namespace margelo::nitro::gradient::views {
 #endif
 
   private:
-    std::optional<HybridLinearGradientViewProps> _props;
+    std::shared_ptr<HybridLinearGradientViewProps> _props;
   };
 
   /**
@@ -94,7 +100,7 @@ namespace margelo::nitro::gradient::views {
    */
   class HybridLinearGradientViewComponentDescriptor final: public react::ConcreteComponentDescriptor<HybridLinearGradientViewShadowNode> {
   public:
-    HybridLinearGradientViewComponentDescriptor(const react::ComponentDescriptorParameters& parameters);
+    explicit HybridLinearGradientViewComponentDescriptor(const react::ComponentDescriptorParameters& parameters);
 
   public:
     /**
