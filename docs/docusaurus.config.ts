@@ -121,7 +121,7 @@ const config: Config = {
     algolia: {
       appId: 'A4VIQAESOI',
       apiKey: '2f4ef0e1c21c2584ccdc443a31d2f36c',
-      indexName: 'react-native-nitro-gradients',
+      indexName: 'react native nitro gradients docs',
     },
     prism: {
       theme: prismThemes.github,
