@@ -16,7 +16,7 @@ export interface RadialGradientViewProps extends HybridViewProps {
 
 export interface RadialGradientViewMethods extends HybridViewMethods {
     update(
-        colors: number[] | null,
+        colors: number[],
         positions?: number[],
         center?: Vector,
         radius?: RadiusValue,

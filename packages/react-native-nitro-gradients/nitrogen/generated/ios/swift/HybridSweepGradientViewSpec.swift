@@ -17,7 +17,7 @@ public protocol HybridSweepGradientViewSpec_protocol: HybridObject, HybridView {
   var tileMode: String? { get set }
 
   // Methods
-  func update(colors: Variant_NullType__Double_?, positions: [Double]?, center: Vector?, blur: Double?, tileMode: String?) throws -> Void
+  func update(colors: [Double], positions: [Double]?, center: Vector?, blur: Double?, tileMode: String?) throws -> Void
 }
 
 public extension HybridSweepGradientViewSpec_protocol {

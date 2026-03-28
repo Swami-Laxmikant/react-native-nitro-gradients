@@ -9,7 +9,7 @@ import { CircularProgressDemo } from '@site/src/components/CircularProgressDemo'
 
 # Reanimated Integration
 
-Every gradient prop can be a Reanimated shared value. Colors, angles, coordinates, blur — all animate on the UI thread with zero bridge overhead.
+Every gradient prop can be a Reanimated shared value. Colors, angles, coordinates, blur - all animate on the UI thread with zero bridge overhead.
 
 ## Card background glow
 
@@ -275,9 +275,8 @@ const styles = StyleSheet.create({
 });
 ```
 
-## Tips
-
-- **All props animate** — `colors`, `positions`, `start`, `end`, `angle`, `center`, `radius`, and `blur` all accept shared values.
-- **UI thread** — Updates run entirely on the UI thread via Nitro Modules, no JS bridge serialization.
-- **Derived values** — Use `useDerivedValue` to compute complex prop values from a single animated driver.
-- **Combine freely** — Animate multiple props at once with independent durations and easings.
+:::note
+- **All props animate** - `colors`, `positions`, `start`, `end`, `angle`, `center`, `radius`, and `blur` all accept shared values.
+- **UI thread** - Updates run entirely on the UI thread.
+- **Derived values** - Use `useDerivedValue` to compute complex prop values from a single animated driver.
+:::

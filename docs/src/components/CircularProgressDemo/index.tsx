@@ -19,7 +19,7 @@ function drawRing(ctx: CanvasRenderingContext2D, progress: number, isDark: boole
 
   ctx.clearRect(0, 0, cw, ch);
 
-  // Track ring — clip to outer circle
+  // Track ring - clip to outer circle
   ctx.save();
   ctx.beginPath();
   ctx.arc(cx, cy, R * DPR, 0, Math.PI * 2);

@@ -2,9 +2,32 @@ import Foundation
 import UIKit
 import NitroModules
 
-class HybridSweepGradientView: HybridSweepGradientViewSpec {
+class ConicGradientLayerView: UIView, GradientLayerProvider {
+    var onLayout: (() -> Void)?
 
-    // MARK: - Private Properties
+    override class var layerClass: AnyClass { CAGradientLayer.self }
+    var gradientLayer: CAGradientLayer { layer as! CAGradientLayer }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        gradientLayer.type = .conic
+        gradientLayer.contentsScale = UIScreen.main.scale // TODO: see default values
+        gradientLayer.isOpaque = false
+    }
+
+    required init?(coder: NSCoder) { fatalError() }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        onLayout?()
+    }
+
+    override func didMoveToWindow() {
+        super.didMoveToWindow() // TODO: check if need to call this way
+    }
+}
+
+class HybridSweepGradientView: HybridSweepGradientViewSpec {
 
     private let containerView = UIView()
     private let gradientView = ConicGradientLayerView(frame: .zero)
@@ -13,11 +36,9 @@ class HybridSweepGradientView: HybridSweepGradientViewSpec {
 
     private var isDirty = false
     private var cachedColors: [CGColor] = []
-    private var cachedLocations: [NSNumber] = []
+    private var cachedLocations: [NSNumber]? = nil
     private var lastBounds: CGRect = .zero
     private var isLayoutValid = false
-
-    // MARK: - Protocol Properties
 
     var colors: [Double] = [] {
         didSet {
@@ -32,12 +53,12 @@ class HybridSweepGradientView: HybridSweepGradientViewSpec {
         didSet {
             if !arraysEqual(oldValue, positions) {
                 isDirty = true
-                cachedLocations = computeLocations()
+                cachedLocations = positions?.map { NSNumber(value: $0) }
             }
         }
     }
 
-    var center: Vector? = Vector(x: .first("50%"), y: .first("50%")) {
+    var center: Vector? = nil {
         didSet {
             if !vectorsEqual(oldValue, center) {
                 isDirty = true
@@ -57,41 +78,27 @@ class HybridSweepGradientView: HybridSweepGradientViewSpec {
         }
     }
 
-    // MARK: - Lifecycle
-
     func afterUpdate() {
         updateGradient()
     }
-
-    // MARK: - Initialization
 
     override init() {
         self.view = containerView
         super.init()
 
         gradientView.translatesAutoresizingMaskIntoConstraints = false
-        blurImageView.translatesAutoresizingMaskIntoConstraints = false
 
         containerView.addSubview(gradientView)
-        containerView.addSubview(blurImageView)
-        blurImageView.isHidden = true
 
         NSLayoutConstraint.activate([
             gradientView.topAnchor.constraint(equalTo: containerView.topAnchor),
             gradientView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
             gradientView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
             gradientView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-            blurImageView.topAnchor.constraint(equalTo: containerView.topAnchor),
-            blurImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            blurImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            blurImageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
         ])
 
         gradientView.onLayout = { [weak self] in
             self?.handleBoundsChange()
-        }
-        gradientView.onWindowChange = { [weak self] in
-            self?.forceRedraw()
         }
 
         isDirty = true
@@ -99,15 +106,6 @@ class HybridSweepGradientView: HybridSweepGradientViewSpec {
             self?.updateGradient()
         }
     }
-
-    private func forceRedraw() {
-        isDirty = true
-        cachedColors = colors.map { parseColorInt($0).cgColor }
-        cachedLocations = computeLocations()
-        updateGradient()
-    }
-
-    // MARK: - Bounds Handling
 
     private func handleBoundsChange() {
         let bounds = gradientView.bounds
@@ -125,57 +123,17 @@ class HybridSweepGradientView: HybridSweepGradientViewSpec {
         }
     }
 
-    // MARK: - Update Interface
-
-    func update(colors: Variant_NullType__Double_?, positions: [Double]?, center: Vector?, blur: Double?, tileMode: String?) throws {
-        var changed = false
-
-        if let colorsVariant = colors, case .second(let colorsArray) = colorsVariant, !self.colors.elementsEqual(colorsArray) {
-            self.colors = colorsArray
-            changed = true
-        }
-        if !arraysEqual(self.positions, positions) {
-            self.positions = positions
-            changed = true
-        }
-        if !vectorsEqual(self.center, center) {
-            self.center = center
-            changed = true
-        }
-        if self.blur != blur {
-            self.blur = blur
-            changed = true
-        }
-        if self.tileMode != tileMode {
-            self.tileMode = tileMode
-            changed = true
-        }
-
-        if changed {
-            updateGradient()
-        }
-    }
-
-    // MARK: - Gradient Updates
-
-    private func computeLocations() -> [NSNumber] {
-        if let positions = positions, !positions.isEmpty {
-            return positions.map { NSNumber(value: $0) }
-        }
-        guard !colors.isEmpty else { return [0, 1] }
-        let step = 1.0 / Double(max(1, colors.count - 1))
-        return (0..<colors.count).map { NSNumber(value: Double($0) * step) }
+    func update(colors: [Double], positions: [Double]?, center: Vector?, blur: Double?, tileMode: String?) throws {
+        self.colors = colors
+        self.positions = positions
+        self.center = center
+        self.blur = blur
+        self.tileMode = tileMode
+        updateGradient()
     }
 
     private func updateGradient() {
         guard isDirty else { return }
-
-        if cachedColors.isEmpty {
-            cachedColors = colors.map { parseColorInt($0).cgColor }
-        }
-        if cachedLocations.isEmpty {
-            cachedLocations = computeLocations()
-        }
 
         let gl = gradientView.gradientLayer
 
@@ -183,38 +141,53 @@ class HybridSweepGradientView: HybridSweepGradientViewSpec {
         CATransaction.setDisableActions(true)
         gl.colors = cachedColors
         gl.locations = cachedLocations
+        applyGeometry()
         CATransaction.commit()
 
-        updateGradientFrame()
+        applyBlur()
         isDirty = false
     }
 
-    private func updateGradientFrame() {
+    private func ensureBlurView() {
+        guard blurImageView.superview == nil else { return }
+        blurImageView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.addSubview(blurImageView)
+        NSLayoutConstraint.activate([
+            blurImageView.topAnchor.constraint(equalTo: containerView.topAnchor),
+            blurImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            blurImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            blurImageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+        ])
+    }
+
+    private func removeBlurView() {
+        guard blurImageView.superview != nil else { return }
+        blurImageView.image = nil
+        blurImageView.removeFromSuperview()
+        gradientView.layer.opacity = 1
+    }
+
+    private func applyGeometry() {
         let bounds = gradientView.bounds
         guard bounds.width > 0 && bounds.height > 0 else { return }
 
         let gl = gradientView.gradientLayer
-
-        CATransaction.begin()
-        CATransaction.setDisableActions(true)
-
         let centerValue = center ?? Vector(x: .first("50%"), y: .first("50%"))
         let normalizedCenter = toNormalizedPoint(value: centerValue, width: bounds.width, height: bounds.height)
         gl.startPoint = normalizedCenter
-        gl.endPoint = CGPoint(x: normalizedCenter.x, y: 0.0)
-
-        CATransaction.commit()
-
-        updateBlurPresentation(
-            sourceLayer: gl,
-            sourceView: gradientView,
-            imageView: blurImageView,
-            radius: blur,
-            tileMode: tileMode
-        )
+        gl.endPoint = CGPoint(x: normalizedCenter.x, y: normalizedCenter.y - 0.1) // CSS like start from top
     }
 
-    deinit {
-        NotificationCenter.default.removeObserver(self)
+    private func applyBlur() {
+        manageBlur(gradientView: gradientView, blur: blur, blurImageView: blurImageView, tileMode: tileMode, containerView: containerView)
+    }
+
+    private func updateGradientFrame() {
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        applyGeometry()
+        CATransaction.commit()
+
+        applyBlur()
     }
 }

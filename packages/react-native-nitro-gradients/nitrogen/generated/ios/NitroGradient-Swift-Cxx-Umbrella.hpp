@@ -22,7 +22,6 @@ namespace margelo::nitro::gradient { struct Vector; }
 #include "HybridRadialGradientViewSpec.hpp"
 #include "HybridSweepGradientViewSpec.hpp"
 #include "Vector.hpp"
-#include <NitroModules/Null.hpp>
 #include <NitroModules/Result.hpp>
 #include <exception>
 #include <memory>

@@ -71,9 +71,12 @@ export const processColors = (colors: ColorValue[]): number[] => {
 };
 
 // @ts-expect-error This is how reanimated works.
-export function useSharedValuesEffect(effect: () => void);
+export function useSharedValuesEffect(effect: () => void, ...deps: unknown[]);
 
-export function useSharedValuesEffect(effect: WorkletFunction) {
+export function useSharedValuesEffect(
+    effect: WorkletFunction,
+    ...deps: unknown[]
+) {
     // biome-ignore lint/correctness/useExhaustiveDependencies: <this is how it works>
     useEffect(() => {
         const mapperId = startMapper(
@@ -81,5 +84,5 @@ export function useSharedValuesEffect(effect: WorkletFunction) {
             Object.values(effect.__closure || {}),
         );
         return () => stopMapper(mapperId);
-    }, [effect.__workletHash]);
+    }, [effect.__workletHash, ...deps]);
 }

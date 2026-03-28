@@ -15,7 +15,7 @@ export interface SweepGradientViewProps extends HybridViewProps {
 
 export interface SweepGradientViewMethods extends HybridViewMethods {
     update(
-        colors: number[] | null,
+        colors: number[],
         positions?: number[],
         center?: Vector,
         blur?: number,

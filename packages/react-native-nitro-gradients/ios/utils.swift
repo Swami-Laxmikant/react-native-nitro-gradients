@@ -2,8 +2,6 @@ import CoreImage
 import UIKit
 import NitroModules
 
-// MARK: - Value Conversion
-
 func toCGFloat(value: Variant_String_Double, width: CGFloat, height: CGFloat, fm: CGFloat) -> CGFloat {
     switch value {
     case .first(let s):
@@ -131,12 +129,10 @@ func getGradientStartPoint(angle: CGFloat, hWidth: CGFloat, hHeight: CGFloat) ->
     return (startX, startY)
 }
 
-// MARK: - Blur Support
-
 private let blurContext = CIContext(options: nil)
 
 private func makeBlurredImage(from layer: CALayer, size: CGSize, scale: CGFloat, radius: Double, tileMode: String?) -> UIImage? {
-    guard size.width > 0, size.height > 0 else { return nil }
+//    guard size.width > 0, size.height > 0 else { return nil }
 
     let format = UIGraphicsImageRendererFormat.default()
     format.scale = scale
@@ -178,23 +174,23 @@ func updateBlurPresentation(
     sourceLayer: CALayer,
     sourceView: UIView,
     imageView: UIImageView,
-    radius: Double?,
+    radius: Double,
     tileMode: String?
 ) {
-    guard let radius = radius, radius > 0 else {
-        imageView.image = nil
-        imageView.isHidden = true
-        sourceView.layer.opacity = 1
-        return
-    }
+//    guard let radius = radius, radius > 0 else {
+//        imageView.image = nil
+//        imageView.isHidden = true
+//        sourceView.layer.opacity = 1
+//        return
+//    }
 
     let bounds = sourceView.bounds
-    guard bounds.width > 0, bounds.height > 0 else {
-        imageView.image = nil
-        imageView.isHidden = true
-        sourceView.layer.opacity = 1
-        return
-    }
+//    guard bounds.width > 0, bounds.height > 0 else {
+//        imageView.image = nil
+//        imageView.isHidden = true
+//        sourceView.layer.opacity = 1
+//        return
+//    }
 
     let scale = sourceView.window?.screen.scale ?? UIScreen.main.scale
     // Temporarily restore opacity so render(in:) captures visible content
@@ -214,164 +210,42 @@ func updateBlurPresentation(
     sourceView.layer.opacity = 0
 }
 
-// MARK: - Gradient View Subclasses (layerClass override)
-
-class AxialGradientLayerView: UIView {
-    var onLayout: (() -> Void)?
-    var onWindowChange: (() -> Void)?
-
-    override class var layerClass: AnyClass { CAGradientLayer.self }
-    var gradientLayer: CAGradientLayer { layer as! CAGradientLayer }
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        gradientLayer.type = .axial
-        gradientLayer.contentsScale = UIScreen.main.scale
-    }
-
-    required init?(coder: NSCoder) { fatalError() }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        onLayout?()
-    }
-
-    override func didMoveToWindow() {
-        super.didMoveToWindow()
-        if window != nil {
-            onWindowChange?()
-        }
-    }
+protocol GradientLayerProvider: UIView {
+    var gradientLayer: CAGradientLayer {get}
 }
 
-class ConicGradientLayerView: UIView {
-    var onLayout: (() -> Void)?
-    var onWindowChange: (() -> Void)?
-
-    override class var layerClass: AnyClass { CAGradientLayer.self }
-    var gradientLayer: CAGradientLayer { layer as! CAGradientLayer }
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        gradientLayer.type = .conic
-        gradientLayer.contentsScale = UIScreen.main.scale
-        gradientLayer.isOpaque = false
-        gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.5)
-        gradientLayer.endPoint = CGPoint(x: 0.5, y: 0.0)
-    }
-
-    required init?(coder: NSCoder) { fatalError() }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        onLayout?()
-    }
-
-    override func didMoveToWindow() {
-        super.didMoveToWindow()
-        if window != nil {
-            onWindowChange?()
-        }
-    }
-}
-
-class RadialGradientLayerView: UIView {
-    var onLayout: (() -> Void)?
-    var onWindowChange: (() -> Void)?
-
-    override class var layerClass: AnyClass { RadialGradientLayer.self }
-    var gradientLayer: RadialGradientLayer { layer as! RadialGradientLayer }
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-
-    required init?(coder: NSCoder) { fatalError() }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        onLayout?()
-    }
-
-    override func didMoveToWindow() {
-        super.didMoveToWindow()
-        if window != nil {
-            onWindowChange?()
-        }
-    }
-}
-
-// MARK: - Radial Gradient Layer
-
-final class RadialGradientLayer: CALayer {
-    var colors: [CGColor] = [UIColor.clear.cgColor, UIColor.clear.cgColor]
-    var locations: [CGFloat] = [0, 1]
-    var center: CGPoint = .zero
-    var radius: CGSize = .zero
-
-    override init() {
-        super.init()
-        setupLayer()
-    }
-
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupLayer()
-    }
-
-    override init(layer: Any) {
-        if let l = layer as? RadialGradientLayer {
-            self.colors = l.colors
-            self.locations = l.locations
-            self.center = l.center
-            self.radius = l.radius
-        }
-        super.init(layer: layer)
-        setupLayer()
-    }
-
-    private func setupLayer() {
-        contentsScale = UIScreen.main.scale
-        needsDisplayOnBoundsChange = true
-        isOpaque = false
-        actions = [
-            "bounds": NSNull(),
-            "position": NSNull(),
-            "contents": NSNull(),
-            "opacity": NSNull(),
-            "transform": NSNull()
-        ]
-    }
-
-    override func draw(in ctx: CGContext) {
-        guard !colors.isEmpty else { return }
-        let colorSpace = CGColorSpaceCreateDeviceRGB()
-        let cgLocations = locations.isEmpty ? defaultLocations(count: colors.count) : locations
-        guard let gradient = CGGradient(colorsSpace: colorSpace, colors: colors as CFArray, locations: cgLocations) else { return }
-
-        let maxR = max(radius.width, radius.height)
-        guard maxR > 0 else { return }
-
-        let sx = radius.width / maxR
-        let sy = radius.height / maxR
-
-        ctx.saveGState()
-        ctx.translateBy(x: center.x, y: center.y)
-        ctx.scaleBy(x: sx == 0 ? 1 : sx, y: sy == 0 ? 1 : sy)
-        ctx.drawRadialGradient(
-            gradient,
-            startCenter: .zero,
-            startRadius: 0,
-            endCenter: .zero,
-            endRadius: maxR,
-            options: [.drawsAfterEndLocation]
+func manageBlur(gradientView: GradientLayerProvider, blur: Double?, blurImageView: UIImageView, tileMode: String?, containerView: UIView){
+    let bounds = gradientView.bounds
+    guard bounds.width > 0 && bounds.height > 0 else { return }
+    if let blur = blur, blur > 0 {
+        ensureBlurView(blurImageView: blurImageView, containerView: containerView)
+        updateBlurPresentation(
+            sourceLayer: gradientView.gradientLayer,
+            sourceView: gradientView,
+            imageView: blurImageView,
+            radius: blur,
+            tileMode: tileMode
         )
-        ctx.restoreGState()
+    } else {
+        removeBlurView(blurImageView: blurImageView, gradientView: gradientView)
     }
+}
 
-    private func defaultLocations(count: Int) -> [CGFloat] {
-        guard count > 1 else { return [0, 1] }
-        let step = 1.0 / CGFloat(max(1, count - 1))
-        return (0..<count).map { CGFloat($0) * step }
-    }
+func ensureBlurView(blurImageView: UIImageView, containerView: UIView) {
+    guard blurImageView.superview == nil else { return }
+    blurImageView.translatesAutoresizingMaskIntoConstraints = false
+    containerView.addSubview(blurImageView)
+    NSLayoutConstraint.activate([
+        blurImageView.topAnchor.constraint(equalTo: containerView.topAnchor),
+        blurImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+        blurImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+        blurImageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+    ])
+}
+
+func removeBlurView(blurImageView: UIImageView, gradientView: UIView) {
+    guard blurImageView.superview != nil else { return }
+    blurImageView.image = nil
+    blurImageView.removeFromSuperview()
+    gradientView.layer.opacity = 1
 }

@@ -615,84 +615,6 @@
 }
 
 /* ───────────────────────────────────────────────
-   CTA
-   ─────────────────────────────────────────────── */
-
-.cta {
-  position: relative;
-  overflow: hidden;
-  padding: 5.5rem 2rem 6.5rem;
-}
-
-.ctaMesh {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-.cm1 {
-  position: absolute;
-  width: 460px;
-  height: 460px;
-  left: -5%;
-  top: -22%;
-  border-radius: 50%;
-  background: radial-gradient(circle, var(--hp-orb3) 0%, transparent 70%);
-  filter: blur(70px);
-  animation: drift2 18s ease-in-out infinite;
-}
-
-.cm2 {
-  position: absolute;
-  width: 380px;
-  height: 380px;
-  right: -5%;
-  bottom: -22%;
-  border-radius: 50%;
-  background: radial-gradient(circle, var(--hp-orb2) 0%, transparent 70%);
-  filter: blur(70px);
-  animation: drift1 22s ease-in-out infinite;
-}
-
-.ctaInner {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  gap: 1.4rem;
-  max-width: 38rem;
-  margin: 0 auto;
-  text-align: center;
-  justify-items: center;
-}
-
-.ctaH {
-  margin: 0;
-  font-family: var(--docs-font-heading);
-  font-size: clamp(1.8rem, 3.2vw, 2.7rem);
-  font-weight: 800;
-  line-height: 1.06;
-  letter-spacing: -0.03em;
-  color: var(--docs-text);
-}
-
-.ctaCmd {
-  display: flex;
-  justify-content: center;
-}
-
-.ctaCmd code {
-  padding: 0.68rem 1.25rem;
-  border: 1px solid var(--hp-cta-cmd-border);
-  border-radius: 999px;
-  background: var(--hp-cta-cmd-bg);
-  color: var(--hp-cta-cmd-text);
-  font-family: var(--docs-font-mono);
-  font-size: 0.85rem;
-  font-weight: 500;
-}
-
-/* ───────────────────────────────────────────────
    Responsive
    ─────────────────────────────────────────────── */
 
@@ -745,10 +667,6 @@
 
   .grid4 {
     grid-template-columns: 1fr;
-  }
-
-  .cta {
-    padding: 3.5rem 1.25rem 4.5rem;
   }
 
   .actions {

@@ -20,7 +20,6 @@ namespace margelo::nitro::gradient { struct Vector; }
 #include "Vector.hpp"
 #include <string>
 #include <variant>
-#include <NitroModules/Null.hpp>
 
 #include "NitroGradient-Swift-Cxx-Umbrella.hpp"
 
@@ -106,7 +105,7 @@ namespace margelo::nitro::gradient {
 
   public:
     // Methods
-    inline void update(const std::optional<std::variant<nitro::NullType, std::vector<double>>>& colors, const std::optional<std::vector<double>>& positions, const std::optional<Vector>& center, std::optional<double> blur, const std::optional<std::string>& tileMode) override {
+    inline void update(const std::vector<double>& colors, const std::optional<std::vector<double>>& positions, const std::optional<Vector>& center, std::optional<double> blur, const std::optional<std::string>& tileMode) override {
       auto __result = _swiftPart.update(colors, positions, center, blur, tileMode);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());

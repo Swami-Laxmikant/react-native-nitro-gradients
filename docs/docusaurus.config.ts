@@ -22,6 +22,16 @@ const config: Config = {
 
   onBrokenLinks: 'throw',
 
+  headTags: [
+    {
+      tagName: 'meta',
+      attributes: {
+        name: 'algolia-site-verification',
+        content: '1EEB4D2365E8C4B4',
+      },
+    },
+  ],
+
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
   // may want to replace "en" with "zh-Hans".
@@ -37,7 +47,7 @@ const config: Config = {
         docs: {
           sidebarPath: './sidebars.ts',
           editUrl:
-            'https://github.com/Swami-Laxmikant/react-native-nitro-gradients/tree/main/docs/',
+            'https://github.com/Swami-Laxmikant/react-native-nitro-gradients/tree/master/docs/',
         },
         blog: false,
         theme: {
@@ -69,11 +79,6 @@ const config: Config = {
           label: 'Docs',
         },
 {
-          to: '/docs/api',
-          label: 'API',
-          position: 'left',
-        },
-        {
           href: 'https://www.npmjs.com/package/react-native-nitro-gradients',
           label: 'npm',
           position: 'right',
@@ -112,6 +117,11 @@ const config: Config = {
         },
       ],
       copyright: `Copyright © ${new Date().getFullYear()} React Native Nitro Gradients. Built with ❤️ in <a href="https://www.google.com/search?q=Bengaluru" target="_blank" rel="noopener noreferrer">Bengaluru</a>.<br/>Special thanks to <a href="https://github.com/mrousavy" target="_blank" rel="noopener noreferrer">Marc Rousavy</a> and <a href="https://github.com/mrousavy/nitro" target="_blank" rel="noopener noreferrer">Nitro Modules</a>.`,
+    },
+    algolia: {
+      appId: 'A4VIQAESOI',
+      apiKey: '2f4ef0e1c21c2584ccdc443a31d2f36c',
+      indexName: 'react-native-nitro-gradients',
     },
     prism: {
       theme: prismThemes.github,

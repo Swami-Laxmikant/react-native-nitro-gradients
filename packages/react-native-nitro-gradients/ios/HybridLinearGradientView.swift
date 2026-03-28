@@ -2,9 +2,35 @@ import Foundation
 import UIKit
 import NitroModules
 
-class HybridLinearGradientView: HybridLinearGradientViewSpec {
+class AxialGradientLayerView: UIView, GradientLayerProvider {
+    var onLayout: (() -> Void)?
+    var onWindowChange: (() -> Void)?
 
-    // MARK: - Private Properties
+    override class var layerClass: AnyClass { CAGradientLayer.self }
+    var gradientLayer: CAGradientLayer { layer as! CAGradientLayer }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        gradientLayer.type = .axial
+        gradientLayer.contentsScale = UIScreen.main.scale
+    }
+
+    required init?(coder: NSCoder) { fatalError() }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        onLayout?()
+    }
+
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        if window != nil {
+            onWindowChange?()
+        }
+    }
+}
+
+class HybridLinearGradientView: HybridLinearGradientViewSpec {
 
     private let containerView = UIView()
     private let gradientView = AxialGradientLayerView(frame: .zero)
@@ -13,11 +39,10 @@ class HybridLinearGradientView: HybridLinearGradientViewSpec {
 
     private var isDirty = false
     private var cachedColors: [CGColor] = []
-    private var cachedLocations: [NSNumber] = []
+    private var cachedLocations: [NSNumber]? = nil
     private var lastBounds: CGRect = .zero
     private var isLayoutValid = false
 
-    // MARK: - Protocol Properties
 
     var colors: [Double] = [] {
         didSet {
@@ -32,7 +57,7 @@ class HybridLinearGradientView: HybridLinearGradientViewSpec {
         didSet {
             if !arraysEqual(oldValue, positions) {
                 isDirty = true
-                cachedLocations = computeLocations()
+                cachedLocations = positions?.map { NSNumber(value: $0) }
             }
         }
     }
@@ -49,7 +74,7 @@ class HybridLinearGradientView: HybridLinearGradientViewSpec {
         }
     }
 
-    var start: Vector? = Vector(x: .first("50%"), y: .first("0%")) {
+    var start: Vector? = nil {
         didSet {
             if angle != nil { return }
             if !vectorsEqual(oldValue, start) {
@@ -58,7 +83,7 @@ class HybridLinearGradientView: HybridLinearGradientViewSpec {
         }
     }
 
-    var end: Vector? = Vector(x: .first("50%"), y: .first("100%")) {
+    var end: Vector? = nil {
         didSet {
             if angle != nil { return }
             if !vectorsEqual(oldValue, end) {
@@ -78,9 +103,7 @@ class HybridLinearGradientView: HybridLinearGradientViewSpec {
             if oldValue != tileMode { isDirty = true }
         }
     }
-
-    // MARK: - Lifecycle
-
+    
     func afterUpdate() {
         updateGradient()
     }
@@ -92,21 +115,21 @@ class HybridLinearGradientView: HybridLinearGradientViewSpec {
         super.init()
 
         gradientView.translatesAutoresizingMaskIntoConstraints = false
-        blurImageView.translatesAutoresizingMaskIntoConstraints = false
+//        blurImageView.translatesAutoresizingMaskIntoConstraints = false
 
         containerView.addSubview(gradientView)
-        containerView.addSubview(blurImageView)
-        blurImageView.isHidden = true
+//        containerView.addSubview(blurImageView)
+//        blurImageView.isHidden = true
 
         NSLayoutConstraint.activate([
             gradientView.topAnchor.constraint(equalTo: containerView.topAnchor),
             gradientView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
             gradientView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
             gradientView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-            blurImageView.topAnchor.constraint(equalTo: containerView.topAnchor),
-            blurImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            blurImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            blurImageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+//            blurImageView.topAnchor.constraint(equalTo: containerView.topAnchor),
+//            blurImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+//            blurImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+//            blurImageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
         ])
 
         gradientView.onLayout = { [weak self] in
@@ -125,7 +148,6 @@ class HybridLinearGradientView: HybridLinearGradientViewSpec {
     private func forceRedraw() {
         isDirty = true
         cachedColors = colors.map { parseColorInt($0).cgColor }
-        cachedLocations = computeLocations()
         updateGradient()
     }
 
@@ -145,74 +167,29 @@ class HybridLinearGradientView: HybridLinearGradientViewSpec {
                 updateGradient()
             } else if isLayoutValid {
                 isDirty = true
-                updateGradientFrame()
+                applyGeometry()
             }
         }
     }
 
-    // MARK: - Update Interface
-
-    func update(colors: Variant_NullType__Double_?, positions: [Double]?, start: Vector?, end: Vector?, angle: Double?, blur: Double?, tileMode: String?) throws {
-        var changed = false
-
-        if let colorsVariant = colors, case .second(let colorsArray) = colorsVariant, !self.colors.elementsEqual(colorsArray) {
-            self.colors = colorsArray
-            changed = true
-        }
-        if !arraysEqual(self.positions, positions) {
-            self.positions = positions
-            changed = true
-        }
-
-        if self.angle != angle {
-            self.angle = angle
-            changed = true
-        }
-
-        if self.angle == nil {
-            if !vectorsEqual(self.start, start) {
-                self.start = start
-                changed = true
-            }
-            if !vectorsEqual(self.end, end) {
-                self.end = end
-                changed = true
-            }
-        }
-
-        if self.blur != blur {
-            self.blur = blur
-            changed = true
-        }
-        if self.tileMode != tileMode {
-            self.tileMode = tileMode
-            changed = true
-        }
-
-        if changed {
-            updateGradient()
-        }
-    }
-
-    // MARK: - Gradient Updates
-
-    private func computeLocations() -> [NSNumber] {
-        if let positions = positions, !positions.isEmpty {
-            return positions.map { NSNumber(value: $0) }
-        }
-        guard !colors.isEmpty else { return [0, 1] }
-        let step = 1.0 / Double(max(1, colors.count - 1))
-        return (0..<colors.count).map { NSNumber(value: Double($0) * step) }
+    func update(colors: [Double], positions: [Double]?, start: Vector?, end: Vector?, angle: Double?, blur: Double?, tileMode: String?) throws {
+        
+        self.colors = colors
+        self.positions = positions
+        self.start = start
+        self.end = end
+        self.angle = angle
+        self.blur = blur
+        self.tileMode = tileMode
+        
+        updateGradient()
     }
 
     private func updateGradient() {
         guard isDirty else { return }
 
         if cachedColors.isEmpty {
-            cachedColors = colors.map { parseColorInt($0).cgColor }
-        }
-        if cachedLocations.isEmpty {
-            cachedLocations = computeLocations()
+            cachedColors = colors.map { parseColorInt($0).cgColor } // TODO: see if redundant
         }
 
         let gl = gradientView.gradientLayer
@@ -221,20 +198,23 @@ class HybridLinearGradientView: HybridLinearGradientViewSpec {
         CATransaction.setDisableActions(true)
         gl.colors = cachedColors
         gl.locations = cachedLocations
+        applyGeometry()
         CATransaction.commit()
+        
+        applyBlur()
 
-        updateGradientFrame()
         isDirty = false
     }
+    
+    private func applyBlur(){
+        manageBlur(gradientView: gradientView, blur: blur, blurImageView: blurImageView, tileMode: tileMode, containerView: containerView)
+    }
 
-    private func updateGradientFrame() {
+    private func applyGeometry() {
         let bounds = gradientView.bounds
         guard bounds.width > 0 && bounds.height > 0 else { return }
 
         let gl = gradientView.gradientLayer
-
-        CATransaction.begin()
-        CATransaction.setDisableActions(true)
 
         let startValue = start ?? Vector(x: .first("50%"), y: .first("0%"))
         let endValue = end ?? Vector(x: .first("50%"), y: .first("100%"))
@@ -242,15 +222,7 @@ class HybridLinearGradientView: HybridLinearGradientViewSpec {
         gl.startPoint = toNormalizedPoint(value: startValue, width: bounds.width, height: bounds.height)
         gl.endPoint = toNormalizedPoint(value: endValue, width: bounds.width, height: bounds.height)
 
-        CATransaction.commit()
-
-        updateBlurPresentation(
-            sourceLayer: gl,
-            sourceView: gradientView,
-            imageView: blurImageView,
-            radius: blur,
-            tileMode: tileMode
-        )
+        gradientView.gradientLayer.setNeedsDisplay()
     }
 
     private func setPointsFromAngle(angle: Double, width: CGFloat, height: CGFloat) {
@@ -268,9 +240,5 @@ class HybridLinearGradientView: HybridLinearGradientViewSpec {
 
         start = Vector(x: .second(Double(absoluteStartX)), y: .second(Double(absoluteStartY)))
         end = Vector(x: .second(Double(absoluteEndX)), y: .second(Double(absoluteEndY)))
-    }
-
-    deinit {
-        NotificationCenter.default.removeObserver(self)
     }
 }

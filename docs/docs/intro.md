@@ -51,7 +51,7 @@ import { RadialGradient } from 'react-native-nitro-gradients';
 ## Sweep
 
 <GradientPreview
-  background="conic-gradient(from 0deg at 130px 130px, #f97316 0%, #eab308 25%, #22c55e 50%, #06b6d4 75%, #f97316 100%)"
+  background="conic-gradient(from 0deg at 50% 50%, #f97316 0%, #eab308 25%, #22c55e 50%, #06b6d4 75%, #f97316 100%)"
   height={260}
   borderRadius={24}
   blur={4}
@@ -105,7 +105,7 @@ All three gradient types support a `blur` prop that applies a Gaussian blur to t
 
 ## Reanimated support
 
-All components accept Reanimated shared values out of the box — colors, angles, blur, and coordinates all animate on the UI thread.
+All components accept Reanimated shared values out of the box - colors, angles, blur, and coordinates all animate on the UI thread.
 
 <AnimatedGradientDemo />
 
@@ -134,8 +134,3 @@ function AnimatedCard() {
   );
 }
 ```
-
-## Next steps
-
-- Read the component docs for [Linear](./linear-gradient.md), [Radial](./radial-gradient.md), and [Sweep](./sweep-gradient.md) — each includes inline visual previews.
-- Review the [Reanimated guide](./animations.md) and [Type definitions](./types.md).

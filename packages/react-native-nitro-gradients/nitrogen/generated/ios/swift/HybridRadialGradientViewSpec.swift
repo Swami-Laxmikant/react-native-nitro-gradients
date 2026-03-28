@@ -18,7 +18,7 @@ public protocol HybridRadialGradientViewSpec_protocol: HybridObject, HybridView 
   var tileMode: String? { get set }
 
   // Methods
-  func update(colors: Variant_NullType__Double_?, positions: [Double]?, center: Vector?, radius: Variant_String_Double?, blur: Double?, tileMode: String?) throws -> Void
+  func update(colors: [Double], positions: [Double]?, center: Vector?, radius: Variant_String_Double?, blur: Double?, tileMode: String?) throws -> Void
 }
 
 public extension HybridRadialGradientViewSpec_protocol {

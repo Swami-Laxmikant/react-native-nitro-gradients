@@ -17,6 +17,13 @@
 #import "HybridSweepGradientViewSpecSwift.hpp"
 #import "NitroGradient-Swift-Cxx-Umbrella.hpp"
 
+#if __has_include(<cxxreact/ReactNativeVersion.h>)
+#include <cxxreact/ReactNativeVersion.h>
+#if REACT_NATIVE_VERSION_MINOR >= 82
+#define ENABLE_RCT_COMPONENT_VIEW_INVALIDATE
+#endif
+#endif
+
 using namespace facebook;
 using namespace margelo::nitro::gradient;
 using namespace margelo::nitro::gradient::views;
@@ -75,32 +82,41 @@ using namespace margelo::nitro::gradient::views;
   swiftPart.beforeUpdate();
 
   BOOL forceAll = _needsInitialProps;
-  _needsInitialProps = NO;
+  if (forceAll) {
+    _needsInitialProps = NO;
+    swiftPart.setColors(newViewProps.colors.value); newViewProps.colors.isDirty = false;
+    swiftPart.setPositions(newViewProps.positions.value); newViewProps.positions.isDirty = false;
+    swiftPart.setCenter(newViewProps.center.value); newViewProps.center.isDirty = false;
+    swiftPart.setBlur(newViewProps.blur.value); newViewProps.blur.isDirty = false;
+    swiftPart.setTileMode(newViewProps.tileMode.value); newViewProps.tileMode.isDirty = false;
+  } else {
 
   // colors: array
-  if (newViewProps.colors.isDirty || forceAll) {
+  if (newViewProps.colors.isDirty) {
     swiftPart.setColors(newViewProps.colors.value);
     newViewProps.colors.isDirty = false;
   }
   // positions: optional
-  if (newViewProps.positions.isDirty || forceAll) {
+  if (newViewProps.positions.isDirty) {
     swiftPart.setPositions(newViewProps.positions.value);
     newViewProps.positions.isDirty = false;
   }
   // center: optional
-  if (newViewProps.center.isDirty || forceAll) {
+  if (newViewProps.center.isDirty) {
     swiftPart.setCenter(newViewProps.center.value);
     newViewProps.center.isDirty = false;
   }
   // blur: optional
-  if (newViewProps.blur.isDirty || forceAll) {
+  if (newViewProps.blur.isDirty) {
     swiftPart.setBlur(newViewProps.blur.value);
     newViewProps.blur.isDirty = false;
   }
   // tileMode: optional
-  if (newViewProps.tileMode.isDirty || forceAll) {
+  if (newViewProps.tileMode.isDirty) {
     swiftPart.setTileMode(newViewProps.tileMode.value);
     newViewProps.tileMode.isDirty = false;
+  }
+
   }
 
   swiftPart.afterUpdate();
@@ -128,5 +144,13 @@ using namespace margelo::nitro::gradient::views;
   NitroGradient::HybridSweepGradientViewSpec_cxx& swiftPart = _hybridView->getSwiftPart();
   swiftPart.maybePrepareForRecycle();
 }
+
+#ifdef ENABLE_RCT_COMPONENT_VIEW_INVALIDATE
+- (void)invalidate {
+  NitroGradient::HybridSweepGradientViewSpec_cxx& swiftPart = _hybridView->getSwiftPart();
+  swiftPart.onDropView();
+  [super invalidate];
+}
+#endif
 
 @end

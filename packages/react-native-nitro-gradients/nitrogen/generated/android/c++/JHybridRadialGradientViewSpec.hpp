@@ -21,11 +21,11 @@ namespace margelo::nitro::gradient {
   class JHybridRadialGradientViewSpec: public virtual HybridRadialGradientViewSpec, public virtual JHybridObject {
   public:
     struct JavaPart: public jni::JavaClass<JavaPart, JHybridObject::JavaPart> {
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/gradient/HybridRadialGradientViewSpec;";
+      static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/gradient/HybridRadialGradientViewSpec;";
       std::shared_ptr<JHybridRadialGradientViewSpec> getJHybridRadialGradientViewSpec();
     };
     struct CxxPart: public jni::HybridClass<CxxPart, JHybridObject::CxxPart> {
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/gradient/HybridRadialGradientViewSpec$CxxPart;";
+      static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/gradient/HybridRadialGradientViewSpec$CxxPart;";
       static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
       static void registerNatives();
       using HybridBase::HybridBase;
@@ -65,7 +65,7 @@ namespace margelo::nitro::gradient {
 
   public:
     // Methods
-    void update(const std::optional<std::variant<nitro::NullType, std::vector<double>>>& colors, const std::optional<std::vector<double>>& positions, const std::optional<Vector>& center, const std::optional<std::variant<std::string, double>>& radius, std::optional<double> blur, const std::optional<std::string>& tileMode) override;
+    void update(const std::vector<double>& colors, const std::optional<std::vector<double>>& positions, const std::optional<Vector>& center, const std::optional<std::variant<std::string, double>>& radius, std::optional<double> blur, const std::optional<std::string>& tileMode) override;
 
   private:
     jni::global_ref<JHybridRadialGradientViewSpec::JavaPart> _javaPart;

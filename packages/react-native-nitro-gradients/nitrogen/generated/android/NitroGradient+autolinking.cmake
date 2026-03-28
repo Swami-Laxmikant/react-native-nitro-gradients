@@ -42,7 +42,6 @@ target_sources(
   # Android-specific Nitrogen C++ sources
   ../nitrogen/generated/android/c++/JHybridLinearGradientViewSpec.cpp
   ../nitrogen/generated/android/c++/JVariant_String_Double.cpp
-  ../nitrogen/generated/android/c++/JVariant_NullType_DoubleArray.cpp
   ../nitrogen/generated/android/c++/views/JHybridLinearGradientViewStateUpdater.cpp
   ../nitrogen/generated/android/c++/JHybridRadialGradientViewSpec.cpp
   ../nitrogen/generated/android/c++/views/JHybridRadialGradientViewStateUpdater.cpp

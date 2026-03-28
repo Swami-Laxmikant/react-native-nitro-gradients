@@ -32,25 +32,25 @@ int initialize(JavaVM* vm) {
 }
 
 struct JHybridLinearGradientViewSpecImpl: public jni::JavaClass<JHybridLinearGradientViewSpecImpl, JHybridLinearGradientViewSpec::JavaPart> {
-  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/gradient/HybridLinearGradientView;";
+  static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/gradient/HybridLinearGradientView;";
   static std::shared_ptr<JHybridLinearGradientViewSpec> create() {
-    static auto constructorFn = javaClassStatic()->getConstructor<JHybridLinearGradientViewSpecImpl::javaobject()>();
+    static const auto constructorFn = javaClassStatic()->getConstructor<JHybridLinearGradientViewSpecImpl::javaobject()>();
     jni::local_ref<JHybridLinearGradientViewSpec::JavaPart> javaPart = javaClassStatic()->newObject(constructorFn);
     return javaPart->getJHybridLinearGradientViewSpec();
   }
 };
 struct JHybridRadialGradientViewSpecImpl: public jni::JavaClass<JHybridRadialGradientViewSpecImpl, JHybridRadialGradientViewSpec::JavaPart> {
-  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/gradient/HybridRadialGradientView;";
+  static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/gradient/HybridRadialGradientView;";
   static std::shared_ptr<JHybridRadialGradientViewSpec> create() {
-    static auto constructorFn = javaClassStatic()->getConstructor<JHybridRadialGradientViewSpecImpl::javaobject()>();
+    static const auto constructorFn = javaClassStatic()->getConstructor<JHybridRadialGradientViewSpecImpl::javaobject()>();
     jni::local_ref<JHybridRadialGradientViewSpec::JavaPart> javaPart = javaClassStatic()->newObject(constructorFn);
     return javaPart->getJHybridRadialGradientViewSpec();
   }
 };
 struct JHybridSweepGradientViewSpecImpl: public jni::JavaClass<JHybridSweepGradientViewSpecImpl, JHybridSweepGradientViewSpec::JavaPart> {
-  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/gradient/HybridSweepGradientView;";
+  static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/gradient/HybridSweepGradientView;";
   static std::shared_ptr<JHybridSweepGradientViewSpec> create() {
-    static auto constructorFn = javaClassStatic()->getConstructor<JHybridSweepGradientViewSpecImpl::javaobject()>();
+    static const auto constructorFn = javaClassStatic()->getConstructor<JHybridSweepGradientViewSpecImpl::javaobject()>();
     jni::local_ref<JHybridSweepGradientViewSpec::JavaPart> javaPart = javaClassStatic()->newObject(constructorFn);
     return javaPart->getJHybridSweepGradientViewSpec();
   }

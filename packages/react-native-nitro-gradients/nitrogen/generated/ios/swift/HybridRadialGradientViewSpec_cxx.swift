@@ -278,28 +278,9 @@ open class HybridRadialGradientViewSpec_cxx {
 
   // Methods
   @inline(__always)
-  public final func update(colors: bridge.std__optional_std__variant_nitro__NullType__std__vector_double___, positions: bridge.std__optional_std__vector_double__, center: bridge.std__optional_Vector_, radius: bridge.std__optional_std__variant_std__string__double__, blur: bridge.std__optional_double_, tileMode: bridge.std__optional_std__string_) -> bridge.Result_void_ {
+  public final func update(colors: bridge.std__vector_double_, positions: bridge.std__optional_std__vector_double__, center: bridge.std__optional_Vector_, radius: bridge.std__optional_std__variant_std__string__double__, blur: bridge.std__optional_double_, tileMode: bridge.std__optional_std__string_) -> bridge.Result_void_ {
     do {
-      try self.__implementation.update(colors: { () -> Variant_NullType__Double_? in
-        if bridge.has_value_std__optional_std__variant_nitro__NullType__std__vector_double___(colors) {
-          let __unwrapped = bridge.get_std__optional_std__variant_nitro__NullType__std__vector_double___(colors)
-          return { () -> Variant_NullType__Double_ in
-            let __variant = bridge.std__variant_nitro__NullType__std__vector_double__(__unwrapped)
-            switch __variant.index() {
-              case 0:
-                let __actual = __variant.get_0()
-                return .first(NullType.null)
-              case 1:
-                let __actual = __variant.get_1()
-                return .second(__actual.map({ __item in __item }))
-              default:
-                fatalError("Variant can never have index \(__variant.index())!")
-            }
-          }()
-        } else {
-          return nil
-        }
-      }(), positions: { () -> [Double]? in
+      try self.__implementation.update(colors: colors.map({ __item in __item }), positions: { () -> [Double]? in
         if bridge.has_value_std__optional_std__vector_double__(positions) {
           let __unwrapped = bridge.get_std__optional_std__vector_double__(positions)
           return __unwrapped.map({ __item in __item })
@@ -362,5 +343,9 @@ open class HybridRadialGradientViewSpec_cxx {
   public final func maybePrepareForRecycle() {
     guard let recyclable = __implementation as? any RecyclableView else { return }
     recyclable.prepareForRecycle()
+  }
+  
+  public final func onDropView() {
+    __implementation.onDropView()
   }
 }

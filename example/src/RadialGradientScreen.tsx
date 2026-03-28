@@ -1,4 +1,9 @@
 import { DemoScreen } from "./demo-ui";
+import {
+    RadialGradientBoundsPlayground,
+    RadialGradientBoundsReanimatedPlayground,
+} from "./gradient-sections/RadialGradientBoundsPlayground";
+import { RadialGradientDynamicSharedValuePlayground } from "./gradient-sections/RadialGradientDynamicSharedValuePlayground";
 import { RadialGradientPalettePlayground } from "./gradient-sections/RadialGradientPalettePlayground";
 import { RadialGradientPlayground } from "./gradient-sections/RadialGradientPlayground";
 import { RadialGradientReanimatedPlayground } from "./gradient-sections/RadialGradientReanimatedPlayground";
@@ -13,6 +18,9 @@ export function RadialGradientScreen() {
         >
             <RadialGradientPlayground />
             <RadialGradientReanimatedPlayground />
+            <RadialGradientBoundsPlayground />
+            <RadialGradientBoundsReanimatedPlayground />
+            <RadialGradientDynamicSharedValuePlayground />
             <RadialGradientResetPlayground />
             <RadialGradientPalettePlayground />
         </DemoScreen>

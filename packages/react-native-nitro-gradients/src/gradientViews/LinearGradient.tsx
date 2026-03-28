@@ -1,5 +1,5 @@
 // biome-ignore lint/correctness/noUnusedImports: Needed for JSX runtime
-import React, { useMemo } from "react";
+import React, { useState } from "react";
 import type { ColorValue, ViewProps } from "react-native";
 import { View } from "react-native";
 import { getHostComponent } from "react-native-nitro-modules";
@@ -12,10 +12,10 @@ import { commonStyles } from "./styles";
 import type { TileMode } from "./types";
 import {
     getValue,
+    type Pretify,
     processColors,
     useAnimatedNitroViewRef,
     useSharedValuesEffect,
-    type Pretify,
     type WithSharedValueObj,
 } from "./utils";
 
@@ -44,39 +44,45 @@ const useLinearGradient = (
     blur: Props["blur"],
     tileMode: Props["tileMode"],
 ) => {
-    const gradProps = useMemo(
-        () => ({
-            positions: getValue(positions),
-            colors: processColors(getValue(colors)),
-            start: getValue(start),
-            end: getValue(end),
-            angle: getValue(angle),
-            blur: getValue(blur),
-            tileMode: getValue(tileMode),
-        }),
-        [colors, start, end, positions, angle, blur, tileMode],
-    );
+    const gradProps = useState(() => ({
+        positions: getValue(positions),
+        colors: processColors(getValue(colors)),
+        start: getValue(start),
+        end: getValue(end),
+        angle: getValue(angle),
+        blur: getValue(blur),
+        tileMode: getValue(tileMode),
+    }))[0];
 
     const [gradRef, setGradRef] = useAnimatedNitroViewRef<
         LinearGradientViewProps,
         LinearGradientViewMethods
     >();
 
-    useSharedValuesEffect(() => {
-        "worklet";
-        if (!gradRef.value) {
-            return;
-        }
-        gradRef.value.update(
-            processColors(getValue(colors)),
-            getValue(positions),
-            getValue(start),
-            getValue(end),
-            getValue(angle),
-            getValue(blur),
-            getValue(tileMode),
-        );
-    });
+    useSharedValuesEffect(
+        () => {
+            "worklet";
+            if (!gradRef.value) {
+                return;
+            }
+            gradRef.value.update(
+                processColors(getValue(colors)),
+                getValue(positions),
+                getValue(start),
+                getValue(end),
+                getValue(angle),
+                getValue(blur),
+                getValue(tileMode),
+            );
+        },
+        colors,
+        start,
+        end,
+        positions,
+        angle,
+        blur,
+        tileMode,
+    );
 
     return {
         gradProps,
@@ -108,7 +114,7 @@ export const LinearGradient = ({
     return (
         <View {...viewProps}>
             <LinearGradientView
-                style={commonStyles.gradientView}
+                style={commonStyles.fullSize}
                 hybridRef={setGradRef}
                 {...gradProps}
             />

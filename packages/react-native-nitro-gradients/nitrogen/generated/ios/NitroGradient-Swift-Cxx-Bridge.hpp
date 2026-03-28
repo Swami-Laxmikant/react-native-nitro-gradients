@@ -30,7 +30,6 @@ namespace NitroGradient { class HybridSweepGradientViewSpec_cxx; }
 #include "HybridRadialGradientViewSpec.hpp"
 #include "HybridSweepGradientViewSpec.hpp"
 #include "Vector.hpp"
-#include <NitroModules/Null.hpp>
 #include <NitroModules/Result.hpp>
 #include <exception>
 #include <memory>
@@ -142,50 +141,6 @@ namespace margelo::nitro::gradient::bridge::swift {
     return optional.has_value();
   }
   inline std::string get_std__optional_std__string_(const std::optional<std::string>& optional) noexcept {
-    return optional.value();
-  }
-  
-  // pragma MARK: std::variant<nitro::NullType, std::vector<double>>
-  /**
-   * Wrapper struct for `std::variant<nitro::NullType, std::vector<double>>`.
-   * std::variant cannot be used in Swift because of a Swift bug.
-   * Not even specializing it works. So we create a wrapper struct.
-   */
-  struct std__variant_nitro__NullType__std__vector_double__ final {
-    std::variant<nitro::NullType, std::vector<double>> variant;
-    std__variant_nitro__NullType__std__vector_double__(std::variant<nitro::NullType, std::vector<double>> variant): variant(variant) { }
-    operator std::variant<nitro::NullType, std::vector<double>>() const noexcept {
-      return variant;
-    }
-    inline size_t index() const noexcept {
-      return variant.index();
-    }
-    inline nitro::NullType get_0() const noexcept {
-      return std::get<0>(variant);
-    }
-    inline std::vector<double> get_1() const noexcept {
-      return std::get<1>(variant);
-    }
-  };
-  inline std__variant_nitro__NullType__std__vector_double__ create_std__variant_nitro__NullType__std__vector_double__(nitro::NullType value) noexcept {
-    return std__variant_nitro__NullType__std__vector_double__(value);
-  }
-  inline std__variant_nitro__NullType__std__vector_double__ create_std__variant_nitro__NullType__std__vector_double__(const std::vector<double>& value) noexcept {
-    return std__variant_nitro__NullType__std__vector_double__(value);
-  }
-  
-  // pragma MARK: std::optional<std::variant<nitro::NullType, std::vector<double>>>
-  /**
-   * Specialized version of `std::optional<std::variant<nitro::NullType, std::vector<double>>>`.
-   */
-  using std__optional_std__variant_nitro__NullType__std__vector_double___ = std::optional<std::variant<nitro::NullType, std::vector<double>>>;
-  inline std::optional<std::variant<nitro::NullType, std::vector<double>>> create_std__optional_std__variant_nitro__NullType__std__vector_double___(const std::variant<nitro::NullType, std::vector<double>>& value) noexcept {
-    return std::optional<std::variant<nitro::NullType, std::vector<double>>>(value);
-  }
-  inline bool has_value_std__optional_std__variant_nitro__NullType__std__vector_double___(const std::optional<std::variant<nitro::NullType, std::vector<double>>>& optional) noexcept {
-    return optional.has_value();
-  }
-  inline std::variant<nitro::NullType, std::vector<double>> get_std__optional_std__variant_nitro__NullType__std__vector_double___(const std::optional<std::variant<nitro::NullType, std::vector<double>>>& optional) noexcept {
     return optional.value();
   }
   

@@ -93,7 +93,7 @@ export default function Home(): ReactNode {
             </h1>
 
             <p className={styles.sub}>
-              Linear, radial, and sweep — Natively rendered with <span className={styles.subHighlight}><br></br>built&#8209;in&nbsp;blur</span> and <span className={styles.subHighlight}>first&#8209;class&nbsp;Reanimated</span>&nbsp;support.
+              Linear, radial, and sweep - Natively rendered with <span className={styles.subHighlight}><br></br>built&#8209;in&nbsp;blur</span> and <span className={styles.subHighlight}>first&#8209;class&nbsp;Reanimated</span>&nbsp;support.
             </p>
 
             <div className={styles.actions}>
@@ -128,7 +128,6 @@ export default function Home(): ReactNode {
               <span>Reanimated 4+</span>
               <span>New Architecture</span>
               <span>Blur</span>
-              {/* <span>Tile modes</span> */}
             </div>
           </div>
         </section>
@@ -230,31 +229,6 @@ function AnimatedCard() {
           </div>
         </section>
 
-        {/* ─── CTA ─── */}
-        <section className={styles.cta}>
-          <div className={styles.ctaMesh} aria-hidden>
-            <div className={styles.cm1} />
-            <div className={styles.cm2} />
-            <div className={styles.noise} />
-          </div>
-          {/* <div className={styles.ctaInner}>
-            <h2 className={styles.ctaH}>Start shipping native gradients.</h2>
-            <div className={styles.ctaCmd}>
-              <code>npm install react-native-nitro-gradients</code>
-            </div>
-            <div className={styles.actions}>
-              <Link className={styles.btnPrimary} to="/docs/installation">
-                Read the docs
-              </Link>
-              <Link
-                className={styles.btnGhost}
-                href="https://github.com/Swami-Laxmikant/react-native-nitro-gradients"
-              >
-                GitHub
-              </Link>
-            </div>
-          </div> */}
-        </section>
       </div>
     </Layout>
   );

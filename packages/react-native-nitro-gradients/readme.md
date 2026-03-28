@@ -2,21 +2,17 @@
 
 High-performance gradient components for React Native, built with [Nitro Modules](https://github.com/mrousavy/nitro) ⚡
 
-> [!WARNING]
-> **🚧 Under Active Development**
-> 
-> This library is currently in early development and **not recommended for production use**
-
 ## Features
 
 - 🎨 **Three gradient types** - Linear, Radial, and Sweep gradients
+- 🔮 **Built-in blur** - Gaussian blur on any gradient via the `blur` prop
 - 🎭 **First-class Reanimated support** - Use shared values as gradient props
 
 ## Installation
 
 ```bash
 npm install react-native-nitro-gradients
-npm install react-native-nitro-modules react-native-reanimated react-native-worklets
+npm install react-native-nitro-modules react-native-reanimated
 cd ios && pod install
 ```
 
@@ -32,7 +28,7 @@ function App() {
     <LinearGradient
       colors={['#667eea', '#764ba2']}
       start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
+      end={{ x: '100%', y: '100%' }}
       style={{ width: 200, height: 200 }}
     />
   );
@@ -48,10 +44,6 @@ function App() {
 - [Radial Gradient](https://Swami-Laxmikant.github.io/react-native-nitro-gradients/docs/radial-gradient)
 - [Sweep Gradient](https://Swami-Laxmikant.github.io/react-native-nitro-gradients/docs/sweep-gradient)
 - [Animations with Reanimated](https://Swami-Laxmikant.github.io/react-native-nitro-gradients/docs/animations)
-
-## Special Thanks
-
-> This project was bootstrapped from [react-native-nitro-image](https://github.com/mrousavy/react-native-nitro-image) by Marc Rousavy.
 
 ## License
 

@@ -17,9 +17,6 @@ namespace margelo::nitro::gradient { struct Vector; }
 #include <string>
 #include <variant>
 #include "JVariant_String_Double.hpp"
-#include <NitroModules/Null.hpp>
-#include "JVariant_NullType_DoubleArray.hpp"
-#include <NitroModules/JNull.hpp>
 
 namespace margelo::nitro::gradient {
 
@@ -136,9 +133,14 @@ namespace margelo::nitro::gradient {
   }
 
   // Methods
-  void JHybridLinearGradientViewSpec::update(const std::optional<std::variant<nitro::NullType, std::vector<double>>>& colors, const std::optional<std::vector<double>>& positions, const std::optional<Vector>& start, const std::optional<Vector>& end, std::optional<double> angle, std::optional<double> blur, const std::optional<std::string>& tileMode) {
-    static const auto method = _javaPart->javaClassStatic()->getMethod<void(jni::alias_ref<JVariant_NullType_DoubleArray> /* colors */, jni::alias_ref<jni::JArrayDouble> /* positions */, jni::alias_ref<JVector> /* start */, jni::alias_ref<JVector> /* end */, jni::alias_ref<jni::JDouble> /* angle */, jni::alias_ref<jni::JDouble> /* blur */, jni::alias_ref<jni::JString> /* tileMode */)>("update");
-    method(_javaPart, colors.has_value() ? JVariant_NullType_DoubleArray::fromCpp(colors.value()) : nullptr, positions.has_value() ? [&]() {
+  void JHybridLinearGradientViewSpec::update(const std::vector<double>& colors, const std::optional<std::vector<double>>& positions, const std::optional<Vector>& start, const std::optional<Vector>& end, std::optional<double> angle, std::optional<double> blur, const std::optional<std::string>& tileMode) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<void(jni::alias_ref<jni::JArrayDouble> /* colors */, jni::alias_ref<jni::JArrayDouble> /* positions */, jni::alias_ref<JVector> /* start */, jni::alias_ref<JVector> /* end */, jni::alias_ref<jni::JDouble> /* angle */, jni::alias_ref<jni::JDouble> /* blur */, jni::alias_ref<jni::JString> /* tileMode */)>("update");
+    method(_javaPart, [&]() {
+      size_t __size = colors.size();
+      jni::local_ref<jni::JArrayDouble> __array = jni::JArrayDouble::newArray(__size);
+      __array->setRegion(0, __size, colors.data());
+      return __array;
+    }(), positions.has_value() ? [&]() {
       size_t __size = positions.value().size();
       jni::local_ref<jni::JArrayDouble> __array = jni::JArrayDouble::newArray(__size);
       __array->setRegion(0, __size, positions.value().data());

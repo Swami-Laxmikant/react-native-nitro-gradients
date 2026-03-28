@@ -38,7 +38,7 @@ function draw(ctx: CanvasRenderingContext2D, time: number, isDark: boolean) {
   ctx.fillStyle = grad;
   ctx.fill();
 
-  // Inner rounded rect (card bg — inset by border width)
+  // Inner rounded rect (card bg - inset by border width)
   const b = BORDER * DPR;
   const innerR = (OUTER_R - BORDER) * DPR;
   ctx.beginPath();

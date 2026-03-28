@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 
 export const commonStyles = StyleSheet.create({
-    gradientView: {
+    fullSize: {
         position: "absolute",
         inset: 0,
     },

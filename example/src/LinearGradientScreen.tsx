@@ -1,4 +1,9 @@
 import { DemoScreen } from "./demo-ui";
+import {
+    LinearGradientBoundsPlayground,
+    LinearGradientBoundsReanimatedPlayground,
+} from "./gradient-sections/LinearGradientBoundsPlayground";
+import { LinearGradientDynamicSharedValuePlayground } from "./gradient-sections/LinearGradientDynamicSharedValuePlayground";
 import { LinearGradientPlayground } from "./gradient-sections/LinearGradientPlayground";
 import { LinearGradientReanimatedPlayground } from "./gradient-sections/LinearGradientReanimatedPlayground";
 import { LinearGradientResetPlayground } from "./gradient-sections/LinearGradientResetPlayground";
@@ -13,6 +18,9 @@ export function LinearGradientScreen() {
         >
             <LinearGradientPlayground />
             <LinearGradientReanimatedPlayground />
+            <LinearGradientBoundsPlayground />
+            <LinearGradientBoundsReanimatedPlayground />
+            <LinearGradientDynamicSharedValuePlayground />
             <LinearGradientResetPlayground />
             <LinearGradientVectorPlayground />
         </DemoScreen>

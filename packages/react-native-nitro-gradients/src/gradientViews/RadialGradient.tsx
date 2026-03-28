@@ -1,5 +1,5 @@
 // biome-ignore lint/correctness/noUnusedImports: Needed for JSX runtime
-import React, { useMemo } from "react";
+import React, { useState } from "react";
 import type { ColorValue, ViewProps } from "react-native";
 import { View } from "react-native";
 import { getHostComponent } from "react-native-nitro-modules";
@@ -12,10 +12,10 @@ import { commonStyles } from "./styles";
 import type { TileMode } from "./types";
 import {
     getValue,
+    type Pretify,
     processColors,
     useAnimatedNitroViewRef,
     useSharedValuesEffect,
-    type Pretify,
     type WithSharedValueObj,
 } from "./utils";
 
@@ -43,37 +43,42 @@ const useRadialGradient = (
     blur: Props["blur"],
     tileMode: Props["tileMode"],
 ) => {
-    const gradProps = useMemo(
-        () => ({
-            positions: getValue(positions) || [],
-            colors: processColors(getValue(colors)),
-            center: getValue(center),
-            radius: getValue(radius),
-            blur: getValue(blur),
-            tileMode: getValue(tileMode),
-        }),
-        [colors, center, radius, positions, blur, tileMode],
-    );
+    const gradProps = useState(() => ({
+        positions: getValue(positions) || [],
+        colors: processColors(getValue(colors)),
+        center: getValue(center),
+        radius: getValue(radius),
+        blur: getValue(blur),
+        tileMode: getValue(tileMode),
+    }))[0];
 
     const [gradRef, setGradRef] = useAnimatedNitroViewRef<
         RadialGradientViewProps,
         RadialGradientViewMethods
     >();
 
-    useSharedValuesEffect(() => {
-        "worklet";
-        if (!gradRef.value) {
-            return;
-        }
-        gradRef.value.update(
-            processColors(getValue(colors)),
-            getValue(positions),
-            getValue(center),
-            getValue(radius),
-            getValue(blur),
-            getValue(tileMode),
-        );
-    });
+    useSharedValuesEffect(
+        () => {
+            "worklet";
+            if (!gradRef.value) {
+                return;
+            }
+            gradRef.value.update(
+                processColors(getValue(colors)),
+                getValue(positions),
+                getValue(center),
+                getValue(radius),
+                getValue(blur),
+                getValue(tileMode),
+            );
+        },
+        colors,
+        center,
+        radius,
+        positions,
+        blur,
+        tileMode,
+    );
 
     return {
         gradProps,
@@ -103,7 +108,7 @@ export const RadialGradient = ({
     return (
         <View {...viewProps}>
             <RadialGradientView
-                style={commonStyles.gradientView}
+                style={commonStyles.fullSize}
                 hybridRef={setGradRef}
                 {...gradProps}
             />

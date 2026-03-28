@@ -4,8 +4,6 @@ sidebar_position: 1
 
 # Installation Guide
 
-Setup and platform notes. Quick Start is in the Overview page.
-
 ## Requirements
 
 - React Native 0.78.0+ (New Architecture enabled)

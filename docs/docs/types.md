@@ -4,7 +4,7 @@ sidebar_position: 7
 
 # Type Definitions
 
-Essential types used in component props.
+Types used in component props.
 
 ## PercentString
 
@@ -42,7 +42,7 @@ Calculates percentage relative to the self container's height.
 
 ## Vector
 
-2D position for coordinates used in props.
+2D position for coordinates used in positional props.
 
 ```typescript
 interface Vector {

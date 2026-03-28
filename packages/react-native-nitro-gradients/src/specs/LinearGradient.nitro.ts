@@ -17,7 +17,7 @@ export interface LinearGradientViewProps extends HybridViewProps {
 
 export interface LinearGradientViewMethods extends HybridViewMethods {
     update(
-        colors: number[] | null,
+        colors: number[],
         positions?: number[],
         start?: Vector,
         end?: Vector,

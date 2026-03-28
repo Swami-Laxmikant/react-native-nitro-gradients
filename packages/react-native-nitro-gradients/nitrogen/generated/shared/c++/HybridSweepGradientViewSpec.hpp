@@ -20,8 +20,6 @@ namespace margelo::nitro::gradient { struct Vector; }
 #include <optional>
 #include "Vector.hpp"
 #include <string>
-#include <NitroModules/Null.hpp>
-#include <variant>
 
 namespace margelo::nitro::gradient {
 
@@ -63,7 +61,7 @@ namespace margelo::nitro::gradient {
 
     public:
       // Methods
-      virtual void update(const std::optional<std::variant<nitro::NullType, std::vector<double>>>& colors, const std::optional<std::vector<double>>& positions, const std::optional<Vector>& center, std::optional<double> blur, const std::optional<std::string>& tileMode) = 0;
+      virtual void update(const std::vector<double>& colors, const std::optional<std::vector<double>>& positions, const std::optional<Vector>& center, std::optional<double> blur, const std::optional<std::string>& tileMode) = 0;
 
     protected:
       // Hybrid Setup

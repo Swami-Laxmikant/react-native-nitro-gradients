@@ -21,7 +21,6 @@ const sidebars: SidebarsConfig = {
       label: 'Reference',
       items: [
         'types',
-        'api',
       ],
     },
     {

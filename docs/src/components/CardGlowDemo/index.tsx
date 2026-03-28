@@ -30,7 +30,7 @@ function draw(ctx: CanvasRenderingContext2D, time: number, isDark: boolean) {
   ctx.fillStyle = pageBg;
   ctx.fillRect(0, 0, cw, ch);
 
-  // Glow: card-shaped rounded rect, blurred — matches card form
+  // Glow: card-shaped rounded rect, blurred - matches card form
   const breathe = (Math.sin(time * 0.001) + 1) / 2;
   const blur = 22 + breathe * 14;
 
@@ -48,7 +48,7 @@ function draw(ctx: CanvasRenderingContext2D, time: number, isDark: boolean) {
   ctx.save();
   ctx.filter = `blur(${blur * DPR}px)`;
 
-  // Primary glow — indigo/violet, card-shaped
+  // Primary glow - indigo/violet, card-shaped
   const glowX = cardX - expand + dx;
   const glowY = cardY - expand + dy;
   const glowW = cardW + expand * 2;

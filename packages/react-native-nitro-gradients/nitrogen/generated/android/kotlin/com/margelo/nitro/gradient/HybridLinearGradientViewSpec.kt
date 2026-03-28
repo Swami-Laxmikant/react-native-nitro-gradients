@@ -10,7 +10,6 @@ package com.margelo.nitro.gradient
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
-import com.margelo.nitro.core.NullType
 import com.margelo.nitro.core.HybridObject
 import com.margelo.nitro.views.HybridView
 
@@ -72,7 +71,7 @@ abstract class HybridLinearGradientViewSpec: HybridView() {
   // Methods
   @DoNotStrip
   @Keep
-  abstract fun update(colors: Variant_NullType_DoubleArray?, positions: DoubleArray?, start: Vector?, end: Vector?, angle: Double?, blur: Double?, tileMode: String?): Unit
+  abstract fun update(colors: DoubleArray, positions: DoubleArray?, start: Vector?, end: Vector?, angle: Double?, blur: Double?, tileMode: String?): Unit
 
   // Default implementation of `HybridObject.toString()`
   override fun toString(): String {

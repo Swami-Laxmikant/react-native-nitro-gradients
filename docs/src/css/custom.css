@@ -58,9 +58,6 @@
   --hp-gradient-text: linear-gradient(135deg, #b95a33 0%, #d99f63 40%, #7cab90 100%);
   --hp-arrow-color: var(--docs-accent-deep);
   --hp-arrow-hover: var(--docs-text);
-  --hp-cta-cmd-bg: rgba(0, 0, 0, 0.04);
-  --hp-cta-cmd-border: rgba(23, 20, 18, 0.08);
-  --hp-cta-cmd-text: var(--docs-muted);
   /* mesh orb opacities */
   --hp-orb1: rgba(185, 90, 51, 0.14);
   --hp-orb2: rgba(124, 171, 144, 0.12);
@@ -151,9 +148,6 @@
   --hp-gradient-text: linear-gradient(135deg, #d4856a 0%, #e8b97a 40%, #9cc4a8 100%);
   --hp-arrow-color: var(--docs-accent);
   --hp-arrow-hover: var(--docs-text);
-  --hp-cta-cmd-bg: rgba(255, 255, 255, 0.04);
-  --hp-cta-cmd-border: rgba(255, 255, 255, 0.08);
-  --hp-cta-cmd-text: rgba(255, 255, 255, 0.5);
   --hp-orb1: rgba(185, 90, 51, 0.2);
   --hp-orb2: rgba(124, 171, 144, 0.16);
   --hp-orb3: rgba(217, 159, 99, 0.14);
@@ -213,11 +207,23 @@ a {
    ─────────────────────────────────────────────── */
 
 .navbar {
+  position: relative;
   border-bottom: 1px solid var(--docs-border);
+  box-shadow: 0 8px 28px rgba(31, 25, 20, 0.03);
+}
+
+.navbar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
   background: var(--ifm-navbar-background-color);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  box-shadow: 0 8px 28px rgba(31, 25, 20, 0.03);
+}
+
+.navbar-sidebar {
+  background: var(--ifm-background-color);
 }
 
 .navbar__brand {

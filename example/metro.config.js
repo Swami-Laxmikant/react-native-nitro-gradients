@@ -11,6 +11,9 @@ const appNodeModules = path.resolve(__dirname, "node_modules");
  * @type {import('@react-native/metro-config').MetroConfig}
  */
 const config = {
+    server: {
+        port: 8083,
+    },
     watchFolders: [root],
     resolver: {
         disableHierarchicalLookup: true,

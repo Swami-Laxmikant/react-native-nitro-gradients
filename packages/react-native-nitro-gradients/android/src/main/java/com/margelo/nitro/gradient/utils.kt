@@ -5,6 +5,7 @@ import android.graphics.RenderEffect
 import android.graphics.Shader
 import android.os.Build
 import android.view.View
+import androidx.annotation.RequiresApi
 import com.margelo.nitro.gradient.Variant_String_Double
 import com.margelo.nitro.gradient.Vector
 
@@ -55,8 +56,6 @@ fun applyBlurToView(
     view: View,
     blurRadius: Double?,
     tileMode: String?,
-    setDrawableBlur: (Float) -> Unit,
-    invalidateDrawable: () -> Unit
 ) {
     val r = blurRadius?.toFloat() ?: 0f
     if (r > 0f) {
@@ -68,18 +67,10 @@ fun applyBlurToView(
                     tileMode.toTileMode()
                 )
             )
-        } else {
-            setDrawableBlur(r)
-            view.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
-            invalidateDrawable()
         }
     } else {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             view.setRenderEffect(null)
-        } else {
-            setDrawableBlur(0f)
-            view.setLayerType(View.LAYER_TYPE_NONE, null)
-            invalidateDrawable()
         }
     }
 }
@@ -87,5 +78,5 @@ fun applyBlurToView(
 fun String?.toTileMode(): Shader.TileMode =
     when (this?.lowercase()) {
         "clamp" -> Shader.TileMode.CLAMP
-        else -> Shader.TileMode.DECAL
+        else -> Shader.TileMode.DECAL // TODO: Add all tileModes
     }

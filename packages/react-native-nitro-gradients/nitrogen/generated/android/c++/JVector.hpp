@@ -23,7 +23,7 @@ namespace margelo::nitro::gradient {
    */
   struct JVector final: public jni::JavaClass<JVector> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/gradient/Vector;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/gradient/Vector;";
 
   public:
     /**
