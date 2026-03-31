@@ -4,9 +4,9 @@ High-performance gradient components for React Native, built with [Nitro Modules
 
 ## Features
 
-- 🎨 **Three gradient types** - Linear, Radial, and Sweep gradients
-- 🔮 **Built-in blur** - Gaussian blur on any gradient via the `blur` prop
-- 🎭 **First-class Reanimated support** - Use shared values as gradient props
+- **Three gradient types** - Linear, Radial, and Sweep gradients
+- **Built-in blur** - Gaussian blur on any gradient via the `blur` prop
+- **First-class Reanimated support** - Use shared values as gradient props
 
 ## Installation
 
